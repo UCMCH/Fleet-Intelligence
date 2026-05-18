@@ -149,7 +149,7 @@ tfoot td{padding:8px 10px;font-weight:700;border-right:1px solid var(--border)}
   <div id="topbar">
     <h1>🚑 UCM Fleet Intelligence</h1>
     <span class="sep">|</span>
-    <button id="ver-badge" onclick="abrirChangelog()">v—</button>
+    <button id="ver-badge" onclick="abrirChangelog()">v1.8.0</button>
     <div id="fleet-selector">
       <button class="fs-btn active" onclick="setFlota('4x2')">🚑 AMB 4×2</button>
       <button class="fs-btn" onclick="setFlota('4x4')">🚑 AMB 4×4</button>
@@ -174,1705 +174,136 @@ tfoot td{padding:8px 10px;font-weight:700;border-right:1px solid var(--border)}
     <button class="tab-btn" onclick="setTab('pipeline')">🎯 Pipeline</button>
   </div>
   <div id="content">
-  <div class="toolbar">
-    <input id="srch" type="text" placeholder="Buscar móvil, patente, chasis, estado…" style="width:240px" oninput="filterFlota()">
-    <select id="fCond" onchange="filterFlota()">
-      <option value="">Todas las condiciones</option>
-      <option>OPERATIVO</option><option>OPERATIVO CON OBS.</option>
-      <option>NO OPERATIVO</option><option>FALLA MECANICA ETI</option>
-      <option>FALLA MECANICA ETE</option><option>FUERA DE SERVICIO</option>
-      <option>EN PRODUCCION</option>
-    </select>
-    <select id="fProp" onchange="filterFlota()">
-      <option value="">UCM + EMECAR</option><option>UCM</option><option>EMECAR</option>
-    </select>
-    <select id="fLease" onchange="filterFlota()">
-      <option value="">Leasing: todos</option>
-      <option value="si">Con leasing</option>
-      <option value="no">Sin leasing</option>
-      <option value="urg">Vence ≤6 meses</option>
-    </select>
-    <span id="flota-count" style="font-size:11px;color:#64748b">79 de 79 móviles</span>
-    <div class="spacer"></div>
-    <button class="btn btn-primary" onclick="openNewForm()">+ Agregar vehículo</button>
+  <div class="sec">
+    <div class="sec-hdr"><h3>Resumen Operacional — AMB 4×2</h3><span class="sub">Semana: 11/05/2026</span></div>
+    <div class="kpi-row">
+      <div class="kpi" style="border-left-color:#1d4ed8"><div class="lbl">Total Flota</div><div class="val">79</div><div class="sub">vehículos registrados</div></div>
+      <div class="kpi" style="border-left-color:#16a34a"><div class="lbl">Operativos</div><div class="val">68</div><div class="sub">62 OK · 6 con obs.</div></div>
+      <div class="kpi" style="border-left-color:#ef4444"><div class="lbl">En taller activo</div><div class="val">6</div><div class="sub">1 fuera de servicio</div></div>
+      <div class="kpi" style="border-left-color:#1d4ed8"><div class="lbl">En producción</div><div class="val" style="color:#1d4ed8">4</div><div class="sub">ingresando a flota</div></div>
+      <div class="kpi" style="border-left-color:#7c3aed"><div class="lbl">Con leasing</div><div class="val">46</div><div class="sub">33 propias</div></div>
+      <div class="kpi" style="border-left-color:#d97706"><div class="lbl">Cuota mensual</div><div class="val" style="font-size:18px">$96.8M</div><div class="sub">deuda total $838.7M</div></div>
+      <div class="kpi" style="border-left-color:#22c55e"><div class="lbl">Pasan a propiedad UCM ≤6m</div><div class="val" style="color:#22c55e">6</div><div class="sub">fin de leasing</div></div>
+    </div>
   </div>
-  <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
-    <span style="font-size:12px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:20px;padding:4px 12px"><strong>79</strong> total</span>
-    <span style="font-size:12px;background:#dcfce7;border:1px solid #86efac;border-radius:20px;padding:4px 12px;color:#15803d"><strong>62</strong> operativos</span>
-    <span style="font-size:12px;background:#fee2e2;border:1px solid #fca5a5;border-radius:20px;padding:4px 12px;color:#b91c1c"><strong>7</strong> en taller / FS</span>
-    <span style="font-size:12px;background:#dbeafe;border:1px solid #93c5fd;border-radius:20px;padding:4px 12px;color:#1d4ed8"><strong>46</strong> con leasing</span>
+
+  <div class="grid2 sec">
+    <div class="card">
+      <div class="card-title">Estado de flota</div>
+      <div class="chart-wrap"><canvas id="chartCondicion" width="905" height="220" style="display: block; box-sizing: border-box; height: 220px; width: 905px;"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Leasing activo por banco <span style="font-size:10px;color:#94a3b8;font-weight:400">— todas las flotas</span></div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th class="sortable" data-sort-dir="none">Banco</th><th class="sortable" data-sort-dir="none">Unid.</th><th class="sortable" data-sort-dir="none">Cuota/mes</th><th class="sortable" data-sort-dir="none">Deuda rest.</th><th class="sortable" data-sort-dir="none">Próx. vcto.</th></tr></thead>
+        <tbody><tr>
+          <td><strong>Banco BCI</strong></td>
+          <td style="text-align:center">11</td>
+          <td style="text-align:right;color:#1d4ed8;font-weight:600">$21.7M</td>
+          <td style="text-align:right">$214.7M</td>
+          <td style="color:#dc2626">Jun-2026</td>
+        </tr><tr>
+          <td><strong>Banco Santander</strong></td>
+          <td style="text-align:center">2</td>
+          <td style="text-align:right;color:#1d4ed8;font-weight:600">$3.8M</td>
+          <td style="text-align:right">$14.0M</td>
+          <td style="color:#dc2626">Sep-2026</td>
+        </tr><tr>
+          <td><strong>Banco de Chile</strong></td>
+          <td style="text-align:center">4</td>
+          <td style="text-align:right;color:#1d4ed8;font-weight:600">$6.8M</td>
+          <td style="text-align:right">$30.1M</td>
+          <td style="color:#dc2626">Oct-2026</td>
+        </tr><tr>
+          <td><strong>Banco Internacional</strong></td>
+          <td style="text-align:center">16</td>
+          <td style="text-align:right;color:#1d4ed8;font-weight:600">$26.2M</td>
+          <td style="text-align:right">$277.5M</td>
+          <td style="color:#475569">Dic-2026</td>
+        </tr><tr>
+          <td><strong>Banco BICE</strong></td>
+          <td style="text-align:center">5</td>
+          <td style="text-align:right;color:#1d4ed8;font-weight:600">$19.5M</td>
+          <td style="text-align:right">$96.9M</td>
+          <td style="color:#475569">Dic-2026</td>
+        </tr><tr>
+          <td><strong>Los Cuatro</strong></td>
+          <td style="text-align:center">4</td>
+          <td style="text-align:right;color:#1d4ed8;font-weight:600">$8.3M</td>
+          <td style="text-align:right">$55.6M</td>
+          <td style="color:#475569">Ene-2027</td>
+        </tr><tr>
+          <td><strong>Rio Branco</strong></td>
+          <td style="text-align:center">4</td>
+          <td style="text-align:right;color:#1d4ed8;font-weight:600">$10.6M</td>
+          <td style="text-align:right">$150.0M</td>
+          <td style="color:#475569">Sep-2027</td>
+        </tr>
+        </tbody><tfoot><tr><td><strong>TOTAL</strong></td><td style="text-align:center"><strong>46</strong></td><td style="text-align:right;color:#1d4ed8">
+              <strong>$96.8M</strong>
+              
+            </td><td style="text-align:right"><strong>$838.7M</strong></td><td></td></tr></tfoot>
+        </table></div>
+    </div>
   </div>
-  <div id="form-container"></div>
-  <div class="tbl-wrap">
-  <table id="flota-table">
-    <thead><tr>
-      <th class="sortable" data-sort-dir="none">Prop.</th><th class="sortable" data-sort-dir="none">Móvil</th><th class="sortable" data-sort-dir="none">Marca</th><th class="sortable" data-sort-dir="none">Modelo</th><th class="sortable" data-sort-dir="none">Patente</th><th class="sortable" data-sort-dir="none">Año</th>
-      <th class="sortable" data-sort-dir="none">Chasis</th><th class="sortable" data-sort-dir="none">R° San.</th><th class="sortable" data-sort-dir="none">Condición</th><th class="sortable" data-sort-dir="none">Estado / Asignación</th>
-      <th class="sortable" data-sort-dir="none">Financiamiento</th><th class="sortable" data-sort-dir="none">F. Inicio</th><th class="sortable" data-sort-dir="none">F. Término</th><th class="sortable" data-sort-dir="none">M. Rest.</th>
-      <th class="sortable" data-sort-dir="none">Monto Financ.</th><th class="sortable" data-sort-dir="none">Remanente K</th>
-      <th class="sortable" data-sort-dir="none">Observaciones</th><th style="text-align:center">Acc.</th>
-    </tr></thead>
-    <tbody id="flota-tbody"><tr id="row-219" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">219</strong></td>
-      <td>FORD</td><td>E-350 6,8 BENCINERO</td>
-      <td style="font-family:monospace;font-size:11px">BVZS-29</td>
-      <td>2010</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="1FDWE3FSXADA92181">1FDWE3FSXADA92181</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-amber">OPERATIVO CON OBS.</span></td>
-      <td style="font-size:11px">BACK UP / EVENTOS</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">Inutilizable por A/C con falla sin reparación , Reclamo sindical DT</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(219)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(219)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-221" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">221</strong></td>
-      <td>FORD</td><td>E-350 6,8 BENCINERO</td>
-      <td style="font-family:monospace;font-size:11px">BVZS-30</td>
-      <td>2010</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="1FDWE3FS1ADA92182">1FDWE3FS1ADA92182</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-amber">OPERATIVO CON OBS.</span></td>
-      <td style="font-size:11px">BACK UP / EVENTOS</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">Inutilizable por A/C con falla sin reparación , Reclamo sindical DT</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(221)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(221)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-225" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">225</strong></td>
-      <td>FORD</td><td>F - 350 6,7</td>
-      <td style="font-family:monospace;font-size:11px">GSWH-43</td>
-      <td>2014</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="1FDRF3GT8EEB82737">1FDRF3GT8EEB82737</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">TRASLADOS BASICOS</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(225)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(225)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-229" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">229</strong></td>
-      <td>FORD</td><td>F - 350 6,7</td>
-      <td style="font-family:monospace;font-size:11px">GXCD-48</td>
-      <td>2014</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="1FDRF3GTXEEB82738">1FDRF3GTXEEB82738</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">TRASLADOS BASICOS</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(229)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(229)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-231" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">231</strong></td>
-      <td>FORD</td><td>F - 350 6,7</td>
-      <td style="font-family:monospace;font-size:11px">GXCD-51</td>
-      <td>2014</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="1FDRF3GT1EEB82739">1FDRF3GT1EEB82739</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-red">NO OPERATIVO</span></td>
-      <td style="font-size:11px">EN TALLER</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">Panne de Caja de Transmisión</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(231)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(231)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-233" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">233</strong></td>
-      <td>FORD</td><td>F-350 TYPE I 6,7</td>
-      <td style="font-family:monospace;font-size:11px">LGCL-18</td>
-      <td>2018</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="1FDRF3GT2JEC36477">1FDRF3GT2JEC36477</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-red">NO OPERATIVO</span></td>
-      <td style="font-size:11px">FUERA DE SERVICIO</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">Inutilizable por falla total de motor (el importado refaccionado falló y caja de cambio con problemas)</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(233)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(233)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-235" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">235</strong></td>
-      <td>FORD</td><td>F-350 TYPE I 6,7</td>
-      <td style="font-family:monospace;font-size:11px">LJWH-87</td>
-      <td>2018</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="1FDRF3GT6JEC36478">1FDRF3GT6JEC36478</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">RESCATE RM</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(235)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(235)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-237" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">237</strong></td>
-      <td>FORD</td><td>F-350 TYPE I 6,7</td>
-      <td style="font-family:monospace;font-size:11px">LJWH-89</td>
-      <td>2018</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="1FDRF3GT6JEC36479">1FDRF3GT6JEC36479</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">TRASLADOS BASICOS</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(237)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(237)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-239" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">239</strong></td>
-      <td>FORD</td><td>F-350 TYPE I 6,7</td>
-      <td style="font-family:monospace;font-size:11px">LJWH-90</td>
-      <td>2018</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="1FDRF3GT6JEC36482">1FDRF3GT6JEC36482</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-red">NO OPERATIVO</span></td>
-      <td style="font-size:11px">EN TALLER</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">Falla de Motor en revisión</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(239)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(239)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-241" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">241</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">RHRC-51</td>
-      <td>2022</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0XXXTTGMTM43747">WF0XXXTTGMTM43747</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">TRASLADOS BASICOS</td>
-      <td><span style="color:#d97706;font-weight:600;font-size:11px">Banco de Chile</span></td>
-      <td style="font-size:11px">Oct-2021</td>
-      <td style="font-size:11px;color:#dc2626;font-weight:700">Oct-2026</td>
-      <td style="text-align:center;color:#dc2626;font-weight:700">5</td>
-      <td style="text-align:right">$51.0M</td>
-      <td style="text-align:right">$4.2M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(241)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(241)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-243" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">243</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">RHTK-96</td>
-      <td>2022</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0XXXTTGMTM43743">WF0XXXTTGMTM43743</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">TRASLADOS BASICOS</td>
-      <td><span style="color:#d97706;font-weight:600;font-size:11px">Banco de Chile</span></td>
-      <td style="font-size:11px">Oct-2021</td>
-      <td style="font-size:11px;color:#dc2626;font-weight:700">Oct-2026</td>
-      <td style="text-align:center;color:#dc2626;font-weight:700">5</td>
-      <td style="text-align:right">$51.0M</td>
-      <td style="text-align:right">$4.2M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(243)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(243)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-245" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">245</strong></td>
-      <td>MERCEDES BENZ</td><td>SPRINTER</td>
-      <td style="font-family:monospace;font-size:11px">RRTF-70</td>
-      <td>2022</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WIV907633NP293313">WIV907633NP293313</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">LAS CONDES</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco de Chile</span></td>
-      <td style="font-size:11px">Dic-2021</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Ene-2027</td>
-      <td style="text-align:center;color:inherit;font-weight:400">8</td>
-      <td style="text-align:right">$61.8M</td>
-      <td style="text-align:right">$8.1M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(245)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(245)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-249" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">249</strong></td>
-      <td>MERCEDES BENZ</td><td>SPRINTER</td>
-      <td style="font-family:monospace;font-size:11px">RSVL-33</td>
-      <td>2022</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WIV907633NP293314">WIV907633NP293314</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">INDISA</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(249)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(249)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-251" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">251</strong></td>
-      <td>MERCEDES BENZ</td><td>SPRINTER</td>
-      <td style="font-family:monospace;font-size:11px">RSVL-38</td>
-      <td>2022</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="8AC907643PE210146">8AC907643PE210146</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">TRASLADOS BASICOS</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(251)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(251)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-253" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">253</strong></td>
-      <td>MERCEDES BENZ</td><td>SPRINTER</td>
-      <td style="font-family:monospace;font-size:11px">SKRG-89</td>
-      <td>2023</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="8AC907643PE214718">8AC907643PE214718</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">LAS CONDES</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco Internacional</span></td>
-      <td style="font-size:11px">Nov-2022</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Dic-2026</td>
-      <td style="text-align:center;color:inherit;font-weight:400">7</td>
-      <td style="text-align:right">$75.6M</td>
-      <td style="text-align:right">$10.8M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(253)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(253)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-255" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">255</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">SSHC-51</td>
-      <td>2023</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0XXXTTGNTJ42171">WF0XXXTTGNTJ42171</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">LAS CONDES</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco Internacional</span></td>
-      <td style="font-size:11px">Mar-2023</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Mar-2027</td>
-      <td style="text-align:center;color:inherit;font-weight:400">10</td>
-      <td style="text-align:right">$65.8M</td>
-      <td style="text-align:right">$13.7M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(255)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(255)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-257" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">257</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">SSGZ-39</td>
-      <td>2023</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0XXXTTGNTJ38746">WF0XXXTTGNTJ38746</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">LAS CONDES</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco Internacional</span></td>
-      <td style="font-size:11px">Mar-2023</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Mar-2027</td>
-      <td style="text-align:center;color:inherit;font-weight:400">10</td>
-      <td style="text-align:right">$65.8M</td>
-      <td style="text-align:right">$13.7M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(257)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(257)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-279" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">279</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TFJT-44</td>
-      <td>2024</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTTRPTL49628">WF0EXXTTRPTL49628</td>
-      <td><span class="badge b-grey">N/A</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">COMUDEF</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Los Cuatro</span></td>
-      <td style="font-size:11px">Ene-2024</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Ene-2027</td>
-      <td style="text-align:center;color:inherit;font-weight:400">8</td>
-      <td style="text-align:right">$62.5M</td>
-      <td style="text-align:right">$13.9M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(279)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(279)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-281" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">281</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TFJT-45</td>
-      <td>2024</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTTRPTL49625">WF0EXXTTRPTL49625</td>
-      <td><span class="badge b-grey">N/A</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">COMUDEF</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Los Cuatro</span></td>
-      <td style="font-size:11px">Ene-2024</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Ene-2027</td>
-      <td style="text-align:center;color:inherit;font-weight:400">8</td>
-      <td style="text-align:right">$62.5M</td>
-      <td style="text-align:right">$13.9M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(281)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(281)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-283" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">283</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TFJT-46</td>
-      <td>2024</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTTRPTY77802">WF0EXXTTRPTY77802</td>
-      <td><span class="badge b-grey">N/A</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">COMUDEF</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Los Cuatro</span></td>
-      <td style="font-size:11px">Ene-2024</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Ene-2027</td>
-      <td style="text-align:center;color:inherit;font-weight:400">8</td>
-      <td style="text-align:right">$62.5M</td>
-      <td style="text-align:right">$13.9M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(283)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(283)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-285" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">285</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TFJT-47</td>
-      <td>2024</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTTRPTL49619">WF0EXXTTRPTL49619</td>
-      <td><span class="badge b-grey">N/A</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">COMUDEF</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Los Cuatro</span></td>
-      <td style="font-size:11px">Ene-2024</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Ene-2027</td>
-      <td style="text-align:center;color:inherit;font-weight:400">8</td>
-      <td style="text-align:right">$62.5M</td>
-      <td style="text-align:right">$13.9M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(285)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(285)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-287" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">287</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TGFC-87</td>
-      <td>2024</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTTRPTY76178">WF0EXXTTRPTY76178</td>
-      <td><span class="badge b-grey">N/A</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">COMUDEF</td>
-      <td><span style="color:#dc2626;font-weight:600;font-size:11px">Banco BCI</span></td>
-      <td style="font-size:11px">Ene-2024</td>
-      <td style="font-size:11px;color:#dc2626;font-weight:700">Jun-2026</td>
-      <td style="text-align:center;color:#dc2626;font-weight:700">1</td>
-      <td style="text-align:right">$52.0M</td>
-      <td style="text-align:right">$1.8M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(287)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(287)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-309" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">309</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TSHL-29</td>
-      <td>2024</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTTRPTT32856">WF0EXXTTRPTT32856</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">RESCATE RM</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(309)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(309)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-311" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">311</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TSHL-46</td>
-      <td>2024</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTTRPTT32860">WF0EXXTTRPTT32860</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">EMECAR</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(311)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(311)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-313" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">313</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TSHL-56</td>
-      <td>2024</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTTRPTT32857">WF0EXXTTRPTT32857</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">RESCATE RM</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(313)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(313)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-315" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">315</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TFTT-58</td>
-      <td>2025</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0DTGVGXSU015802">WF0DTGVGXSU015802</td>
-      <td><span class="badge b-amber">PENDIENTE</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">RESCATE RM</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco BICE</span></td>
-      <td style="font-size:11px">Nov-2024</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Dic-2026</td>
-      <td style="text-align:center;color:inherit;font-weight:400">7</td>
-      <td style="text-align:right">$50.4M</td>
-      <td style="text-align:right">$14.1M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(315)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(315)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-317" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">317</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TFTT-59</td>
-      <td>2025</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0DTGVG7SU015806">WF0DTGVG7SU015806</td>
-      <td><span class="badge b-amber">PENDIENTE</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">TRASLADOS BASICOS</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco BICE</span></td>
-      <td style="font-size:11px">Nov-2024</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Dic-2026</td>
-      <td style="text-align:center;color:inherit;font-weight:400">7</td>
-      <td style="text-align:right">$50.4M</td>
-      <td style="text-align:right">$14.1M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(317)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(317)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-319" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">319</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TYLF-60</td>
-      <td>2025</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTT7STK37552">WF0EXXTT7STK37552</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">HOSPITAL SAN JUAN DE DIOS</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco BICE</span></td>
-      <td style="font-size:11px">Dic-2024</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Ene-2027</td>
-      <td style="text-align:center;color:inherit;font-weight:400">8</td>
-      <td style="text-align:right">$46.4M</td>
-      <td style="text-align:right">$14.8M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(319)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(319)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-321" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">321</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TYLF-83</td>
-      <td>2025</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTT6STK41110">WF0EXXTT6STK41110</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">COMUDEF</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco BICE</span></td>
-      <td style="font-size:11px">Dic-2024</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Ene-2027</td>
-      <td style="text-align:center;color:inherit;font-weight:400">8</td>
-      <td style="text-align:right">$46.4M</td>
-      <td style="text-align:right">$14.8M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(321)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(321)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-323" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">323</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TYSZ-69</td>
-      <td>2025</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTT1STC30647">WF0EXXTT1STC30647</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">HOSPITAL LUIS TISNE</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco de Chile</span></td>
-      <td style="font-size:11px">Dic-2024</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Dic-2026</td>
-      <td style="text-align:center;color:inherit;font-weight:400">7</td>
-      <td style="text-align:right">$46.4M</td>
-      <td style="text-align:right">$13.5M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(323)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(323)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-325" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">325</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TZHF-19</td>
-      <td>2025</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTT0STK43922">WF0EXXTT0STK43922</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">AUTOPISTA NORORIENTE</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco BCI</span></td>
-      <td style="font-size:11px">Ene-2025</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Feb-2027</td>
-      <td style="text-align:center;color:inherit;font-weight:400">9</td>
-      <td style="text-align:right">$46.4M</td>
-      <td style="text-align:right">$16.7M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(325)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(325)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-327" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">327</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TZVJ-71</td>
-      <td>2025</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTT0STC30705">WF0EXXTT0STC30705</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">HOSPITAL SAN JUAN DE DIOS</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco BCI</span></td>
-      <td style="font-size:11px">Ene-2025</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Mar-2027</td>
-      <td style="text-align:center;color:inherit;font-weight:400">10</td>
-      <td style="text-align:right">$46.4M</td>
-      <td style="text-align:right">$17.8M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(327)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(327)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-333" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">333</strong></td>
-      <td>FORD</td><td>TRANSIT 2.0 AT</td>
-      <td style="font-family:monospace;font-size:11px">RKXL74</td>
-      <td>2025</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0DTGVG0SU017560">WF0DTGVG0SU017560</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">HOSPITAL LINARES</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco BCI</span></td>
-      <td style="font-size:11px">Feb-2025</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Mar-2028</td>
-      <td style="text-align:center;color:inherit;font-weight:400">22</td>
-      <td style="text-align:right">$44.5M</td>
-      <td style="text-align:right">$26.4M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(333)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(333)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-335" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">335</strong></td>
-      <td>FORD</td><td>TRANSIT 2.0 AT</td>
-      <td style="font-family:monospace;font-size:11px">RKXL75</td>
-      <td>2025</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0DTGVG4SU0175562">WF0DTGVG4SU0175562</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">HOSPITAL LUIS TISNE</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco BCI</span></td>
-      <td style="font-size:11px">Feb-2025</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Mar-2028</td>
-      <td style="text-align:center;color:inherit;font-weight:400">22</td>
-      <td style="text-align:right">$44.5M</td>
-      <td style="text-align:right">$26.4M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(335)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(335)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-337" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">337</strong></td>
-      <td>FORD</td><td>TRANSIT 2.0 AT</td>
-      <td style="font-family:monospace;font-size:11px">TZBW10</td>
-      <td>2025</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0DTGVGBSU016415">WF0DTGVGBSU016415</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">HOSPITAL TALAGANTE</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(337)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(337)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-339" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">339</strong></td>
-      <td>FORD</td><td>TRANSIT 2.0 AT</td>
-      <td style="font-family:monospace;font-size:11px">TZBW11</td>
-      <td>2025</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0DTGVGBSU016423">WF0DTGVGBSU016423</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">HOSPITAL LUIS TISNE</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(339)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(339)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-341" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">341</strong></td>
-      <td>FORD</td><td>TRANSIT 2.0 AT</td>
-      <td style="font-family:monospace;font-size:11px">TZBW13</td>
-      <td>2025</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0DTGVG3SU017262">WF0DTGVG3SU017262</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">RESCATE RM</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(341)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(341)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-343" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">343</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TVKC17</td>
-      <td>2025</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTT7STY01149">WF0EXXTT7STY01149</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-red">NO OPERATIVO</span></td>
-      <td style="font-size:11px">EN TALLER</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">Falla de Embragüe, perteneciente a Hospital San Juan, será ingresada a CURIFOR</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(343)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(343)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-345" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">345</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TVKC18</td>
-      <td>2025</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTT8STY01144">WF0EXXTT8STY01144</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">ENAP</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(345)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(345)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-347" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">347</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TVKC19</td>
-      <td>2025</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTT6STY03636">WF0EXXTT6STY03636</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">HOSPITAL SAN JUAN DE DIOS</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(347)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(347)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-349" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">349</strong></td>
-      <td>FORD</td><td>TRANSIT 2.0 AT</td>
-      <td style="font-family:monospace;font-size:11px">TZBW12</td>
-      <td>2025</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0DTGVG1SU017258">WF0DTGVG1SU017258</td>
-      <td><span class="badge b-amber">PENDIENTE</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">HOSPITAL LUIS TISNE</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(349)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(349)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-351" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">351</strong></td>
-      <td>FORD</td><td>TRANSIT 2.0 AT</td>
-      <td style="font-family:monospace;font-size:11px">TZBW14</td>
-      <td>2025</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0DTGVG9SU016424">WF0DTGVG9SU016424</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">HOSPITAL SAN JUAN DE DIOS</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(351)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(351)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-353" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">353</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">VKKJ92</td>
-      <td>2026</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTT7STJ41162">WF0EXXTT7STJ41162</td>
-      <td><span class="badge b-amber">PENDIENTE</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">HOSPITAL LUIS TISNE</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Rio Branco</span></td>
-      <td style="font-size:11px">Sep-2025</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Sep-2027</td>
-      <td style="text-align:center;color:inherit;font-weight:400">16</td>
-      <td style="text-align:right">$56.3M</td>
-      <td style="text-align:right">$37.5M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(353)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(353)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-355" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">355</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">VKKJ96</td>
-      <td>2026</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTT7STJ41159">WF0EXXTT7STJ41159</td>
-      <td><span class="badge b-amber">PENDIENTE</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">HOSPITAL SAN JUAN DE DIOS</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Rio Branco</span></td>
-      <td style="font-size:11px">Sep-2025</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Sep-2027</td>
-      <td style="text-align:center;color:inherit;font-weight:400">16</td>
-      <td style="text-align:right">$56.3M</td>
-      <td style="text-align:right">$37.5M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(355)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(355)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-357" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">357</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">VKZC-10</td>
-      <td>2026</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTT9STT27446">WF0EXXTT9STT27446</td>
-      <td><span class="badge b-amber">PENDIENTE</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">HOSPITAL RANCAGUA</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco BICE</span></td>
-      <td style="font-size:11px">Sep-2025</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Sep-2028</td>
-      <td style="text-align:center;color:inherit;font-weight:400">28</td>
-      <td style="text-align:right">$50.1M</td>
-      <td style="text-align:right">$39.0M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(357)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(357)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-359" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">359</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">VLPF-65</td>
-      <td>2026</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTT9STT27454">WF0EXXTT9STT27454</td>
-      <td><span class="badge b-amber">PENDIENTE</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">HOSPITAL RANCAGUA</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco BCI</span></td>
-      <td style="font-size:11px">Sep-2025</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Abr-2028</td>
-      <td style="text-align:center;color:inherit;font-weight:400">23</td>
-      <td style="text-align:right">$51.0M</td>
-      <td style="text-align:right">$37.9M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(359)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(359)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-361" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">361</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">VDSD-36</td>
-      <td>2026</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTT0STM65263">WF0EXXTT0STM65263</td>
-      <td><span class="badge b-amber">PENDIENTE</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">HOSPITAL RANCAGUA</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Rio Branco</span></td>
-      <td style="font-size:11px">Sep-2025</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Sep-2027</td>
-      <td style="text-align:center;color:inherit;font-weight:400">16</td>
-      <td style="text-align:right">$56.3M</td>
-      <td style="text-align:right">$37.5M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(361)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(361)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-363" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">363</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">VDSD-37</td>
-      <td>2026</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTT0STM65277">WF0EXXTT0STM65277</td>
-      <td><span class="badge b-amber">PENDIENTE</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">HOSPITAL RANCAGUA</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Rio Branco</span></td>
-      <td style="font-size:11px">Sep-2025</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Sep-2027</td>
-      <td style="text-align:center;color:inherit;font-weight:400">16</td>
-      <td style="text-align:right">$56.3M</td>
-      <td style="text-align:right">$37.5M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(363)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(363)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-375" class="">
-      <td><span class="badge b-blue">UCM</span></td>
-      <td><strong style="font-size:13px">375</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">—</td>
-      <td>2026</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="">—</td>
-      <td><span class="badge b-amber">PENDIENTE</span></td>
-      <td><span class="badge b-blue">EN PRODUCCION</span></td>
-      <td style="font-size:11px">EN PRODUCCION</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(375)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(375)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-80" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">80</strong></td>
-      <td>MERCEDES BENZ</td><td>SPRINTER</td>
-      <td style="font-family:monospace;font-size:11px">DBLS-58</td>
-      <td>2011</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="8AC90366BE039400">8AC90366BE039400</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-amber">OPERATIVO CON OBS.</span></td>
-      <td style="font-size:11px">BACK UP / EVENTOS</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(80)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(80)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-82" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">82</strong></td>
-      <td>MERCEDES BENZ</td><td>SPRINTER</td>
-      <td style="font-family:monospace;font-size:11px">FCCV-39</td>
-      <td>2012</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WD3YE7A99CS684012">WD3YE7A99CS684012</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-amber">OPERATIVO CON OBS.</span></td>
-      <td style="font-size:11px">BACK UP EMECAR</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(82)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(82)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-83" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">83</strong></td>
-      <td>MERCEDES BENZ</td><td>SPRINTER</td>
-      <td style="font-family:monospace;font-size:11px">GSWJ-43</td>
-      <td>2014</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WBD906613ES845128">WBD906613ES845128</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-amber">OPERATIVO CON OBS.</span></td>
-      <td style="font-size:11px">BACK UP / EVENTOS</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(83)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(83)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-84" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">84</strong></td>
-      <td>MERCEDES BENZ</td><td>SPRINTER</td>
-      <td style="font-family:monospace;font-size:11px">JZDX-19</td>
-      <td>2017</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="8AC906633HE123855">8AC906633HE123855</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-amber">OPERATIVO CON OBS.</span></td>
-      <td style="font-size:11px">BACK UP EMECAR</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(84)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(84)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-85" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">85</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">RGCW-93</td>
-      <td>2022</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0XXXTTGMTJ74615">WF0XXXTTGMTJ74615</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-red">NO OPERATIVO</span></td>
-      <td style="font-size:11px">EN TALLER</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">Falta Caja Eléctrica Consola de Sirena y Baliza</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(85)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(85)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-86" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">86</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">RGCW-99</td>
-      <td>2022</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0XXXTTGMTJ74614">WF0XXXTTGMTJ74614</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">EMECAR</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(86)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(86)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-87" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">87</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">RWTR-74</td>
-      <td>2022</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0XXXTTGNTL02510">WF0XXXTTGNTL02510</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">EMECAR</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(87)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(87)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-259" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">259</strong></td>
-      <td>MAXUS</td><td>DELIVER 9 L3H3</td>
-      <td style="font-family:monospace;font-size:11px">SFPS-34</td>
-      <td>2023</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="LSH14J7CXNA050811">LSH14J7CXNA050811</td>
-      <td><span class="badge b-grey">N/A</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">COMUDEF</td>
-      <td><span style="color:#d97706;font-weight:600;font-size:11px">Banco BCI</span></td>
-      <td style="font-size:11px">Jul-2023</td>
-      <td style="font-size:11px;color:#dc2626;font-weight:700">Sep-2026</td>
-      <td style="text-align:center;color:#dc2626;font-weight:700">4</td>
-      <td style="text-align:right">$56.2M</td>
-      <td style="text-align:right">$5.9M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(259)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(259)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-261" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">261</strong></td>
-      <td>MAXUS</td><td>DELIVER 9 L3H3</td>
-      <td style="font-family:monospace;font-size:11px">SXSV-36</td>
-      <td>2023</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="LSH14J7C7NA050796">LSH14J7C7NA050796</td>
-      <td><span class="badge b-grey">N/A</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">COMUDEF</td>
-      <td><span style="color:#d97706;font-weight:600;font-size:11px">Banco Santander</span></td>
-      <td style="font-size:11px">Ago-2023</td>
-      <td style="font-size:11px;color:#dc2626;font-weight:700">Sep-2026</td>
-      <td style="text-align:center;color:#dc2626;font-weight:700">4</td>
-      <td style="text-align:right">$54.4M</td>
-      <td style="text-align:right">$5.9M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(261)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(261)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-263" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">263</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">SHXL-79</td>
-      <td>2023</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0XXXTTGPTB37770">WF0XXXTTGPTB37770</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">HOSPITAL TALAGANTE</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco BCI</span></td>
-      <td style="font-size:11px">Jul-2023</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Sep-2027</td>
-      <td style="text-align:center;color:inherit;font-weight:400">16</td>
-      <td style="text-align:right">$50.7M</td>
-      <td style="text-align:right">$16.2M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(263)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(263)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-265" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">265</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">SHXL-94</td>
-      <td>2023</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0XXXTTGPTB37773">WF0XXXTTGPTB37773</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">HOSPITAL SAN JUAN DE DIOS</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco BCI</span></td>
-      <td style="font-size:11px">Jul-2023</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Sep-2027</td>
-      <td style="text-align:center;color:inherit;font-weight:400">16</td>
-      <td style="text-align:right">$50.7M</td>
-      <td style="text-align:right">$16.2M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(265)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(265)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-267" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">267</strong></td>
-      <td>MAXUS</td><td>DELIVER 9 L3H3</td>
-      <td style="font-family:monospace;font-size:11px">TBYY-96</td>
-      <td>2023</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="LSH14J7C0NA050803">LSH14J7C0NA050803</td>
-      <td><span class="badge b-grey">N/A</span></td>
-      <td><span class="badge b-red">NO OPERATIVO</span></td>
-      <td style="font-size:11px">EN TALLER</td>
-      <td><span style="color:#d97706;font-weight:600;font-size:11px">Banco Santander</span></td>
-      <td style="font-size:11px">Oct-2023</td>
-      <td style="font-size:11px;color:#dc2626;font-weight:700">Nov-2026</td>
-      <td style="text-align:center;color:#dc2626;font-weight:700">6</td>
-      <td style="text-align:right">$50.0M</td>
-      <td style="text-align:right">$8.1M</td>
-      <td class="wrap">Ingresa 11-05 a Kaufmann, a la espera de cotización</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(267)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(267)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-269" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">269</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">SHXL-67</td>
-      <td>2023</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0XXXTTGPTB35369">WF0XXXTTGPTB35369</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">HOSPITAL LA FLORIDA</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco Internacional</span></td>
-      <td style="font-size:11px">Dic-2023</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Dic-2026</td>
-      <td style="text-align:center;color:inherit;font-weight:400">7</td>
-      <td style="text-align:right">$43.2M</td>
-      <td style="text-align:right">$8.4M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(269)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(269)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-271" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">271</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">SHXL-68</td>
-      <td>2023</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0XXXTTGPTM09116">WF0XXXTTGPTM09116</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">RESCATE RM</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco Internacional</span></td>
-      <td style="font-size:11px">Dic-2023</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Dic-2026</td>
-      <td style="text-align:center;color:inherit;font-weight:400">7</td>
-      <td style="text-align:right">$43.2M</td>
-      <td style="text-align:right">$8.4M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(271)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(271)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-273" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">273</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">SHXL-69</td>
-      <td>2023</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0XXXTTGPTB38395">WF0XXXTTGPTB38395</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">TRASLADOS BASICOS</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco Internacional</span></td>
-      <td style="font-size:11px">Dic-2023</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Dic-2026</td>
-      <td style="text-align:center;color:inherit;font-weight:400">7</td>
-      <td style="text-align:right">$43.2M</td>
-      <td style="text-align:right">$8.4M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(273)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(273)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-275" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">275</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">SHXL-93</td>
-      <td>2023</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0XXXTTGPTB38398">WF0XXXTTGPTB38398</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">BUPA ANTOFAGASTA</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco Internacional</span></td>
-      <td style="font-size:11px">Dic-2023</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Dic-2026</td>
-      <td style="text-align:center;color:inherit;font-weight:400">7</td>
-      <td style="text-align:right">$43.2M</td>
-      <td style="text-align:right">$8.4M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(275)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(275)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-277" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">277</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">SHXL-95</td>
-      <td>2023</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0XXXTTGPTB35366">WF0XXXTTGPTB35366</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">EMECAR</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco Internacional</span></td>
-      <td style="font-size:11px">Dic-2023</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Dic-2026</td>
-      <td style="text-align:center;color:inherit;font-weight:400">7</td>
-      <td style="text-align:right">$43.2M</td>
-      <td style="text-align:right">$8.4M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(277)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(277)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-289" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">289</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TJTL-96</td>
-      <td>2024</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTTRPTY77810">WF0EXXTTRPTY77810</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-red">NO OPERATIVO</span></td>
-      <td style="font-size:11px">EN TALLER</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco BCI</span></td>
-      <td style="font-size:11px">Mar-2024</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Abr-2028</td>
-      <td style="text-align:center;color:inherit;font-weight:400">23</td>
-      <td style="text-align:right">$52.5M</td>
-      <td style="text-align:right">$24.6M</td>
-      <td class="wrap">Ingresa 11-05 a Curifor, a la espera de cotización</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(289)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(289)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-291" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">291</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TJTL-98</td>
-      <td>2024</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTTRPTT32868">WF0EXXTTRPTT32868</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">RESCATE RM</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco BCI</span></td>
-      <td style="font-size:11px">Mar-2024</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">Abr-2028</td>
-      <td style="text-align:center;color:inherit;font-weight:400">23</td>
-      <td style="text-align:right">$52.5M</td>
-      <td style="text-align:right">$24.6M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(291)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(291)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-293" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">293</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TKJH-97</td>
-      <td>2024</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTTRPTT32858">WF0EXXTTRPTT32858</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">TRASLADOS BASICOS</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco Internacional</span></td>
-      <td style="font-size:11px">Abr-2024</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">May-2028</td>
-      <td style="text-align:center;color:inherit;font-weight:400">24</td>
-      <td style="text-align:right">$52.0M</td>
-      <td style="text-align:right">$25.5M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(293)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(293)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-295" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">295</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TKJH-99</td>
-      <td>2024</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTTRPTT32859">WF0EXXTTRPTT32859</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">HOSPITAL LINARES</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco Internacional</span></td>
-      <td style="font-size:11px">Abr-2024</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">May-2028</td>
-      <td style="text-align:center;color:inherit;font-weight:400">24</td>
-      <td style="text-align:right">$52.0M</td>
-      <td style="text-align:right">$25.5M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(295)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(295)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-297" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">297</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TKXZ-70</td>
-      <td>2024</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTTRPTT32862">WF0EXXTTRPTT32862</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">RESCATE RM</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco Internacional</span></td>
-      <td style="font-size:11px">Abr-2024</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">May-2028</td>
-      <td style="text-align:center;color:inherit;font-weight:400">24</td>
-      <td style="text-align:right">$49.8M</td>
-      <td style="text-align:right">$24.4M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(297)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(297)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-299" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">299</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TKXZ-71</td>
-      <td>2024</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTTRPTT32807">WF0EXXTTRPTT32807</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">HOSPITAL TALAGANTE</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco Internacional</span></td>
-      <td style="font-size:11px">Abr-2024</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">May-2028</td>
-      <td style="text-align:center;color:inherit;font-weight:400">24</td>
-      <td style="text-align:right">$49.8M</td>
-      <td style="text-align:right">$24.4M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(299)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(299)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-301" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">301</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TKYL-33</td>
-      <td>2024</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTTRPTL32866">WF0EXXTTRPTL32866</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">TRASLADOS BASICOS</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco Internacional</span></td>
-      <td style="font-size:11px">Abr-2024</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">May-2028</td>
-      <td style="text-align:center;color:inherit;font-weight:400">24</td>
-      <td style="text-align:right">$49.8M</td>
-      <td style="text-align:right">$24.4M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(301)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(301)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-303" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">303</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TKYL-34</td>
-      <td>2024</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTTRPTL69849">WF0EXXTTRPTL69849</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">ELECCON</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco Internacional</span></td>
-      <td style="font-size:11px">Abr-2024</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">May-2028</td>
-      <td style="text-align:center;color:inherit;font-weight:400">24</td>
-      <td style="text-align:right">$49.8M</td>
-      <td style="text-align:right">$24.4M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(303)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(303)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-305" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">305</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TKYL-35</td>
-      <td>2024</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTTRPTL32861">WF0EXXTTRPTL32861</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">COMUDEF</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco Internacional</span></td>
-      <td style="font-size:11px">Abr-2024</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">May-2028</td>
-      <td style="text-align:center;color:inherit;font-weight:400">24</td>
-      <td style="text-align:right">$49.8M</td>
-      <td style="text-align:right">$24.4M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(305)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(305)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-307" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">307</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">TKYP-59</td>
-      <td>2024</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTTRPTL32804">WF0EXXTTRPTL32804</td>
-      <td><span class="badge b-green">OK</span></td>
-      <td><span class="badge b-green">OPERATIVO</span></td>
-      <td style="font-size:11px">HOSPITAL SAN JUAN DE DIOS</td>
-      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco Internacional</span></td>
-      <td style="font-size:11px">Abr-2024</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">May-2028</td>
-      <td style="text-align:center;color:inherit;font-weight:400">24</td>
-      <td style="text-align:right">$49.8M</td>
-      <td style="text-align:right">$24.4M</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(307)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(307)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-369" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">369</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">—</td>
-      <td>2026</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="">—</td>
-      <td><span class="badge b-amber">PENDIENTE</span></td>
-      <td><span class="badge b-blue">EN PRODUCCION</span></td>
-      <td style="font-size:11px">EN PRODUCCION</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(369)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(369)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-371" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">371</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">—</td>
-      <td>2026</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="">—</td>
-      <td><span class="badge b-amber">PENDIENTE</span></td>
-      <td><span class="badge b-blue">EN PRODUCCION</span></td>
-      <td style="font-size:11px">EN PRODUCCION</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(371)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(371)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr id="row-373" class="">
-      <td><span class="badge b-purple">EMECAR</span></td>
-      <td><strong style="font-size:13px">373</strong></td>
-      <td>FORD</td><td>TRANSIT 2.2</td>
-      <td style="font-family:monospace;font-size:11px">—</td>
-      <td>2026</td>
-      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="">—</td>
-      <td><span class="badge b-amber">PENDIENTE</span></td>
-      <td><span class="badge b-blue">EN PRODUCCION</span></td>
-      <td style="font-size:11px">EN PRODUCCION</td>
-      <td><span style="color:#94a3b8">Propio</span></td>
-      <td style="font-size:11px">—</td>
-      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
-      <td style="text-align:center;color:inherit;font-weight:400">—</td>
-      <td style="text-align:right">—</td>
-      <td style="text-align:right">—</td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="openEditForm(373)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="askDelete(373)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr></tbody>
-  </table></div></div>
+
+  <!-- ── Evolución cuota mensual ── -->
+  <div class="sec">
+    <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)">
+      <span style="font-weight:700;font-size:13px;color:var(--navy)">Evolución de cuota mensual de leasing</span>
+      <span style="font-size:11px;color:var(--text-s)">todas las flotas · desde hoy hasta fin del último contrato</span>
+    </div>
+    <div id="leasing-evo-wrap" style="position:relative;background:#fff;border:1px solid var(--border);border-radius:8px;padding:16px 14px 10px">
+      <canvas id="chartLeasingEvo" style="width: 1854px; height: 220px; display: block; box-sizing: border-box;" width="1854" height="220"></canvas>
+      <div id="leasing-evo-tooltip" style="display: none; position: absolute; background: var(--navy); color: rgb(255, 255, 255); border-radius: 8px; padding: 10px 14px; font-size: 11px; pointer-events: none; min-width: 180px; box-shadow: rgba(0, 0, 0, 0.25) 0px 4px 16px; z-index: 10; left: 649px; top: 8px;"><div style="font-weight:800;font-size:12px;margin-bottom:8px;text-transform:capitalize">abril de 2027</div><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid #334155"><span style="color:#94a3b8;font-size:10px">TOTAL CUOTA/MES</span><span style="font-weight:800;font-size:16px;color:#60a5fa">$52.5M</span></div><div style="color:#64748b;font-size:10px;margin-bottom:6px">34 contratos activos</div><div style="display:flex;align-items:center;gap:6px;padding:3px 0;border-bottom:1px solid #1e293b"><div style="width:8px;height:8px;border-radius:2px;background:#ef4444;flex-shrink:0"></div><span style="flex:1;color:#94a3b8;font-size:10px">Banco BCI</span><span style="font-weight:700;font-size:11px">$15.9M</span><span style="color:#475569;font-size:10px;margin-left:4px">15u</span></div><div style="display:flex;align-items:center;gap:6px;padding:3px 0;border-bottom:1px solid #1e293b"><div style="width:8px;height:8px;border-radius:2px;background:#3b82f6;flex-shrink:0"></div><span style="flex:1;color:#94a3b8;font-size:10px">Banco Internacional</span><span style="font-weight:700;font-size:11px">$15.7M</span><span style="color:#475569;font-size:10px;margin-left:4px">10u</span></div><div style="display:flex;align-items:center;gap:6px;padding:3px 0;border-bottom:1px solid #1e293b"><div style="width:8px;height:8px;border-radius:2px;background:#eab308;flex-shrink:0"></div><span style="flex:1;color:#94a3b8;font-size:10px">Rio Branco</span><span style="font-weight:700;font-size:11px">$10.6M</span><span style="color:#475569;font-size:10px;margin-left:4px">4u</span></div><div style="display:flex;align-items:center;gap:6px;padding:3px 0;border-bottom:1px solid #1e293b"><div style="width:8px;height:8px;border-radius:2px;background:#f97316;flex-shrink:0"></div><span style="flex:1;color:#94a3b8;font-size:10px">Banco Santander</span><span style="font-weight:700;font-size:11px">$6.8M</span><span style="color:#475569;font-size:10px;margin-left:4px">2u</span></div><div style="display:flex;align-items:center;gap:6px;padding:3px 0;border-bottom:1px solid #1e293b"><div style="width:8px;height:8px;border-radius:2px;background:#22c55e;flex-shrink:0"></div><span style="flex:1;color:#94a3b8;font-size:10px">Banco BICE</span><span style="font-weight:700;font-size:11px">$3.5M</span><span style="color:#475569;font-size:10px;margin-left:4px">3u</span></div></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px" id="leasing-evo-legend"><div style="display:flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:12px;border:1px solid #a855f740;background:#a855f712;cursor:default"><div style="width:10px;height:10px;border-radius:2px;background:#a855f7"></div><span>Banco de Chile</span><span style="color:#94a3b8">4u</span></div><div style="display:flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:12px;border:1px solid #3b82f640;background:#3b82f612;cursor:default"><div style="width:10px;height:10px;border-radius:2px;background:#3b82f6"></div><span>Banco Internacional</span><span style="color:#94a3b8">19u</span></div><div style="display:flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:12px;border:1px solid #06b6d440;background:#06b6d412;cursor:default"><div style="width:10px;height:10px;border-radius:2px;background:#06b6d4"></div><span>Los Cuatro</span><span style="color:#94a3b8">4u</span></div><div style="display:flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:12px;border:1px solid #ef444440;background:#ef444412;cursor:default"><div style="width:10px;height:10px;border-radius:2px;background:#ef4444"></div><span>Banco BCI</span><span style="color:#94a3b8">19u</span></div><div style="display:flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:12px;border:1px solid #22c55e40;background:#22c55e12;cursor:default"><div style="width:10px;height:10px;border-radius:2px;background:#22c55e"></div><span>Banco BICE</span><span style="color:#94a3b8">7u</span></div><div style="display:flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:12px;border:1px solid #eab30840;background:#eab30812;cursor:default"><div style="width:10px;height:10px;border-radius:2px;background:#eab308"></div><span>Rio Branco</span><span style="color:#94a3b8">4u</span></div><div style="display:flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:12px;border:1px solid #f9731640;background:#f9731612;cursor:default"><div style="width:10px;height:10px;border-radius:2px;background:#f97316"></div><span>Banco Santander</span><span style="color:#94a3b8">4u</span></div><div style="display:flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:12px;border:1px solid #0f172a40;background:#0f172a10"><div style="width:12px;height:3px;border-radius:2px;background:#0f172a"></div><span style="font-weight:700">Total</span></div></div>
+  </div>
+
+  <div class="sec"><div class="sec-hdr"><h3>Vehículos en producción</h3><span class="sub">Ingresando a flota próximamente</span></div><div class="tbl-wrap"><table><thead><tr><th class="sortable" data-sort-dir="none">Prop.</th><th class="sortable" data-sort-dir="none">Móvil</th><th class="sortable" data-sort-dir="none">Marca / Modelo</th><th class="sortable" data-sort-dir="none">Patente</th><th class="sortable" data-sort-dir="none">Año</th><th class="sortable" data-sort-dir="none">Observaciones</th></tr></thead><tbody><tr><td><span class="badge b-blue">UCM</span></td><td><strong>375</strong></td><td>FORD TRANSIT 2.2</td><td style="font-family:monospace;font-size:11px">Sin patente aún</td><td style="text-align:center">2026</td><td style="text-align:center;font-weight:600;color:#1d4ed8">May-2026</td></tr><tr><td><span class="badge b-purple">EMECAR</span></td><td><strong>369</strong></td><td>FORD TRANSIT 2.2</td><td style="font-family:monospace;font-size:11px">Sin patente aún</td><td style="text-align:center">2026</td><td style="text-align:center;font-weight:600;color:#1d4ed8">May-2026</td></tr><tr><td><span class="badge b-purple">EMECAR</span></td><td><strong>371</strong></td><td>FORD TRANSIT 2.2</td><td style="font-family:monospace;font-size:11px">Sin patente aún</td><td style="text-align:center">2026</td><td style="text-align:center;font-weight:600;color:#1d4ed8">Jun-2026</td></tr><tr><td><span class="badge b-purple">EMECAR</span></td><td><strong>373</strong></td><td>FORD TRANSIT 2.2</td><td style="font-family:monospace;font-size:11px">Sin patente aún</td><td style="text-align:center">2026</td><td style="text-align:center;font-weight:600;color:#1d4ed8">Jun-2026</td></tr></tbody></table></div></div>
+  <div class="sec">
+    <div class="sec-hdr"><h3>Móviles en taller esta semana</h3></div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th class="sortable" data-sort-dir="none">Móvil</th><th class="sortable" data-sort-dir="none">Marca / Modelo</th><th class="sortable" data-sort-dir="none">Patente</th><th class="sortable" data-sort-dir="none">Estado</th><th class="sortable" data-sort-dir="none">Observación</th></tr></thead>
+      <tbody><tr style="">
+        <td><strong>231</strong></td><td>FORD F - 350 6,7</td>
+        <td style="font-family:monospace">GXCD-51</td>
+        <td><span class="badge b-red">En Taller</span></td>
+        <td class="wrap">Panne de Caja de Transmisión</td>
+      </tr><tr style="background:#f8f8f8">
+        <td><strong>233</strong></td><td>FORD F-350 TYPE I 6,7</td>
+        <td style="font-family:monospace">LGCL-18</td>
+        <td><span class="badge b-dark">Fuera de Servicio</span></td>
+        <td class="wrap">Inutilizable por falla total de motor (el importado refaccionado falló y caja de cambio con problemas)</td>
+      </tr><tr style="">
+        <td><strong>239</strong></td><td>FORD F-350 TYPE I 6,7</td>
+        <td style="font-family:monospace">LJWH-90</td>
+        <td><span class="badge b-red">En Taller</span></td>
+        <td class="wrap">Falla de Motor en revisión</td>
+      </tr><tr style="">
+        <td><strong>343</strong></td><td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace">TVKC17</td>
+        <td><span class="badge b-red">En Taller</span></td>
+        <td class="wrap">Falla de Embragüe, perteneciente a Hospital San Juan, será ingresada a CURIFOR</td>
+      </tr><tr style="">
+        <td><strong>85</strong></td><td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace">RGCW-93</td>
+        <td><span class="badge b-red">En Taller</span></td>
+        <td class="wrap">Falta Caja Eléctrica Consola de Sirena y Baliza</td>
+      </tr><tr style="">
+        <td><strong>267</strong></td><td>MAXUS DELIVER 9 L3H3</td>
+        <td style="font-family:monospace">TBYY-96</td>
+        <td><span class="badge b-red">En Taller</span></td>
+        <td class="wrap">Ingresa 11-05 a Kaufmann, a la espera de cotización</td>
+      </tr><tr style="">
+        <td><strong>289</strong></td><td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace">TJTL-96</td>
+        <td><span class="badge b-red">En Taller</span></td>
+        <td class="wrap">Ingresa 11-05 a Curifor, a la espera de cotización</td>
+      </tr></tbody>
+    </table></div>
+  </div>
+  <div id="panel-chart-data" data-labels="[&quot;OPERATIVO&quot;,&quot;OP. CON OBS.&quot;,&quot;EN TALLER&quot;,&quot;FUERA SERVICIO&quot;,&quot;EN PRODUCCIÓN&quot;]" data-values="[62,6,6,1,4]" data-colors="[&quot;#16a34a&quot;,&quot;#d97706&quot;,&quot;#ef4444&quot;,&quot;#374151&quot;,&quot;#3b82f6&quot;]" style="display:none"></div></div>
 </div>
 <script>
 /* ═══════════════════════════════════════════
@@ -3686,13 +2117,101 @@ render();
 <div id="gtip" style="position: fixed; background: rgb(15, 23, 42); color: rgb(255, 255, 255); padding: 7px 12px; border-radius: 7px; font-size: 11px; pointer-events: none; z-index: 9999; max-width: 260px; line-height: 1.5; box-shadow: rgba(0, 0, 0, 0.3) 0px 4px 16px; display: none; left: 1194px; top: 530px;">Flota Efectiva − Flota Asignada. + = unidades disponibles sobre contratos actuales. − = déficit.</div>
 
 <!-- ── CHANGELOG MODAL ── -->
-<div id="cl-overlay" onclick="if(event.target===this)cerrarChangelog()">
+<div id="cl-overlay" onclick="if(event.target===this)cerrarChangelog()" class="">
   <div id="cl-modal">
     <div class="cl-head">
       <h2>📋 Historial de versiones</h2>
       <button onclick="cerrarChangelog()">✕</button>
     </div>
-    <div id="cl-body"></div>
+    <div id="cl-body">
+    <div class="cl-version">
+      <div class="cl-ver-hdr">
+        <span class="cl-ver-num">v1.8.0</span>
+        <span class="cl-ver-date">2026-05-18</span>
+        <span class="cl-ver-badge latest">✓ Versión actual</span>
+      </div>
+      
+        <div class="cl-entry">
+          <span class="cl-dot fix"></span>
+          <span>Carga de reporte: EN PRODUCCION y FUERA DE SERVICIO protegidos contra sobreescritura.</span>
+        </div>
+        <div class="cl-entry">
+          <span class="cl-dot fix"></span>
+          <span>Normalización de condiciones del xlsx — OPERATIVO C/OBS, NO OP, etc. ya reconocidos.</span>
+        </div>
+        <div class="cl-entry">
+          <span class="cl-dot fix"></span>
+          <span>VAN ahora actualiza RS y chasis al cargar el reporte (igual que AMB).</span>
+        </div>
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Changelog incorporado — historial visible desde el badge de versión en el topbar.</span>
+        </div>
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Mensaje de carga del reporte ahora muestra desglose por flota y vehículos en taller.</span>
+        </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 16px">
+    <div class="cl-version">
+      <div class="cl-ver-hdr">
+        <span class="cl-ver-num">v1.7.0</span>
+        <span class="cl-ver-date">2026-05-18</span>
+        
+      </div>
+      
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Flota 4×4: contrato RESCATE RM (rol 4×2) para móvil 365 — distribución corregida.</span>
+        </div>
+        <div class="cl-entry">
+          <span class="cl-dot fix"></span>
+          <span>Capital remanente calculado dinámicamente con amortización lineal según fecha actual.</span>
+        </div>
+        <div class="cl-entry">
+          <span class="cl-dot fix"></span>
+          <span>Campo Remanente en formulario pasa a solo lectura — se actualiza con monto y fechas.</span>
+        </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 16px">
+    <div class="cl-version">
+      <div class="cl-ver-hdr">
+        <span class="cl-ver-num">v1.6.0</span>
+        <span class="cl-ver-date">2026-05-15</span>
+        
+      </div>
+      
+        <div class="cl-entry">
+          <span class="cl-dot fix"></span>
+          <span>Proyección: línea naranja considera duración de cada oportunidad pipeline — sube y baja correctamente.</span>
+        </div>
+        <div class="cl-entry">
+          <span class="cl-dot fix"></span>
+          <span>Ambulancias en pipeline y reserva taller redondeadas al entero más cercano.</span>
+        </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 16px">
+    <div class="cl-version">
+      <div class="cl-ver-hdr">
+        <span class="cl-ver-num">v1.5.0</span>
+        <span class="cl-ver-date">2026-05-15</span>
+        
+      </div>
+      
+        <div class="cl-entry">
+          <span class="cl-dot data"></span>
+          <span>Datos leasing actualizados desde Detalle_Vehiculos_UCM_Emecar_11-May-26.xlsx.</span>
+        </div>
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Cuotas PMT 1%/mes calculadas para móviles 241, 243, 245, 253, 255, 257.</span>
+        </div>
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Los Cuatro (279–285) y Rio Branco (353–363) con datos completos de leasing.</span>
+        </div>
+    </div>
+    </div>
     <div id="cl-github-banner">
       <span>🌐 Publicado en GitHub Pages — todos ven siempre la versión más reciente</span>
       <a href="https://github.com" target="_blank" id="cl-gh-link">Ver repositorio →</a>
