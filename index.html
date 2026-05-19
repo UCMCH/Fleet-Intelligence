@@ -149,10 +149,10 @@ tfoot td{padding:8px 10px;font-weight:700;border-right:1px solid var(--border)}
   <div id="topbar">
     <h1>🚑 UCM Fleet Intelligence</h1>
     <span class="sep">|</span>
-    <button id="ver-badge" onclick="abrirChangelog()">v2.0.0</button>
+    <button id="ver-badge" onclick="abrirChangelog()">v2.0.2</button>
     <div id="fleet-selector">
-      <button class="fs-btn active" onclick="setFlota('4x2')">🚑 AMB 4×2</button>
-      <button class="fs-btn" onclick="setFlota('4x4')">🚑 AMB 4×4</button>
+      <button class="fs-btn" onclick="setFlota('4x2')">🚑 AMB 4×2</button>
+      <button class="fs-btn active" onclick="setFlota('4x4')">🚑 AMB 4×4</button>
       <button class="fs-btn" onclick="setFlota('van')">🚐 VAN</button>
       <button class="fs-btn" onclick="setFlota('autos')">🚗 AUTOS</button>
     </div>
@@ -166,143 +166,426 @@ tfoot td{padding:8px 10px;font-weight:700;border-right:1px solid var(--border)}
     </div>
   </div>
   <div id="tabs">
-    <button class="tab-btn active" onclick="setTab('panel')">📊 Panel</button>
+    <button class="tab-btn" onclick="setTab('panel')">📊 Panel</button>
     <button class="tab-btn" onclick="setTab('flota')">🚑 Flota</button>
     <button class="tab-btn" onclick="setTab('leasing')">🏦 Leasing</button>
     <button class="tab-btn" onclick="setTab('asignaciones')">📋 Asignaciones</button>
     <button class="tab-btn" onclick="setTab('taller')">🔧 Taller <span id="taller-badge" class="tab-badge" style="display: inline;">5</span></button>
-    <button class="tab-btn" onclick="setTab('proyeccion')">📈 Proyección</button>
+    <button class="tab-btn active" onclick="setTab('proyeccion')">📈 Proyección</button>
     <button class="tab-btn" onclick="setTab('pipeline')">🎯 Pipeline</button>
   </div>
   <div id="content">
-  <div class="sec">
-    <div class="sec-hdr">
-      <h3>Resumen Operacional — Todas las flotas</h3>
-      <div style="display:flex;align-items:center;gap:10px">
-        <span class="sub">Semana: 18/05/2026</span>
-        <button onclick="togglePanelView()" style="padding:4px 12px;border-radius:20px;border:1px solid var(--blue);background:var(--blue);color:#fff;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap">
-          ✓ Todas las flotas
-        </button>
-      </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">
+    <div>
+      <span style="font-size:14px;font-weight:700;color:var(--navy)">Proyección de capacidad — AMB 4×4</span>
+      <span style="font-size:11px;color:var(--text-s);margin-left:10px">24 meses · contratos activos + pipeline · flota descontada la reserva en taller</span>
     </div>
-    <div class="kpi-row">
-      <div class="kpi" style="border-left-color:#1d4ed8"><div class="lbl">Total Flota</div><div class="val">98</div><div class="sub">vehículos registrados</div></div>
-      <div class="kpi" style="border-left-color:#16a34a"><div class="lbl">Operativos</div><div class="val">78</div><div class="sub">72 OK · 6 con obs.</div></div>
-      <div class="kpi" style="border-left-color:#ef4444"><div class="lbl">En taller activo</div><div class="val">4</div><div class="sub">1 fuera de servicio</div></div>
-      <div class="kpi" style="border-left-color:#1d4ed8"><div class="lbl">En producción</div><div class="val" style="color:#1d4ed8">15</div><div class="sub">ingresando a flota</div></div>
-      <div class="kpi" style="border-left-color:#7c3aed"><div class="lbl">Con leasing</div><div class="val">66</div><div class="sub">32 propias</div></div>
-      <div class="kpi" style="border-left-color:#d97706"><div class="lbl">Cuota mensual</div><div class="val" style="font-size:18px">$113.1M</div><div class="sub">deuda total $1.2B</div></div>
-      <div class="kpi" style="border-left-color:#22c55e"><div class="lbl">Pasan a propiedad UCM ≤6m</div><div class="val" style="color:#22c55e">6</div><div class="sub">fin de leasing</div></div>
+    <div style="display:flex;align-items:center;gap:8px;font-size:12px">
+      <span style="color:#64748b">Reserva estructural taller:</span>
+      <button onclick="ajustarReserva(-1)" style="width:26px;height:26px;border:1px solid var(--border);border-radius:5px;background:#fff;cursor:pointer;font-size:15px;line-height:1">−</button>
+      <span style="font-weight:700;font-size:15px;min-width:36px;text-align:center">8%</span>
+      <button onclick="ajustarReserva(1)" style="width:26px;height:26px;border:1px solid var(--border);border-radius:5px;background:#fff;cursor:pointer;font-size:15px;line-height:1">+</button>
+      <span style="color:#64748b">(≈ 0 und.)</span>
     </div>
   </div>
 
-  <div class="grid2 sec">
-    <div class="card">
-      <div class="card-title">Estado de flota</div>
-      <div class="chart-wrap"><canvas id="chartCondicion" width="905" height="220" style="display: block; box-sizing: border-box; height: 220px; width: 905px;"></canvas></div>
-    </div>
-    <div class="card">
-      <div class="card-title">Leasing activo por banco <span style="font-size:10px;color:#94a3b8;font-weight:400">— todas las flotas</span></div>
-      <div class="tbl-wrap"><table>
-        <thead><tr><th class="sortable" data-sort-dir="none">Banco</th><th class="sortable" data-sort-dir="none">Unid.</th><th class="sortable" data-sort-dir="none">Cuota/mes</th><th class="sortable" data-sort-dir="none">Deuda rest.</th><th class="sortable" data-sort-dir="none">Próx. vcto.</th></tr></thead>
-        <tbody><tr>
-          <td><strong>Banco BCI</strong></td>
-          <td style="text-align:center">19</td>
-          <td style="text-align:right;color:#1d4ed8;font-weight:600">$25.5M</td>
-          <td style="text-align:right">$298.3M</td>
-          <td style="color:#dc2626">Jun-2026</td>
-        </tr><tr>
-          <td><strong>Banco Santander</strong></td>
-          <td style="text-align:center">9</td>
-          <td style="text-align:right;color:#1d4ed8;font-weight:600">$10.5M</td>
-          <td style="text-align:right">$139.5M</td>
-          <td style="color:#dc2626">Sep-2026</td>
-        </tr><tr>
-          <td><strong>Banco de Chile</strong></td>
-          <td style="text-align:center">4</td>
-          <td style="text-align:right;color:#1d4ed8;font-weight:600">$6.8M</td>
-          <td style="text-align:right">$30.1M</td>
-          <td style="color:#dc2626">Oct-2026</td>
-        </tr><tr>
-          <td><strong>Banco Internacional</strong></td>
-          <td style="text-align:center">19</td>
-          <td style="text-align:right;color:#1d4ed8;font-weight:600">$30.0M</td>
-          <td style="text-align:right">$353.9M</td>
-          <td style="color:#475569">Dic-2026</td>
-        </tr><tr>
-          <td><strong>Banco BICE</strong></td>
-          <td style="text-align:center">7</td>
-          <td style="text-align:right;color:#1d4ed8;font-weight:600">$21.5M</td>
-          <td style="text-align:right">$134.7M</td>
-          <td style="color:#475569">Dic-2026</td>
-        </tr><tr>
-          <td><strong>Los Cuatro</strong></td>
-          <td style="text-align:center">4</td>
-          <td style="text-align:right;color:#1d4ed8;font-weight:600">$8.3M</td>
-          <td style="text-align:right">$55.6M</td>
-          <td style="color:#475569">Ene-2027</td>
-        </tr><tr>
-          <td><strong>Rio Branco</strong></td>
-          <td style="text-align:center">4</td>
-          <td style="text-align:right;color:#1d4ed8;font-weight:600">$10.6M</td>
-          <td style="text-align:right">$150.0M</td>
-          <td style="color:#475569">Sep-2027</td>
-        </tr>
-        </tbody><tfoot><tr><td><strong>TOTAL</strong></td><td style="text-align:center"><strong>66</strong></td><td style="text-align:right;color:#1d4ed8">
-              <strong>$113.1M</strong>
-              <div style="font-size:9px;color:#d97706;font-weight:600">⚠ parcial</div>
-            </td><td style="text-align:right"><strong>$1.2B</strong></td><td></td></tr></tfoot>
-        </table></div>
+  <div class="alert alert-danger" style="margin-bottom:16px">
+    ⚠ <strong>Déficit proyectado en 1 mes(es)</strong> — considerar adquisición de flota adicional.
+  </div>
+
+  <!-- Chart -->
+  <div class="card sec">
+    <div class="card-title">Flota disponible vs demanda por mes</div>
+    <div class="chart-wrap" style="height:240px"><canvas id="chartProy" width="1814" height="240" style="display: block; box-sizing: border-box; height: 240px; width: 1814px;"></canvas></div>
+    <div style="display:flex;gap:14px;margin-top:8px;font-size:11px;flex-wrap:wrap">
+      <span style="display:flex;align-items:center;gap:5px"><span style="width:16px;height:3px;background:#1d4ed8;display:inline-block;border-radius:2px"></span>Flota efectiva</span>
+      <span style="display:flex;align-items:center;gap:5px"><span style="width:16px;height:3px;background:#16a34a;display:inline-block;border-radius:2px"></span>Demanda contratos activos</span>
+      <span style="display:flex;align-items:center;gap:5px"><span style="width:16px;height:3px;background:#f97316;display:inline-block;border-radius:2px;border-bottom:2px dashed #f97316"></span>Demanda + pipeline ponderado</span>
     </div>
   </div>
 
-  <!-- ── Evolución cuota mensual ── -->
+  <!-- Table -->
   <div class="sec">
-    <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)">
-      <span style="font-weight:700;font-size:13px;color:var(--navy)">Evolución de cuota mensual de leasing</span>
-      <span style="font-size:11px;color:var(--text-s)">todas las flotas · desde hoy hasta fin del último contrato</span>
-    </div>
-    <div id="leasing-evo-wrap" style="position:relative;background:#fff;border:1px solid var(--border);border-radius:8px;padding:16px 14px 10px">
-      <canvas id="chartLeasingEvo" style="width: 1854px; height: 220px; display: block; box-sizing: border-box;" width="1854" height="220"></canvas>
-      <div id="leasing-evo-tooltip" style="display:none;position:absolute;background:var(--navy);color:#fff;border-radius:8px;padding:10px 14px;font-size:11px;pointer-events:none;min-width:180px;box-shadow:0 4px 16px rgba(0,0,0,.25);z-index:10"></div>
-    </div>
-    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px" id="leasing-evo-legend"><div style="display:flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:12px;border:1px solid #a855f740;background:#a855f712;cursor:default"><div style="width:10px;height:10px;border-radius:2px;background:#a855f7"></div><span>Banco de Chile</span><span style="color:#94a3b8">4u</span></div><div style="display:flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:12px;border:1px solid #3b82f640;background:#3b82f612;cursor:default"><div style="width:10px;height:10px;border-radius:2px;background:#3b82f6"></div><span>Banco Internacional</span><span style="color:#94a3b8">19u</span></div><div style="display:flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:12px;border:1px solid #06b6d440;background:#06b6d412;cursor:default"><div style="width:10px;height:10px;border-radius:2px;background:#06b6d4"></div><span>Los Cuatro</span><span style="color:#94a3b8">4u</span></div><div style="display:flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:12px;border:1px solid #ef444440;background:#ef444412;cursor:default"><div style="width:10px;height:10px;border-radius:2px;background:#ef4444"></div><span>Banco BCI</span><span style="color:#94a3b8">19u</span></div><div style="display:flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:12px;border:1px solid #22c55e40;background:#22c55e12;cursor:default"><div style="width:10px;height:10px;border-radius:2px;background:#22c55e"></div><span>Banco BICE</span><span style="color:#94a3b8">7u</span></div><div style="display:flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:12px;border:1px solid #eab30840;background:#eab30812;cursor:default"><div style="width:10px;height:10px;border-radius:2px;background:#eab308"></div><span>Rio Branco</span><span style="color:#94a3b8">4u</span></div><div style="display:flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:12px;border:1px solid #f9731640;background:#f9731612;cursor:default"><div style="width:10px;height:10px;border-radius:2px;background:#f97316"></div><span>Banco Santander</span><span style="color:#94a3b8">4u</span></div><div style="display:flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:12px;border:1px solid #0f172a40;background:#0f172a10"><div style="width:12px;height:3px;border-radius:2px;background:#0f172a"></div><span style="font-weight:700">Total</span></div></div>
-  </div>
-
-  <div class="sec"><div class="sec-hdr"><h3>Vehículos en producción</h3><span class="sub">Ingresando a flota próximamente</span></div><div class="tbl-wrap"><table><thead><tr><th class="sortable" data-sort-dir="none">Prop.</th><th class="sortable" data-sort-dir="none">Móvil</th><th class="sortable" data-sort-dir="none">Marca / Modelo</th><th class="sortable" data-sort-dir="none">Patente</th><th class="sortable" data-sort-dir="none">Año</th><th class="sortable" data-sort-dir="none">Observaciones</th></tr></thead><tbody><tr><td><span class="badge b-blue">UCM</span></td><td><strong>375</strong></td><td>FORD TRANSIT 2.2</td><td style="font-family:monospace;font-size:11px">Sin patente aún</td><td style="text-align:center">2026</td><td style="text-align:center;font-weight:600;color:#1d4ed8">May-2026</td></tr><tr><td><span class="badge b-purple">EMECAR</span></td><td><strong>369</strong></td><td>FORD TRANSIT 2.2</td><td style="font-family:monospace;font-size:11px">Sin patente aún</td><td style="text-align:center">2026</td><td style="text-align:center;font-weight:600;color:#1d4ed8">May-2026</td></tr><tr><td><span class="badge b-purple">EMECAR</span></td><td><strong>371</strong></td><td>FORD TRANSIT 2.2</td><td style="font-family:monospace;font-size:11px">Sin patente aún</td><td style="text-align:center">2026</td><td style="text-align:center;font-weight:600;color:#1d4ed8">Jun-2026</td></tr><tr><td><span class="badge b-purple">EMECAR</span></td><td><strong>373</strong></td><td>FORD TRANSIT 2.2</td><td style="font-family:monospace;font-size:11px">Sin patente aún</td><td style="text-align:center">2026</td><td style="text-align:center;font-weight:600;color:#1d4ed8">Jun-2026</td></tr><tr><td><span class="badge b-blue">UCM</span></td><td><strong>367</strong></td><td>FORD TRANSIT VAN L3H3 4X4 2.0</td><td style="font-family:monospace;font-size:11px">Sin patente aún</td><td style="text-align:center">2026</td><td style="text-align:center;font-weight:600;color:#1d4ed8">May-2026</td></tr><tr><td><span class="badge b-blue">UCM</span></td><td><strong>377</strong></td><td>FORD TRANSIT VAN L3H3 4X4 2.0</td><td style="font-family:monospace;font-size:11px">Sin patente aún</td><td style="text-align:center">2026</td><td style="text-align:center;font-weight:600;color:#1d4ed8">Jun-2026</td></tr><tr><td><span class="badge b-blue">UCM</span></td><td><strong>379</strong></td><td>FORD TRANSIT VAN L3H3 4X4 2.0</td><td style="font-family:monospace;font-size:11px">Sin patente aún</td><td style="text-align:center">2026</td><td style="text-align:center;font-weight:600;color:#1d4ed8">Jun-2026</td></tr><tr><td><span class="badge b-blue">UCM</span></td><td><strong>401</strong></td><td>CHEVROLET SAIL SEDAN 1.5 LTZ MT</td><td style="font-family:monospace;font-size:11px">PENDIENTE</td><td style="text-align:center">2026</td><td style="text-align:center;font-weight:600;color:#1d4ed8">May-2026</td></tr><tr><td><span class="badge b-blue">UCM</span></td><td><strong>402</strong></td><td>CHEVROLET SAIL SEDAN 1.5 LTZ MT</td><td style="font-family:monospace;font-size:11px">PENDIENTE</td><td style="text-align:center">2026</td><td style="text-align:center;font-weight:600;color:#1d4ed8">May-2026</td></tr><tr><td><span class="badge b-blue">UCM</span></td><td><strong>403</strong></td><td>CHEVROLET SAIL SEDAN 1.5 LTZ MT</td><td style="font-family:monospace;font-size:11px">PENDIENTE</td><td style="text-align:center">2026</td><td style="text-align:center;font-weight:600;color:#1d4ed8">May-2026</td></tr><tr><td><span class="badge b-blue">UCM</span></td><td><strong>404</strong></td><td>CHEVROLET SAIL SEDAN 1.5 LTZ MT</td><td style="font-family:monospace;font-size:11px">PENDIENTE</td><td style="text-align:center">2026</td><td style="text-align:center;font-weight:600;color:#1d4ed8">May-2026</td></tr><tr><td><span class="badge b-blue">UCM</span></td><td><strong>405</strong></td><td>CHEVROLET SAIL SEDAN 1.5 LTZ MT</td><td style="font-family:monospace;font-size:11px">PENDIENTE</td><td style="text-align:center">2026</td><td style="text-align:center;font-weight:600;color:#1d4ed8">May-2026</td></tr><tr><td><span class="badge b-blue">UCM</span></td><td><strong>406</strong></td><td>CHEVROLET SAIL SEDAN 1.5 LTZ MT</td><td style="font-family:monospace;font-size:11px">PENDIENTE</td><td style="text-align:center">2026</td><td style="text-align:center;font-weight:600;color:#1d4ed8">May-2026</td></tr><tr><td><span class="badge b-blue">UCM</span></td><td><strong>407</strong></td><td>CHEVROLET SAIL SEDAN 1.5 LTZ MT</td><td style="font-family:monospace;font-size:11px">PENDIENTE</td><td style="text-align:center">2026</td><td style="text-align:center;font-weight:600;color:#1d4ed8">May-2026</td></tr><tr><td><span class="badge b-blue">UCM</span></td><td><strong>408</strong></td><td>CHEVROLET SAIL SEDAN 1.5 LTZ MT</td><td style="font-family:monospace;font-size:11px">PENDIENTE</td><td style="text-align:center">2026</td><td style="text-align:center;font-weight:600;color:#1d4ed8">May-2026</td></tr></tbody></table></div></div>
-  <div class="sec">
-    <div class="sec-hdr"><h3>Móviles en taller esta semana</h3></div>
-    <div class="tbl-wrap"><table>
-      <thead><tr><th class="sortable" data-sort-dir="none">Móvil</th><th class="sortable" data-sort-dir="none">Marca / Modelo</th><th class="sortable" data-sort-dir="none">Patente</th><th class="sortable" data-sort-dir="none">Estado</th><th class="sortable" data-sort-dir="none">Observación</th></tr></thead>
-      <tbody><tr style="background:#f8f8f8">
-        <td><strong>233</strong></td><td>FORD F-350 TYPE I 6,7</td>
-        <td style="font-family:monospace">LGCL-18</td>
-        <td><span class="badge b-dark">Fuera de Servicio</span></td>
-        <td class="wrap">Inutilizable por falla total de motor (el importado refaccionado falló y caja de cambio con problemas)</td>
-      </tr><tr style="">
-        <td><strong>239</strong></td><td>FORD F-350 TYPE I 6,7</td>
-        <td style="font-family:monospace">LJWH-90</td>
-        <td><span class="badge b-red">En Taller</span></td>
-        <td class="wrap">Falla de Motor en revisión</td>
-      </tr><tr style="">
-        <td><strong>343</strong></td><td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace">TVKC17</td>
-        <td><span class="badge b-red">En Taller</span></td>
-        <td class="wrap">Falla de Embragüe, perteneciente a Hospital San Juan, en CURIFOR</td>
-      </tr><tr style="">
-        <td><strong>267</strong></td><td>MAXUS DELIVER 9 L3H3</td>
-        <td style="font-family:monospace">TBYY-96</td>
-        <td><span class="badge b-red">En Taller</span></td>
-        <td class="wrap">Ingresa 11-05 a Kaufmann, a la espera de cotización</td>
-      </tr><tr style="">
-        <td><strong>289</strong></td><td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace">TJTL-96</td>
-        <td><span class="badge b-red">En Taller</span></td>
-        <td class="wrap">Falla de conversor</td>
-      </tr></tbody>
+    <div style="font-size:12px;font-weight:600;color:#0f172a;margin-bottom:8px">Detalle mes a mes</div>
+    <div class="tbl-wrap"><table style="table-layout:auto" data-nosort="true">
+      <thead><tr>
+        <th style="width:75px">Mes</th>
+        <th style="width:110px;cursor:help" onmouseenter="showTip(event,'Total − FS − Reserva estructural % − Op. con Obs. − Prod. sin fecha. Formato: base(+entregas ese mes). Ej: 62(+2) = 62 disponibles + 2 que ingresan.')" onmouseleave="hideTip()">Flota Efectiva ℹ</th>
+        <th style="width:130px;cursor:help" onmouseenter="showTip(event,'Suma de unidades asignadas en contratos activos ese mes (contratos con fFin &gt;= mes o permanentes).')" onmouseleave="hideTip()">Flota Asignada ℹ</th>
+        <th style="width:120px;cursor:help" onmouseenter="showTip(event,'Cantidad de contratos cuya fecha de término es exactamente este mes.')" onmouseleave="hideTip()">Contratos que Terminan ℹ</th>
+        <th style="width:110px;cursor:help" onmouseenter="showTip(event,'Unidades que quedan libres al vencer contratos este mes. Pasa el cursor sobre el número para ver detalle por cliente.')" onmouseleave="hideTip()">Uds. Liberadas ℹ</th>
+        <th style="width:140px;cursor:help" onmouseenter="showTip(event,'Flota Efectiva − Flota Asignada. + = unidades disponibles sobre contratos actuales. − = déficit.')" onmouseleave="hideTip()">Sobrante / Faltante ℹ</th>
+        <th style="width:140px;cursor:help" onmouseenter="showTip(event,'Demanda ponderada (unidades × prob%) de oportunidades pipeline ACTIVAS ese mes: ya arrancaron (fReq ≤ mes) y su contrato no ha terminado (fReq + duración &gt; mes).')" onmouseleave="hideTip()">Demanda Uds. Pipeline ℹ</th>
+        <th style="width:120px;cursor:help" onmouseenter="showTip(event,'Sobrante/Faltante − Demanda pipeline. Negativo = hay que adquirir flota para cubrir contratos actuales y pipeline esperado.')" onmouseleave="hideTip()">Sobrante / Faltante Neto ℹ</th>
+      </tr></thead>
+      <tbody>
+      <tr style="background:transparent">
+        <td style="text-align:center;font-weight:400;width:135px">may. 26</td>
+        <td style="text-align:center">
+          3<span style="color:#16a34a;font-size:10px;font-weight:600;margin-left:3px">(+1)</span>
+        </td>
+        <td style="text-align:center">3</td>
+        <td style="text-align:center;color:#cbd5e1;font-weight:400">—</td>
+        <td style="text-align:center;white-space:nowrap;width:135px"><span style="color:#cbd5e1">—</span></td>
+        <td style="text-align:center;font-weight:700;color:#d97706">
+          +1 und.
+        </td>
+        <td style="text-align:center;color:#f97316">1</td>
+        <td style="text-align:center">
+          <span style="display:inline-block;min-width:52px;padding:3px 10px;border-radius:12px;font-weight:800;font-size:12px;background:#fef3c7;color:#d97706">+0 und.</span>
+        </td>
+      </tr><tr style="background:var(--row-alt)">
+        <td style="text-align:center;font-weight:400;width:135px">jun. 26</td>
+        <td style="text-align:center">
+          4<span style="color:#16a34a;font-size:10px;font-weight:600;margin-left:3px">(+2)</span>
+        </td>
+        <td style="text-align:center">3</td>
+        <td style="text-align:center;color:#cbd5e1;font-weight:400">—</td>
+        <td style="text-align:center;white-space:nowrap;width:135px"><span style="color:#cbd5e1">—</span></td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">
+          +3 und.
+        </td>
+        <td style="text-align:center;color:#f97316">2</td>
+        <td style="text-align:center">
+          <span style="display:inline-block;min-width:52px;padding:3px 10px;border-radius:12px;font-weight:800;font-size:12px;background:#fef3c7;color:#d97706">+1 und.</span>
+        </td>
+      </tr><tr style="background:transparent">
+        <td style="text-align:center;font-weight:400;width:135px">jul. 26</td>
+        <td style="text-align:center">
+          6<span style="color:#94a3b8;font-size:10px;margin-left:3px">(0)</span>
+        </td>
+        <td style="text-align:center">3</td>
+        <td style="text-align:center;color:#cbd5e1;font-weight:400">—</td>
+        <td style="text-align:center;white-space:nowrap;width:135px"><span style="color:#cbd5e1">—</span></td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">
+          +3 und.
+        </td>
+        <td style="text-align:center;color:#f97316">2</td>
+        <td style="text-align:center">
+          <span style="display:inline-block;min-width:52px;padding:3px 10px;border-radius:12px;font-weight:800;font-size:12px;background:#fef3c7;color:#d97706">+1 und.</span>
+        </td>
+      </tr><tr style="background:var(--row-alt)">
+        <td style="text-align:center;font-weight:400;width:135px">ago. 26</td>
+        <td style="text-align:center">
+          6<span style="color:#94a3b8;font-size:10px;margin-left:3px">(0)</span>
+        </td>
+        <td style="text-align:center">3</td>
+        <td style="text-align:center;color:#cbd5e1;font-weight:400">—</td>
+        <td style="text-align:center;white-space:nowrap;width:135px"><span style="color:#cbd5e1">—</span></td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">
+          +3 und.
+        </td>
+        <td style="text-align:center;color:#f97316">3</td>
+        <td style="text-align:center">
+          <span style="display:inline-block;min-width:52px;padding:3px 10px;border-radius:12px;font-weight:800;font-size:12px;background:#fef3c7;color:#d97706">+0 und.</span>
+        </td>
+      </tr><tr style="background:transparent">
+        <td style="text-align:center;font-weight:400;width:135px">sep. 26</td>
+        <td style="text-align:center">
+          6<span style="color:#94a3b8;font-size:10px;margin-left:3px">(0)</span>
+        </td>
+        <td style="text-align:center">3</td>
+        <td style="text-align:center;color:#cbd5e1;font-weight:400">—</td>
+        <td style="text-align:center;white-space:nowrap;width:135px"><span style="color:#cbd5e1">—</span></td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">
+          +3 und.
+        </td>
+        <td style="text-align:center;color:#f97316">3</td>
+        <td style="text-align:center">
+          <span style="display:inline-block;min-width:52px;padding:3px 10px;border-radius:12px;font-weight:800;font-size:12px;background:#fef3c7;color:#d97706">+0 und.</span>
+        </td>
+      </tr><tr style="background:var(--row-alt)">
+        <td style="text-align:center;font-weight:400;width:135px">oct. 26</td>
+        <td style="text-align:center">
+          6<span style="color:#94a3b8;font-size:10px;margin-left:3px">(0)</span>
+        </td>
+        <td style="text-align:center">3</td>
+        <td style="text-align:center;color:#cbd5e1;font-weight:400">—</td>
+        <td style="text-align:center;white-space:nowrap;width:135px"><span style="color:#cbd5e1">—</span></td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">
+          +3 und.
+        </td>
+        <td style="text-align:center;color:#f97316">3</td>
+        <td style="text-align:center">
+          <span style="display:inline-block;min-width:52px;padding:3px 10px;border-radius:12px;font-weight:800;font-size:12px;background:#fef3c7;color:#d97706">+0 und.</span>
+        </td>
+      </tr><tr style="background:transparent">
+        <td style="text-align:center;font-weight:400;width:135px">nov. 26</td>
+        <td style="text-align:center">
+          6<span style="color:#94a3b8;font-size:10px;margin-left:3px">(0)</span>
+        </td>
+        <td style="text-align:center">3</td>
+        <td style="text-align:center;color:#cbd5e1;font-weight:400">—</td>
+        <td style="text-align:center;white-space:nowrap;width:135px"><span style="color:#cbd5e1">—</span></td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">
+          +3 und.
+        </td>
+        <td style="text-align:center;color:#f97316">3</td>
+        <td style="text-align:center">
+          <span style="display:inline-block;min-width:52px;padding:3px 10px;border-radius:12px;font-weight:800;font-size:12px;background:#fef3c7;color:#d97706">+0 und.</span>
+        </td>
+      </tr><tr style="background:var(--row-alt)">
+        <td style="text-align:center;font-weight:400;width:135px">dic. 26</td>
+        <td style="text-align:center">
+          6<span style="color:#94a3b8;font-size:10px;margin-left:3px">(0)</span>
+        </td>
+        <td style="text-align:center">3</td>
+        <td style="text-align:center;color:#cbd5e1;font-weight:400">—</td>
+        <td style="text-align:center;white-space:nowrap;width:135px"><span style="color:#cbd5e1">—</span></td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">
+          +3 und.
+        </td>
+        <td style="text-align:center;color:#f97316">3</td>
+        <td style="text-align:center">
+          <span style="display:inline-block;min-width:52px;padding:3px 10px;border-radius:12px;font-weight:800;font-size:12px;background:#fef3c7;color:#d97706">+0 und.</span>
+        </td>
+      </tr><tr style="background:#fff1f2">
+        <td style="text-align:center;font-weight:700;width:135px">ene. 27</td>
+        <td style="text-align:center">
+          6<span style="color:#94a3b8;font-size:10px;margin-left:3px">(0)</span>
+        </td>
+        <td style="text-align:center">3</td>
+        <td style="text-align:center;color:#d97706;font-weight:700">1</td>
+        <td style="text-align:center;white-space:nowrap;width:135px"><span style="color:#16a34a;font-weight:700;cursor:help" onmouseenter="showTip(event,'+2 TECHINT ')" onmouseleave="hideTip()" '="">+2 ℹ</span></td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">
+          +3 und.
+        </td>
+        <td style="text-align:center;color:#f97316">4</td>
+        <td style="text-align:center">
+          <span style="display:inline-block;min-width:52px;padding:3px 10px;border-radius:12px;font-weight:800;font-size:12px;background:#fee2e2;color:#dc2626">-1 und.</span>
+        </td>
+      </tr><tr style="background:var(--row-alt)">
+        <td style="text-align:center;font-weight:400;width:135px">feb. 27</td>
+        <td style="text-align:center">
+          6<span style="color:#94a3b8;font-size:10px;margin-left:3px">(0)</span>
+        </td>
+        <td style="text-align:center">1</td>
+        <td style="text-align:center;color:#cbd5e1;font-weight:400">—</td>
+        <td style="text-align:center;white-space:nowrap;width:135px"><span style="color:#cbd5e1">—</span></td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">
+          +5 und.
+        </td>
+        <td style="text-align:center;color:#f97316">4</td>
+        <td style="text-align:center">
+          <span style="display:inline-block;min-width:52px;padding:3px 10px;border-radius:12px;font-weight:800;font-size:12px;background:#fef3c7;color:#d97706">+1 und.</span>
+        </td>
+      </tr><tr style="background:transparent">
+        <td style="text-align:center;font-weight:400;width:135px">mar. 27</td>
+        <td style="text-align:center">
+          6<span style="color:#94a3b8;font-size:10px;margin-left:3px">(0)</span>
+        </td>
+        <td style="text-align:center">1</td>
+        <td style="text-align:center;color:#cbd5e1;font-weight:400">—</td>
+        <td style="text-align:center;white-space:nowrap;width:135px"><span style="color:#cbd5e1">—</span></td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">
+          +5 und.
+        </td>
+        <td style="text-align:center;color:#f97316">4</td>
+        <td style="text-align:center">
+          <span style="display:inline-block;min-width:52px;padding:3px 10px;border-radius:12px;font-weight:800;font-size:12px;background:#fef3c7;color:#d97706">+1 und.</span>
+        </td>
+      </tr><tr style="background:var(--row-alt)">
+        <td style="text-align:center;font-weight:400;width:135px">abr. 27</td>
+        <td style="text-align:center">
+          6<span style="color:#94a3b8;font-size:10px;margin-left:3px">(0)</span>
+        </td>
+        <td style="text-align:center">1</td>
+        <td style="text-align:center;color:#cbd5e1;font-weight:400">—</td>
+        <td style="text-align:center;white-space:nowrap;width:135px"><span style="color:#cbd5e1">—</span></td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">
+          +5 und.
+        </td>
+        <td style="text-align:center;color:#f97316">4</td>
+        <td style="text-align:center">
+          <span style="display:inline-block;min-width:52px;padding:3px 10px;border-radius:12px;font-weight:800;font-size:12px;background:#fef3c7;color:#d97706">+1 und.</span>
+        </td>
+      </tr><tr style="background:transparent">
+        <td style="text-align:center;font-weight:400;width:135px">may. 27</td>
+        <td style="text-align:center">
+          6<span style="color:#94a3b8;font-size:10px;margin-left:3px">(0)</span>
+        </td>
+        <td style="text-align:center">1</td>
+        <td style="text-align:center;color:#cbd5e1;font-weight:400">—</td>
+        <td style="text-align:center;white-space:nowrap;width:135px"><span style="color:#cbd5e1">—</span></td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">
+          +5 und.
+        </td>
+        <td style="text-align:center;color:#f97316">4</td>
+        <td style="text-align:center">
+          <span style="display:inline-block;min-width:52px;padding:3px 10px;border-radius:12px;font-weight:800;font-size:12px;background:#fef3c7;color:#d97706">+1 und.</span>
+        </td>
+      </tr><tr style="background:var(--row-alt)">
+        <td style="text-align:center;font-weight:400;width:135px">jun. 27</td>
+        <td style="text-align:center">
+          6<span style="color:#94a3b8;font-size:10px;margin-left:3px">(0)</span>
+        </td>
+        <td style="text-align:center">1</td>
+        <td style="text-align:center;color:#cbd5e1;font-weight:400">—</td>
+        <td style="text-align:center;white-space:nowrap;width:135px"><span style="color:#cbd5e1">—</span></td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">
+          +5 und.
+        </td>
+        <td style="text-align:center;color:#f97316">3</td>
+        <td style="text-align:center">
+          <span style="display:inline-block;min-width:52px;padding:3px 10px;border-radius:12px;font-weight:800;font-size:12px;background:#dcfce7;color:#16a34a">+2 und.</span>
+        </td>
+      </tr><tr style="background:transparent">
+        <td style="text-align:center;font-weight:400;width:135px">jul. 27</td>
+        <td style="text-align:center">
+          6<span style="color:#94a3b8;font-size:10px;margin-left:3px">(0)</span>
+        </td>
+        <td style="text-align:center">1</td>
+        <td style="text-align:center;color:#cbd5e1;font-weight:400">—</td>
+        <td style="text-align:center;white-space:nowrap;width:135px"><span style="color:#cbd5e1">—</span></td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">
+          +5 und.
+        </td>
+        <td style="text-align:center;color:#f97316">3</td>
+        <td style="text-align:center">
+          <span style="display:inline-block;min-width:52px;padding:3px 10px;border-radius:12px;font-weight:800;font-size:12px;background:#dcfce7;color:#16a34a">+2 und.</span>
+        </td>
+      </tr><tr style="background:var(--row-alt)">
+        <td style="text-align:center;font-weight:400;width:135px">ago. 27</td>
+        <td style="text-align:center">
+          6<span style="color:#94a3b8;font-size:10px;margin-left:3px">(0)</span>
+        </td>
+        <td style="text-align:center">1</td>
+        <td style="text-align:center;color:#cbd5e1;font-weight:400">—</td>
+        <td style="text-align:center;white-space:nowrap;width:135px"><span style="color:#cbd5e1">—</span></td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">
+          +5 und.
+        </td>
+        <td style="text-align:center;color:#f97316">2</td>
+        <td style="text-align:center">
+          <span style="display:inline-block;min-width:52px;padding:3px 10px;border-radius:12px;font-weight:800;font-size:12px;background:#dcfce7;color:#16a34a">+3 und.</span>
+        </td>
+      </tr><tr style="background:transparent">
+        <td style="text-align:center;font-weight:400;width:135px">sep. 27</td>
+        <td style="text-align:center">
+          6<span style="color:#94a3b8;font-size:10px;margin-left:3px">(0)</span>
+        </td>
+        <td style="text-align:center">1</td>
+        <td style="text-align:center;color:#cbd5e1;font-weight:400">—</td>
+        <td style="text-align:center;white-space:nowrap;width:135px"><span style="color:#cbd5e1">—</span></td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">
+          +5 und.
+        </td>
+        <td style="text-align:center;color:#f97316">2</td>
+        <td style="text-align:center">
+          <span style="display:inline-block;min-width:52px;padding:3px 10px;border-radius:12px;font-weight:800;font-size:12px;background:#dcfce7;color:#16a34a">+3 und.</span>
+        </td>
+      </tr><tr style="background:var(--row-alt)">
+        <td style="text-align:center;font-weight:400;width:135px">oct. 27</td>
+        <td style="text-align:center">
+          6<span style="color:#94a3b8;font-size:10px;margin-left:3px">(0)</span>
+        </td>
+        <td style="text-align:center">1</td>
+        <td style="text-align:center;color:#cbd5e1;font-weight:400">—</td>
+        <td style="text-align:center;white-space:nowrap;width:135px"><span style="color:#cbd5e1">—</span></td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">
+          +5 und.
+        </td>
+        <td style="text-align:center;color:#f97316">2</td>
+        <td style="text-align:center">
+          <span style="display:inline-block;min-width:52px;padding:3px 10px;border-radius:12px;font-weight:800;font-size:12px;background:#dcfce7;color:#16a34a">+3 und.</span>
+        </td>
+      </tr><tr style="background:transparent">
+        <td style="text-align:center;font-weight:400;width:135px">nov. 27</td>
+        <td style="text-align:center">
+          6<span style="color:#94a3b8;font-size:10px;margin-left:3px">(0)</span>
+        </td>
+        <td style="text-align:center">1</td>
+        <td style="text-align:center;color:#cbd5e1;font-weight:400">—</td>
+        <td style="text-align:center;white-space:nowrap;width:135px"><span style="color:#cbd5e1">—</span></td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">
+          +5 und.
+        </td>
+        <td style="text-align:center;color:#f97316">2</td>
+        <td style="text-align:center">
+          <span style="display:inline-block;min-width:52px;padding:3px 10px;border-radius:12px;font-weight:800;font-size:12px;background:#dcfce7;color:#16a34a">+3 und.</span>
+        </td>
+      </tr><tr style="background:var(--row-alt)">
+        <td style="text-align:center;font-weight:400;width:135px">dic. 27</td>
+        <td style="text-align:center">
+          6<span style="color:#94a3b8;font-size:10px;margin-left:3px">(0)</span>
+        </td>
+        <td style="text-align:center">1</td>
+        <td style="text-align:center;color:#cbd5e1;font-weight:400">—</td>
+        <td style="text-align:center;white-space:nowrap;width:135px"><span style="color:#cbd5e1">—</span></td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">
+          +5 und.
+        </td>
+        <td style="text-align:center;color:#f97316">2</td>
+        <td style="text-align:center">
+          <span style="display:inline-block;min-width:52px;padding:3px 10px;border-radius:12px;font-weight:800;font-size:12px;background:#dcfce7;color:#16a34a">+3 und.</span>
+        </td>
+      </tr><tr style="background:transparent">
+        <td style="text-align:center;font-weight:400;width:135px">ene. 28</td>
+        <td style="text-align:center">
+          6<span style="color:#94a3b8;font-size:10px;margin-left:3px">(0)</span>
+        </td>
+        <td style="text-align:center">1</td>
+        <td style="text-align:center;color:#cbd5e1;font-weight:400">—</td>
+        <td style="text-align:center;white-space:nowrap;width:135px"><span style="color:#cbd5e1">—</span></td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">
+          +5 und.
+        </td>
+        <td style="text-align:center;color:#f97316">2</td>
+        <td style="text-align:center">
+          <span style="display:inline-block;min-width:52px;padding:3px 10px;border-radius:12px;font-weight:800;font-size:12px;background:#dcfce7;color:#16a34a">+3 und.</span>
+        </td>
+      </tr><tr style="background:var(--row-alt)">
+        <td style="text-align:center;font-weight:400;width:135px">feb. 28</td>
+        <td style="text-align:center">
+          6<span style="color:#94a3b8;font-size:10px;margin-left:3px">(0)</span>
+        </td>
+        <td style="text-align:center">1</td>
+        <td style="text-align:center;color:#cbd5e1;font-weight:400">—</td>
+        <td style="text-align:center;white-space:nowrap;width:135px"><span style="color:#cbd5e1">—</span></td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">
+          +5 und.
+        </td>
+        <td style="text-align:center;color:#f97316">2</td>
+        <td style="text-align:center">
+          <span style="display:inline-block;min-width:52px;padding:3px 10px;border-radius:12px;font-weight:800;font-size:12px;background:#dcfce7;color:#16a34a">+3 und.</span>
+        </td>
+      </tr><tr style="background:transparent">
+        <td style="text-align:center;font-weight:400;width:135px">mar. 28</td>
+        <td style="text-align:center">
+          6<span style="color:#94a3b8;font-size:10px;margin-left:3px">(0)</span>
+        </td>
+        <td style="text-align:center">1</td>
+        <td style="text-align:center;color:#cbd5e1;font-weight:400">—</td>
+        <td style="text-align:center;white-space:nowrap;width:135px"><span style="color:#cbd5e1">—</span></td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">
+          +5 und.
+        </td>
+        <td style="text-align:center;color:#f97316">2</td>
+        <td style="text-align:center">
+          <span style="display:inline-block;min-width:52px;padding:3px 10px;border-radius:12px;font-weight:800;font-size:12px;background:#dcfce7;color:#16a34a">+3 und.</span>
+        </td>
+      </tr><tr style="background:var(--row-alt)">
+        <td style="text-align:center;font-weight:400;width:135px">abr. 28</td>
+        <td style="text-align:center">
+          6<span style="color:#94a3b8;font-size:10px;margin-left:3px">(0)</span>
+        </td>
+        <td style="text-align:center">1</td>
+        <td style="text-align:center;color:#cbd5e1;font-weight:400">—</td>
+        <td style="text-align:center;white-space:nowrap;width:135px"><span style="color:#cbd5e1">—</span></td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">
+          +5 und.
+        </td>
+        <td style="text-align:center;color:#f97316">2</td>
+        <td style="text-align:center">
+          <span style="display:inline-block;min-width:52px;padding:3px 10px;border-radius:12px;font-weight:800;font-size:12px;background:#dcfce7;color:#16a34a">+3 und.</span>
+        </td>
+      </tr>
+      </tbody>
     </table></div>
   </div>
-  <div id="panel-chart-data" data-labels="[&quot;OPERATIVO&quot;,&quot;OP. CON OBS.&quot;,&quot;EN TALLER&quot;,&quot;FUERA SERVICIO&quot;,&quot;EN PRODUCCIÓN&quot;]" data-values="[72,6,4,1,15]" data-colors="[&quot;#16a34a&quot;,&quot;#d97706&quot;,&quot;#ef4444&quot;,&quot;#374151&quot;,&quot;#3b82f6&quot;]" style="display:none"></div></div>
+
+  <div id="proy-chart-data" data-labels="[&quot;may. 26&quot;,&quot;jun. 26&quot;,&quot;jul. 26&quot;,&quot;ago. 26&quot;,&quot;sep. 26&quot;,&quot;oct. 26&quot;,&quot;nov. 26&quot;,&quot;dic. 26&quot;,&quot;ene. 27&quot;,&quot;feb. 27&quot;,&quot;mar. 27&quot;,&quot;abr. 27&quot;,&quot;may. 27&quot;,&quot;jun. 27&quot;,&quot;jul. 27&quot;,&quot;ago. 27&quot;,&quot;sep. 27&quot;,&quot;oct. 27&quot;,&quot;nov. 27&quot;,&quot;dic. 27&quot;,&quot;ene. 28&quot;,&quot;feb. 28&quot;,&quot;mar. 28&quot;,&quot;abr. 28&quot;]" data-flota="[4,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6]" data-demanda="[3,3,3,3,3,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]" data-total="[4,5,5,6,6,6,6,6,7,5,5,5,5,4,4,3,3,3,3,3,3,3,3,3]" style="display:none"></div>
+  </div>
 </div>
 <script>
 /* ═══════════════════════════════════════════
@@ -339,8 +622,8 @@ const SHOP_HIST = {
 };
 
 /* ── PIPELINE ── */
-const PIPELINE_AMB = [{"id":1778860214493,"cliente":"VERONA","qty":1,"prob":100,"fReq":"2026-06","duracion":24,"estado":"Adjudicado","notas":"Empresa RM"},{"id":1778860204201,"cliente":"FUSAT RANCAGUA","qty":3,"prob":10,"fReq":"2026-07","duracion":36,"estado":"Prospecto","notas":"Licitación hospital público"},{"id":1778860232658,"cliente":"HOSPITAL DEL COBRE","qty":4,"prob":10,"fReq":"2026-8","duracion":24,"estado":"Prospecto","notas":""},{"id":1778860097855,"cliente":"GRUPO COSTANERA-LITORAL","qty":1,"prob":50,"fReq":"2026-07","duracion":36,"estado":"Negociación","notas":""},{"id":1778860117802,"cliente":"MUNICIPALIDAD LAS CONDES","qty":4,"prob":50,"fReq":"2026-08","duracion":24,"estado":"Propuesta","notas":""},{"id":1778860148896,"cliente":"COSAYACH","qty":3,"prob":50,"fReq":"2026-8","duracion":24,"estado":"Negociación","notas":"Compañía de Salitre y Yodo"},{"id":1778860266258,"cliente":"ISA INTERVIAL RUTA LOS RÍOS","qty":1,"prob":30,"fReq":"2026-07","duracion":12,"estado":"Prospecto","notas":""},{"id":1778860257086,"cliente":"ISA INTERVIAL EL LOA","qty":1,"prob":30,"fReq":"2026-06","duracion":12,"estado":"Prospecto","notas":""},{"id":1778860187055,"cliente":"SACYR RUTA 68","qty":3,"prob":20,"fReq":"2026-08","duracion":36,"estado":"Propuesta","notas":""},{"id":1778852888729,"cliente":"SACYR RUTA DEL DESIERTO","qty":2,"prob":5,"fReq":"2026-08","duracion":36,"estado":"Prospecto","notas":""},{"id":1778852914968,"cliente":"SACYR RUTA DEL ALGARROBO","qty":1,"prob":5,"fReq":"2026-08","duracion":36,"estado":"Prospecto","notas":""},{"id":1778853051020,"cliente":"COX","qty":4,"prob":50,"fReq":"2026-07","duracion":12,"estado":"Propuesta","notas":""},{"id":1778853574689,"cliente":"HOSPITAL SAN JUAN DE DIOS","qty":7,"prob":25,"fReq":"2026-08","duracion":12,"estado":"Prospecto","notas":""}];
-const PIPELINE_4X4 = [{"id":1778852092152,"cliente":"ACCIONA","qty":1,"prob":100,"fReq":"2026-06","duracion":24,"estado":"Adjudicado","notas":"Proyecto minero norte"},{"id":1778860026181,"cliente":"MINERA PAMPA CAMARONES","qty":2,"prob":20,"fReq":"2026-08","duracion":24,"estado":"Prospecto","notas":"Exploración fase inicial"},{"id":1779137734484,"cliente":"AURYN","qty":1,"prob":100,"fReq":"2026-05","duracion":24,"estado":"Adjudicado","notas":""},{"id":1778852267024,"cliente":"LIBRILLO","qty":1,"prob":100,"fReq":"2026-05","duracion":12,"estado":"Adjudicado","notas":""},{"id":1778852315295,"cliente":"RUTA MINERA","qty":1,"prob":50,"fReq":"2026-06","duracion":60,"estado":"Negociación","notas":""},{"id":1778860378606,"cliente":"OBSERVATORIO AURA","qty":2,"prob":25,"fReq":"2026-07","duracion":36,"estado":"Propuesta","notas":""},{"id":1778852442486,"cliente":"COLLAHUASI","qty":1,"prob":15,"fReq":"2026-08","duracion":12,"estado":"Prospecto","notas":""},{"id":1778860418580,"cliente":"HOSPITAL DEL COBRE","qty":1,"prob":10,"fReq":"2026-08","duracion":24,"estado":"Propuesta","notas":""}];
+const PIPELINE_AMB = [{"id":1779221533119,"cliente":"VERONA","qty":1,"prob":80,"fReq":"2026-06","duracion":24,"estado":"Negociación avanzada","notas":"Empresa RM"},{"id":1778860204201,"cliente":"FUSAT RANCAGUA","qty":3,"prob":10,"fReq":"2026-07","duracion":36,"estado":"Prospecto","notas":"Licitación hospital público"},{"id":1779221568191,"cliente":"HOSPITAL DEL COBRE","qty":5,"prob":10,"fReq":"2026-8","duracion":24,"estado":"Prospecto","notas":""},{"id":1779221586045,"cliente":"GRUPO COSTANERA-LITORAL","qty":1,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Negociación","notas":""},{"id":1778860117802,"cliente":"MUNICIPALIDAD LAS CONDES","qty":4,"prob":50,"fReq":"2026-08","duracion":24,"estado":"Propuesta","notas":""},{"id":1779221610895,"cliente":"COSAYACH","qty":3,"prob":10,"fReq":"2026-8","duracion":24,"estado":"Negociación","notas":"Compañía de Salitre y Yodo"},{"id":1779221740465,"cliente":"SACYR RUTA 68","qty":3,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Propuesta","notas":""},{"id":1779221698227,"cliente":"SACYR COPIAPO","qty":2,"prob":10,"fReq":"2026-08","duracion":36,"estado":"Prospecto","notas":""},{"id":1779221756425,"cliente":"SACYR RUTA DEL ALGARROBO","qty":2,"prob":10,"fReq":"2026-07","duracion":36,"estado":"Prospecto","notas":""},{"id":1778853051020,"cliente":"COX","qty":4,"prob":50,"fReq":"2026-07","duracion":12,"estado":"Propuesta","notas":""},{"id":1778853574689,"cliente":"HOSPITAL SAN JUAN DE DIOS","qty":7,"prob":25,"fReq":"2026-08","duracion":12,"estado":"Prospecto","notas":""},{"id":1779221825771,"cliente":"RUTA MINERA","qty":1,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Propuesta","notas":""},{"id":1779221892251,"cliente":"AES LOS CURUROS","qty":1,"prob":20,"fReq":"2026-07","duracion":12,"estado":"Prospecto","notas":""},{"id":1779221926783,"cliente":"PAMPA CAMARONES","qty":1,"prob":30,"fReq":"2026-08","duracion":24,"estado":"Prospecto","notas":""}];
+const PIPELINE_4X4 = [{"id":1779221985448,"cliente":"ACCIONA","qty":1,"prob":90,"fReq":"2026-06","duracion":24,"estado":"Adjudicado","notas":"Proyecto minero norte"},{"id":1779137734484,"cliente":"AURYN","qty":1,"prob":100,"fReq":"2026-05","duracion":24,"estado":"Adjudicado","notas":""},{"id":1779222043677,"cliente":"ANDEX MINERALS","qty":1,"prob":20,"fReq":"2026-08","duracion":12,"estado":"Negociación","notas":""},{"id":1779221974587,"cliente":"OBSERVATORIO AURA","qty":2,"prob":20,"fReq":"2026-08","duracion":36,"estado":"Propuesta","notas":""},{"id":1778860418580,"cliente":"HOSPITAL DEL COBRE","qty":1,"prob":10,"fReq":"2026-08","duracion":24,"estado":"Propuesta","notas":""},{"id":1779222087238,"cliente":"COLLAHUASI","qty":1,"prob":5,"fReq":"2026-08","duracion":12,"estado":"Prospecto","notas":""},{"id":1779222115992,"cliente":"GRUPO COX","qty":1,"prob":50,"fReq":"2026-06","duracion":12,"estado":"Propuesta","notas":""},{"id":1779222161145,"cliente":"GRUPO COX - II REGION","qty":4,"prob":10,"fReq":"2026-6","duracion":12,"estado":"Prospecto","notas":""},{"id":1779222187378,"cliente":"GRUPO COX - III REGION","qty":1,"prob":5,"fReq":"2026-08","duracion":12,"estado":"Propuesta","notas":""}];
 const PIPELINE_VAN = [];
 
 /* ══════════════════════════════════════
@@ -2004,7 +2287,7 @@ function downloadUpdatedHTML(versionOverride){
     (_,p1)=>"const HIST_ANUAL = "+JSON.stringify(HIST_ANUAL,null,0)+";"+p1);
   // Save APP_VERSION — función como reemplazo para evitar que $ en JSON se malinterprete
   src=src.replace(/(?:const|let) APP_VERSION = "[^"]*";/,
-    ()=>'let APP_VERSION = "'+versionToSave+'";');
+    ()=>'let APP_VERSION = "2.0.2";');
   // Save CHANGELOG — función como reemplazo (evita problemas con $ en JSON)
   src=src.replace(/const CHANGELOG = \[[\s\S]*\];(\s*function initChangelog)/,
     (_,p1)=>"const CHANGELOG = "+JSON.stringify(CHANGELOG)+";"+p1);
@@ -2480,7 +2763,7 @@ function syncReqsFromFleet(){
 render();
 </script>
 
-<div id="gtip" style="position: fixed; background: rgb(15, 23, 42); color: rgb(255, 255, 255); padding: 7px 12px; border-radius: 7px; font-size: 11px; pointer-events: none; z-index: 9999; max-width: 260px; line-height: 1.5; box-shadow: rgba(0, 0, 0, 0.3) 0px 4px 16px; display: none; left: 368px; top: 556px;">Total − FS − Reserva estructural % − Op. con Obs. − Prod. sin fecha. Formato: base(+entregas ese mes). Ej: 62(+2) = 62 disponibles + 2 que ingresan.</div>
+<div id="gtip" style="position: fixed; background: rgb(15, 23, 42); color: rgb(255, 255, 255); padding: 7px 12px; border-radius: 7px; font-size: 11px; pointer-events: none; z-index: 9999; max-width: 260px; line-height: 1.5; box-shadow: rgba(0, 0, 0, 0.3) 0px 4px 16px; display: none; left: 609px; top: 198px;">Suma de unidades asignadas en contratos activos ese mes (contratos con fFin &gt;= mes o permanentes).</div>
 
 <!-- ── CHANGELOG MODAL ── -->
 <div id="cl-overlay" onclick="if(event.target===this)cerrarChangelog()" class="">
@@ -2492,18 +2775,35 @@ render();
     <div id="cl-body">
     <div class="cl-version">
       <div class="cl-ver-hdr">
-        <span class="cl-ver-num">v2.0.1</span>
+        <span class="cl-ver-num">v2.0.2</span>
         <span class="cl-ver-date">2026-05-19</span>
         <span class="cl-ver-badge latest">✓ Versión actual</span>
       </div>
       
         <div class="cl-entry">
           <span class="cl-dot "></span>
-          <span>Asignación Correcta de VANs</span>
+          <span>Se arreglaron los Pipeline de Ambulancias 4x2 y 4x4</span>
+        </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 16px">
+    <div class="cl-version">
+      <div class="cl-ver-hdr">
+        <span class="cl-ver-num">v2.0.1</span>
+        <span class="cl-ver-date">2026-05-19</span>
+        
+      </div>
+      
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Versionado automático al guardar: la versión se incrementa sola (patch), sin intervención manual.</span>
+        </div>
+        <div class="cl-entry">
+          <span class="cl-dot fix"></span>
+          <span>downloadUpdatedHTML: APP_VERSION y CHANGELOG ahora se serializan correctamente usando funciones arrow en replace() para evitar interpretación errónea de $ en JSON.</span>
         </div>
         <div class="cl-entry">
           <span class="cl-dot "></span>
-          <span>Ingresdos 2 nuevos vehículos 4x4 comprados a Dikar</span>
+          <span>Nombre del archivo incluye fecha y versión: UCM_Fleet_Intelligence_YYYYMMDD_vX-Y-Z.html.</span>
         </div>
     </div>
     <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 16px">
@@ -2679,75 +2979,7 @@ render();
    y actualizar APP_VERSION.
 ──────────────────────────────────────────────────────────────── */
 let APP_VERSION = "2.0.1";
-const CHANGELOG = [
-  {
-    version:"2.0.1", date:"2026-05-19", latest:true,
-    entries:[
-      {type:"feat", text:"Versionado automático al guardar: la versión se incrementa sola (patch), sin intervención manual."},
-      {type:"fix",  text:"downloadUpdatedHTML: APP_VERSION y CHANGELOG ahora se serializan correctamente usando funciones arrow en replace() para evitar interpretación errónea de $ en JSON."},
-      {type:"feat", text:"Nombre del archivo incluye fecha y versión: UCM_Fleet_Intelligence_YYYYMMDD_vX-Y-Z.html."},
-    ]
-  },
-  {
-    version:"2.0.0", date:"2026-05-19",
-    entries:[
-      {type:"feat", text:"Panel: botón 'Ver todas las flotas' consolida KPIs de AMB 4×2, 4×4, VAN y AUTOS en una sola vista."},
-      {type:"feat", text:"Diagnóstico: rediseñado como modal instantáneo (sin file picker). Muestra estado de librerías, condiciones por flota, estados sin REQS, semana cargada y versión."},
-    ]
-  },
-  {
-    version:"1.9.0", date:"2026-05-19",
-    entries:[
-      {type:"feat", text:"Requerimientos temporales recurrentes por contrato: campo tempReqs con mesIni/mesFin/qty/motivo. Se aplica todos los años en ese rango de meses."},
-      {type:"feat", text:"getReqOp(r, ym): función helper que calcula requerimiento base + boosts temporales para un mes dado."},
-      {type:"feat", text:"Proyección: demandaContratos varía mes a mes según tempReqs activos — la línea azul ya no es plana."},
-      {type:"feat", text:"Asignaciones: columna Req. Operación muestra badge morado +N cuando hay boost temporal activo."},
-      {type:"fix",  text:"Proyección: data-freed y data-net del gráfico Pipeline usan getReqOp y getAsigReal con variable local flt (no fl del scope externo)."},
-    ]
-  },
-  {
-    version:"1.8.1", date:"2026-05-19",
-    entries:[
-      {type:"fix",  text:"Asignaciones: REQS_AMB reconstruido con nombres exactos que vienen del xlsx (TRASLADO BÁSICO, CORP. LAS CONDES, etc.)."},
-      {type:"fix",  text:"syncReqsFromFleet: purga entradas fantasma (asig=0 sin fFin futura) — resuelve duplicados por cambio de nombre en xlsx."},
-      {type:"fix",  text:"REQS_4X4: TECHINT renombrado a TECHINT TOCOPILLA, BESS LIBRILLO agregado."},
-      {type:"fix",  text:"editContrato: acepta clientes nuevos (string), agrega fIni, elimina campo asig (ahora es solo lectura desde FLEET)."},
-    ]
-  },
-  {
-    version:"1.8.0", date:"2026-05-18",
-    entries:[
-      {type:"feat", text:"Asignaciones: tabla unificada — asig desde FLEET.estado (automático), metadata desde REQS (manual). Clientes nuevos detectados con badge NUEVO."},
-      {type:"feat", text:"buildTodasFilas() y getAsigReal(): helpers compartidos entre Asignaciones y Proyección."},
-      {type:"fix",  text:"Proyección: demandaContratos y unidadesLibres usan getAsigReal en lugar de r.asig (que era siempre 0)."},
-      {type:"fix",  text:"Carga de reporte: EN PRODUCCION y FUERA DE SERVICIO protegidos contra sobreescritura."},
-      {type:"fix",  text:"Carga de reporte: normalizarCond() mapea variantes del xlsx (OPERATIVO C/OBS, NO OP, etc.)."},
-      {type:"feat", text:"Changelog incorporado: badge de versión en topbar abre historial de cambios."},
-    ]
-  },
-  {
-    version:"1.7.0", date:"2026-05-18",
-    entries:[
-      {type:"feat", text:"Panel: botón 'Ver todas las flotas' en Leasing (ya existía)."},
-      {type:"feat", text:"4×4: contrato RESCATE RM (rol 4×2) para móvil 365."},
-      {type:"fix",  text:"Capital remanente calculado dinámicamente con amortización lineal según fecha actual."},
-    ]
-  },
-  {
-    version:"1.6.0", date:"2026-05-15",
-    entries:[
-      {type:"fix",  text:"Proyección: pipeDemanda considera duración de cada oportunidad — línea naranja sube y baja correctamente."},
-      {type:"fix",  text:"Ambulancias en pipeline y reserva taller redondeadas al entero más cercano."},
-    ]
-  },
-  {
-    version:"1.5.0", date:"2026-05-15",
-    entries:[
-      {type:"data", text:"Datos leasing actualizados desde Detalle_Vehiculos_UCM_Emecar_11-May-26.xlsx."},
-      {type:"feat", text:"Cuotas PMT 1%/mes para móviles 241, 243, 245, 253, 255, 257. Los Cuatro y Rio Branco con datos completos."},
-    ]
-  },
-];
+const CHANGELOG = [{"version":"2.0.2","date":"2026-05-19","latest":true,"entries":[{"type":"feat","text":"Se arreglaron los Pipeline de Ambulancias 4x2 y 4x4"}]},{"version":"2.0.1","date":"2026-05-19","entries":[{"type":"feat","text":"Versionado automático al guardar: la versión se incrementa sola (patch), sin intervención manual."},{"type":"fix","text":"downloadUpdatedHTML: APP_VERSION y CHANGELOG ahora se serializan correctamente usando funciones arrow en replace() para evitar interpretación errónea de $ en JSON."},{"type":"feat","text":"Nombre del archivo incluye fecha y versión: UCM_Fleet_Intelligence_YYYYMMDD_vX-Y-Z.html."}]},{"version":"2.0.0","date":"2026-05-19","entries":[{"type":"feat","text":"Panel: botón 'Ver todas las flotas' consolida KPIs de AMB 4×2, 4×4, VAN y AUTOS en una sola vista."},{"type":"feat","text":"Diagnóstico: rediseñado como modal instantáneo (sin file picker). Muestra estado de librerías, condiciones por flota, estados sin REQS, semana cargada y versión."}]},{"version":"1.9.0","date":"2026-05-19","entries":[{"type":"feat","text":"Requerimientos temporales recurrentes por contrato: campo tempReqs con mesIni/mesFin/qty/motivo. Se aplica todos los años en ese rango de meses."},{"type":"feat","text":"getReqOp(r, ym): función helper que calcula requerimiento base + boosts temporales para un mes dado."},{"type":"feat","text":"Proyección: demandaContratos varía mes a mes según tempReqs activos — la línea azul ya no es plana."},{"type":"feat","text":"Asignaciones: columna Req. Operación muestra badge morado +N cuando hay boost temporal activo."},{"type":"fix","text":"Proyección: data-freed y data-net del gráfico Pipeline usan getReqOp y getAsigReal con variable local flt (no fl del scope externo)."}]},{"version":"1.8.1","date":"2026-05-19","entries":[{"type":"fix","text":"Asignaciones: REQS_AMB reconstruido con nombres exactos que vienen del xlsx (TRASLADO BÁSICO, CORP. LAS CONDES, etc.)."},{"type":"fix","text":"syncReqsFromFleet: purga entradas fantasma (asig=0 sin fFin futura) — resuelve duplicados por cambio de nombre en xlsx."},{"type":"fix","text":"REQS_4X4: TECHINT renombrado a TECHINT TOCOPILLA, BESS LIBRILLO agregado."},{"type":"fix","text":"editContrato: acepta clientes nuevos (string), agrega fIni, elimina campo asig (ahora es solo lectura desde FLEET)."}]},{"version":"1.8.0","date":"2026-05-18","entries":[{"type":"feat","text":"Asignaciones: tabla unificada — asig desde FLEET.estado (automático), metadata desde REQS (manual). Clientes nuevos detectados con badge NUEVO."},{"type":"feat","text":"buildTodasFilas() y getAsigReal(): helpers compartidos entre Asignaciones y Proyección."},{"type":"fix","text":"Proyección: demandaContratos y unidadesLibres usan getAsigReal en lugar de r.asig (que era siempre 0)."},{"type":"fix","text":"Carga de reporte: EN PRODUCCION y FUERA DE SERVICIO protegidos contra sobreescritura."},{"type":"fix","text":"Carga de reporte: normalizarCond() mapea variantes del xlsx (OPERATIVO C/OBS, NO OP, etc.)."},{"type":"feat","text":"Changelog incorporado: badge de versión en topbar abre historial de cambios."}]},{"version":"1.7.0","date":"2026-05-18","entries":[{"type":"feat","text":"Panel: botón 'Ver todas las flotas' en Leasing (ya existía)."},{"type":"feat","text":"4×4: contrato RESCATE RM (rol 4×2) para móvil 365."},{"type":"fix","text":"Capital remanente calculado dinámicamente con amortización lineal según fecha actual."}]},{"version":"1.6.0","date":"2026-05-15","entries":[{"type":"fix","text":"Proyección: pipeDemanda considera duración de cada oportunidad — línea naranja sube y baja correctamente."},{"type":"fix","text":"Ambulancias en pipeline y reserva taller redondeadas al entero más cercano."}]},{"version":"1.5.0","date":"2026-05-15","entries":[{"type":"data","text":"Datos leasing actualizados desde Detalle_Vehiculos_UCM_Emecar_11-May-26.xlsx."},{"type":"feat","text":"Cuotas PMT 1%/mes para móviles 241, 243, 245, 253, 255, 257. Los Cuatro y Rio Branco con datos completos."}]}];
 
 function initChangelog(){
   const badge=document.getElementById("ver-badge");
