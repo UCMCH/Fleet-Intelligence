@@ -1,6 +1,6 @@
 <html lang="es"><head>
 <meta charset="UTF-8">
-<meta name="app-version" content="2.5.0">
+<meta name="app-version" content="2.5.1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UCM Fleet Intelligence</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -174,12 +174,12 @@ tfoot td{padding:8px 10px;font-weight:700;border-right:1px solid var(--border)}
   <div id="topbar">
     <h1>🚑 UCM Fleet Intelligence</h1>
     <span class="sep">|</span>
-    <button id="ver-badge" onclick="abrirChangelog()">v2.3.3</button>
+    <button id="ver-badge" onclick="abrirChangelog()">v2.5.1</button>
     <div id="fleet-selector">
-      <button class="fs-btn" onclick="setFlota('4x2')">🚑 AMB 4×2</button>
+      <button class="fs-btn active" onclick="setFlota('4x2')">🚑 AMB 4×2</button>
       <button class="fs-btn" onclick="setFlota('4x4')">🚑 AMB 4×4</button>
       <button class="fs-btn" onclick="setFlota('van')">🚐 VAN</button>
-      <button class="fs-btn active" onclick="setFlota('autos')">🚗 AUTOS</button>
+      <button class="fs-btn" onclick="setFlota('autos')">🚗 AUTOS</button>
     </div>
     <div class="spacer"></div>
     <div id="upload-area">
@@ -195,201 +195,307 @@ tfoot td{padding:8px 10px;font-weight:700;border-right:1px solid var(--border)}
     <button class="tab-btn" onclick="setTab('flota')">🚑 Flota</button>
     <button class="tab-btn" onclick="setTab('leasing')">🏦 Leasing</button>
     <button class="tab-btn" onclick="setTab('asignaciones')">📋 Asignaciones</button>
-    <button class="tab-btn active" onclick="setTab('taller')">🔧 Taller <span id="taller-badge" class="tab-badge" style="display: none;">0</span></button>
+    <button class="tab-btn" onclick="setTab('taller')">🔧 Taller <span id="taller-badge" class="tab-badge" style="display: inline;">6</span></button>
     <button class="tab-btn" onclick="setTab('proyeccion')">📈 Proyección</button>
-    <button class="tab-btn" onclick="setTab('pipeline')">🎯 Pipeline</button>
+    <button class="tab-btn active" onclick="setTab('pipeline')">🎯 Pipeline</button>
   </div>
   <div id="content">
-  <div class="sec-hdr"><h3>Taller y Mantenimiento</h3><span class="sub">0 en taller · 0 fuera de servicio</span></div>
-  <div class="sec">
-    <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:#0f172a">En taller esta semana</div>
-    <div class="tbl-wrap"><table>
-      <thead><tr>
-        <th class="sortable" data-sort-dir="none">Móvil</th><th class="sortable" data-sort-dir="none">Marca / Modelo</th><th class="sortable" data-sort-dir="none">Patente</th><th class="sortable" data-sort-dir="none">Año</th>
-        <th class="sortable" data-sort-dir="none">Condición</th><th class="sortable" data-sort-dir="none">Sem. consecutivas</th><th class="sortable" data-sort-dir="none">Descripción de la falla</th><th class="sortable" data-sort-dir="none">Fecha salida estimada</th>
-      </tr></thead>
-      <tbody>
-      <tr><td colspan="8" style="text-align:center;color:#94a3b8;padding:16px">Sin vehículos en taller</td></tr>
-      </tbody>
-    </table></div>
+  <div class="sec-hdr"><h3>Pipeline de Negocios — AMB 4×2</h3><span class="sub">Oportunidades activas</span></div>
+  <div class="kpi-row">
+    <div class="kpi" style="border-left-color:#7c3aed"><div class="lbl">Oportunidades</div><div class="val">14</div></div>
+    <div class="kpi" style="border-left-color:#1d4ed8"><div class="lbl">Demanda potencial</div><div class="val">31 und.</div></div>
+    <div class="kpi" style="border-left-color:#16a34a">
+      <div class="lbl">Demanda ponderada</div>
+      <div class="val">8 und.</div>
+      <div class="sub">7.6 → redondeado al entero</div>
+    </div>
+  </div>
+
+  <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
+    <button onclick="abrirFormPipeline(null)" style="padding:5px 14px;background:#1d4ed8;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600">+ Agregar oportunidad</button>
   </div>
   
-  <div class="sec">
-    <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:#0f172a">Historial — ranking por semanas acumuladas</div>
-    <div class="tbl-wrap"><table>
-      <thead><tr>
-        <th class="sortable" data-sort-dir="none">Móvil</th><th class="sortable" data-sort-dir="none">Patente</th><th class="sortable" data-sort-dir="none">Año</th>
-        <th class="sortable" data-sort-dir="none">Semanas totales</th><th class="sortable" data-sort-dir="none">Episodios</th><th class="sortable" data-sort-dir="none">Consecutivas</th><th class="sortable" data-sort-dir="none">Primer ingreso</th><th class="sortable" data-sort-dir="none">Última obs.</th><th class="sortable" data-sort-dir="none">Señal</th>
-      </tr></thead>
-      <tbody>
-      <tr><td colspan="9" style="text-align:center;color:#94a3b8;padding:16px">Sin vehículos con historial de taller</td></tr>
-      </tbody>
-    </table></div>
+
+  <div id="pipeline-form-container"></div>
+
+  <div class="tbl-wrap"><table>
+    <thead><tr>
+      <th class="sortable" data-sort-dir="none">Cliente</th>
+      <th class="sortable" data-sort-dir="none">Unidades</th>
+      <th class="sortable" data-sort-dir="none">Prob. %</th>
+      <th class="sortable" data-sort-dir="none">Dem. pond.</th>
+      <th class="sortable" data-sort-dir="none">F. Requerida</th>
+      <th class="sortable" data-sort-dir="none">Duración (m)</th>
+      <th class="sortable" data-sort-dir="none">Estado</th>
+      <th class="sortable" data-sort-dir="none">Notas</th>
+      <th></th>
+    </tr></thead>
+    <tbody>
+    <tr style="">
+      <td><strong>VERONA</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:80px;max-width:100px;height:8px;border-radius:4px;background:#16a34a"></div>
+          <strong style="color:#16a34a">80%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.8</td>
+      <td style="text-align:center">Jun-2026</td>
+      <td style="text-align:center">24 m</td>
+      <td><span class="badge b-green">Negociación avanzada</span></td>
+      <td class="wrap">Empresa RM</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(0)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(0)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>FUSAT RANCAGUA</strong></td>
+      <td style="text-align:center;font-weight:700">3</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:10px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">10%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.3</td>
+      <td style="text-align:center">Jul-2026</td>
+      <td style="text-align:center">36 m</td>
+      <td><span class="badge b-grey">Prospecto</span></td>
+      <td class="wrap">Licitación hospital público</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(1)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(1)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>GRUPO COSTANERA-LITORAL</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:20px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">20%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.2</td>
+      <td style="text-align:center">Jul-2026</td>
+      <td style="text-align:center">36 m</td>
+      <td><span class="badge b-grey">Negociación</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(2)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(2)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>MUNICIPALIDAD LAS CONDES</strong></td>
+      <td style="text-align:center;font-weight:700">4</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:50px;max-width:100px;height:8px;border-radius:4px;background:#d97706"></div>
+          <strong style="color:#d97706">50%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">2.0</td>
+      <td style="text-align:center">Ago-2026</td>
+      <td style="text-align:center">24 m</td>
+      <td><span class="badge b-amber">Propuesta</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(3)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(3)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>COSAYACH</strong></td>
+      <td style="text-align:center;font-weight:700">3</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:10px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">10%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.3</td>
+      <td style="text-align:center">Ago-2026</td>
+      <td style="text-align:center">24 m</td>
+      <td><span class="badge b-grey">Negociación</span></td>
+      <td class="wrap">Compañía de Salitre y Yodo</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(4)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(4)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>SACYR RUTA 68</strong></td>
+      <td style="text-align:center;font-weight:700">3</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:20px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">20%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.6</td>
+      <td style="text-align:center">Jul-2026</td>
+      <td style="text-align:center">36 m</td>
+      <td><span class="badge b-grey">Propuesta</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(5)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(5)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>SACYR COPIAPO</strong></td>
+      <td style="text-align:center;font-weight:700">2</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:10px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">10%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.2</td>
+      <td style="text-align:center">Ago-2026</td>
+      <td style="text-align:center">36 m</td>
+      <td><span class="badge b-grey">Prospecto</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(6)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(6)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>SACYR RUTA DEL ALGARROBO</strong></td>
+      <td style="text-align:center;font-weight:700">2</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:10px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">10%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.2</td>
+      <td style="text-align:center">Jul-2026</td>
+      <td style="text-align:center">36 m</td>
+      <td><span class="badge b-grey">Prospecto</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(7)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(7)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>HOSPITAL SAN JUAN DE DIOS</strong></td>
+      <td style="text-align:center;font-weight:700">7</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:25px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">25%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">1.8</td>
+      <td style="text-align:center">Ago-2026</td>
+      <td style="text-align:center">12 m</td>
+      <td><span class="badge b-grey">Prospecto</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(8)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(8)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>RUTA MINERA</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:20px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">20%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.2</td>
+      <td style="text-align:center">Jul-2026</td>
+      <td style="text-align:center">36 m</td>
+      <td><span class="badge b-grey">Propuesta</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(9)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(9)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>AES LOS CURUROS</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:20px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">20%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.2</td>
+      <td style="text-align:center">Jul-2026</td>
+      <td style="text-align:center">12 m</td>
+      <td><span class="badge b-grey">Prospecto</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(10)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(10)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>PAMPA CAMARONES</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:30px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">30%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.3</td>
+      <td style="text-align:center">Ago-2026</td>
+      <td style="text-align:center">24 m</td>
+      <td><span class="badge b-grey">Prospecto</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(11)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(11)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>HOSPITAL LUIS TISNE</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:50px;max-width:100px;height:8px;border-radius:4px;background:#d97706"></div>
+          <strong style="color:#d97706">50%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.5</td>
+      <td style="text-align:center">Jun-2026</td>
+      <td style="text-align:center">3 m</td>
+      <td><span class="badge b-amber">Prospecto</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(12)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(12)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>POWER CHINA</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:10px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">10%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.1</td>
+      <td style="text-align:center">Jul-2026</td>
+      <td style="text-align:center">12 m</td>
+      <td><span class="badge b-grey">Prospecto</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(13)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(13)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr>
+    </tbody>
+  </table></div>
+
+  <!-- Chart: unidades a comprar por mes -->
+  
+  <div class="card" style="margin-top:18px">
+    <div class="card-title">Unidades a adquirir por mes — según demanda ponderada del pipeline</div>
+    <div style="font-size:11px;color:#64748b;margin-bottom:10px">Azul = demanda bruta pipeline · Verde = se liberan de contratos · Naranja/Rojo = compra neta recomendada (demanda − liberadas). Pasa el cursor para ver detalle de cada mes.</div>
+    <div class="chart-wrap" style="height:220px"><canvas id="chartPipelineCompras" width="1854" height="220" style="display: block; box-sizing: border-box; height: 220px; width: 1854px;"></canvas></div>
+    <div id="pipeline-chart-data" data-labels="[&quot;jun. 26&quot;,&quot;jul. 26&quot;,&quot;ago. 26&quot;,&quot;sep. 26&quot;,&quot;oct. 26&quot;,&quot;nov. 26&quot;,&quot;dic. 26&quot;,&quot;ene. 27&quot;,&quot;feb. 27&quot;,&quot;mar. 27&quot;,&quot;abr. 27&quot;,&quot;may. 27&quot;,&quot;jun. 27&quot;,&quot;jul. 27&quot;,&quot;ago. 27&quot;,&quot;sep. 27&quot;,&quot;oct. 27&quot;,&quot;nov. 27&quot;,&quot;dic. 27&quot;,&quot;ene. 28&quot;,&quot;feb. 28&quot;,&quot;mar. 28&quot;,&quot;abr. 28&quot;,&quot;may. 28&quot;]" data-demand="[2,2,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]" data-freed="[0,0,12,0,0,0,0,5,0,0,0,0,1,0,0,0,0,0,0,22,0,0,0,0]" data-net="[2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]" style="display:none"></div>
   </div>
-  <div class="sec" style="margin-top:24px">
-    <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)">
-      <span style="font-size:13px;font-weight:700;color:var(--navy)">Historial anual — semanas fuera de operación por móvil</span>
-      <span style="font-size:11px;color:var(--text-s)">12 móviles con historial · flota AUTOS</span>
-    </div>
-    <div style="display:flex;gap:12px;margin-bottom:10px;flex-wrap:wrap;font-size:11px;align-items:center">
-      <span style="display:flex;align-items:center;gap:5px"><span style="width:14px;height:14px;border-radius:7px;background:#22c55e;display:inline-block"></span>1–2 sem.</span>
-      <span style="display:flex;align-items:center;gap:5px"><span style="width:14px;height:14px;border-radius:7px;background:#eab308;display:inline-block"></span>3–5 sem.</span>
-      <span style="display:flex;align-items:center;gap:5px"><span style="width:14px;height:14px;border-radius:7px;background:#f97316;display:inline-block"></span>6–7 sem.</span>
-      <span style="display:flex;align-items:center;gap:5px"><span style="width:14px;height:14px;border-radius:7px;background:#dc2626;display:inline-block"></span>8+ sem.</span>
-      <span style="color:#94a3b8;font-size:10px;margin-left:4px">Pasa el cursor sobre los números para ver el detalle de fechas</span>
-    </div>
-    <div class="tbl-wrap"><table>
-      <thead><tr>
-        <th class="sortable" data-sort-dir="none">Móvil</th><th class="sortable" data-sort-dir="none">Marca / Modelo</th><th class="sortable" data-sort-dir="none">Patente</th><th class="sortable" data-sort-dir="none">Año fab.</th>
-        <th class="sortable" data-sort-dir="none">2024</th><th class="sortable" data-sort-dir="none">2025</th><th class="sortable" data-sort-dir="none">2026</th><th class="sortable" data-sort-dir="none">Total</th>
-      </tr></thead>
-      <tbody><tr style="background:transparent;">
-      <td style="text-align:center"><strong>1</strong></td>
-      <td>CHEVROLET SAIL NB 1.5</td>
-      <td style="font-family:monospace;font-size:11px;text-align:center">VXWW-94</td>
-      <td style="text-align:center">2026</td>
-      <td style="text-align:center;color:#cbd5e1">—</td><td style="text-align:center;color:#cbd5e1">—</td><td style="text-align:center;color:#cbd5e1">—</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:8px;justify-content:center">
-          
-          <span style="font-weight:400;color:#e2e8f0">0</span>
-        </div>
-      </td>
-    </tr><tr style="background:var(--row-alt);">
-      <td style="text-align:center"><strong>2</strong></td>
-      <td>CHEVROLET SAIL NB 1.5</td>
-      <td style="font-family:monospace;font-size:11px;text-align:center">VXWL-65</td>
-      <td style="text-align:center">2026</td>
-      <td style="text-align:center;color:#cbd5e1">—</td><td style="text-align:center;color:#cbd5e1">—</td><td style="text-align:center;color:#cbd5e1">—</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:8px;justify-content:center">
-          
-          <span style="font-weight:400;color:#e2e8f0">0</span>
-        </div>
-      </td>
-    </tr><tr style="background:transparent;">
-      <td style="text-align:center"><strong>3</strong></td>
-      <td>CHEVROLET SAIL NB 1.5</td>
-      <td style="font-family:monospace;font-size:11px;text-align:center">VXWT-79</td>
-      <td style="text-align:center">2026</td>
-      <td style="text-align:center;color:#cbd5e1">—</td><td style="text-align:center;color:#cbd5e1">—</td><td style="text-align:center;color:#cbd5e1">—</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:8px;justify-content:center">
-          
-          <span style="font-weight:400;color:#e2e8f0">0</span>
-        </div>
-      </td>
-    </tr><tr style="background:var(--row-alt);">
-      <td style="text-align:center"><strong>4</strong></td>
-      <td>CHEVROLET SAIL NB 1.5</td>
-      <td style="font-family:monospace;font-size:11px;text-align:center">VXWR-58</td>
-      <td style="text-align:center">2026</td>
-      <td style="text-align:center;color:#cbd5e1">—</td><td style="text-align:center;color:#cbd5e1">—</td><td style="text-align:center;color:#cbd5e1">—</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:8px;justify-content:center">
-          
-          <span style="font-weight:400;color:#e2e8f0">0</span>
-        </div>
-      </td>
-    </tr><tr style="background:transparent;">
-      <td style="text-align:center"><strong>5</strong></td>
-      <td>CHEVROLET SAIL NB 1.5</td>
-      <td style="font-family:monospace;font-size:11px;text-align:center">VXWY-67</td>
-      <td style="text-align:center">2026</td>
-      <td style="text-align:center;color:#cbd5e1">—</td><td style="text-align:center;color:#cbd5e1">—</td><td style="text-align:center;color:#cbd5e1">—</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:8px;justify-content:center">
-          
-          <span style="font-weight:400;color:#e2e8f0">0</span>
-        </div>
-      </td>
-    </tr><tr style="background:var(--row-alt);">
-      <td style="text-align:center"><strong>6</strong></td>
-      <td>CHEVROLET SAIL NB 1.5</td>
-      <td style="font-family:monospace;font-size:11px;text-align:center">VXWY-77</td>
-      <td style="text-align:center">2026</td>
-      <td style="text-align:center;color:#cbd5e1">—</td><td style="text-align:center;color:#cbd5e1">—</td><td style="text-align:center;color:#cbd5e1">—</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:8px;justify-content:center">
-          
-          <span style="font-weight:400;color:#e2e8f0">0</span>
-        </div>
-      </td>
-    </tr><tr style="background:transparent;">
-      <td style="text-align:center"><strong>7</strong></td>
-      <td>CHEVROLET SAIL NB 1.5</td>
-      <td style="font-family:monospace;font-size:11px;text-align:center">VXWT-69</td>
-      <td style="text-align:center">2026</td>
-      <td style="text-align:center;color:#cbd5e1">—</td><td style="text-align:center;color:#cbd5e1">—</td><td style="text-align:center;color:#cbd5e1">—</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:8px;justify-content:center">
-          
-          <span style="font-weight:400;color:#e2e8f0">0</span>
-        </div>
-      </td>
-    </tr><tr style="background:var(--row-alt);">
-      <td style="text-align:center"><strong>8</strong></td>
-      <td>CHEVROLET SAIL NB 1.5</td>
-      <td style="font-family:monospace;font-size:11px;text-align:center">VXWT-59</td>
-      <td style="text-align:center">2026</td>
-      <td style="text-align:center;color:#cbd5e1">—</td><td style="text-align:center;color:#cbd5e1">—</td><td style="text-align:center;color:#cbd5e1">—</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:8px;justify-content:center">
-          
-          <span style="font-weight:400;color:#e2e8f0">0</span>
-        </div>
-      </td>
-    </tr><tr style="background:transparent;">
-      <td style="text-align:center"><strong>151</strong></td>
-      <td>TOYOTA COROLLA CROSS CVT HEV</td>
-      <td style="font-family:monospace;font-size:11px;text-align:center">SKHP41</td>
-      <td style="text-align:center">2023</td>
-      <td style="text-align:center;color:#cbd5e1">—</td><td style="text-align:center;color:#cbd5e1">—</td><td style="text-align:center;color:#cbd5e1">—</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:8px;justify-content:center">
-          
-          <span style="font-weight:400;color:#e2e8f0">0</span>
-        </div>
-      </td>
-    </tr><tr style="background:var(--row-alt);">
-      <td style="text-align:center"><strong>37</strong></td>
-      <td>FORD RANGER DSL XL 4X2 2.0L MT</td>
-      <td style="font-family:monospace;font-size:11px;text-align:center">VTVZ-19</td>
-      <td style="text-align:center">2026</td>
-      <td style="text-align:center;color:#cbd5e1">—</td><td style="text-align:center;color:#cbd5e1">—</td><td style="text-align:center;color:#cbd5e1">—</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:8px;justify-content:center">
-          
-          <span style="font-weight:400;color:#e2e8f0">0</span>
-        </div>
-      </td>
-    </tr><tr style="background:transparent;">
-      <td style="text-align:center"><strong>39</strong></td>
-      <td>FORD RANGER DSL XL 4X2 2.0L MT</td>
-      <td style="font-family:monospace;font-size:11px;text-align:center">VTVZ-39</td>
-      <td style="text-align:center">2026</td>
-      <td style="text-align:center;color:#cbd5e1">—</td><td style="text-align:center;color:#cbd5e1">—</td><td style="text-align:center;color:#cbd5e1">—</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:8px;justify-content:center">
-          
-          <span style="font-weight:400;color:#e2e8f0">0</span>
-        </div>
-      </td>
-    </tr><tr style="background:var(--row-alt);">
-      <td style="text-align:center"><strong>41</strong></td>
-      <td>TOYOTA HYLUX</td>
-      <td style="font-family:monospace;font-size:11px;text-align:center"></td>
-      <td style="text-align:center">2026</td>
-      <td style="text-align:center;color:#cbd5e1">—</td><td style="text-align:center;color:#cbd5e1">—</td><td style="text-align:center;color:#cbd5e1">—</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:8px;justify-content:center">
-          
-          <span style="font-weight:400;color:#e2e8f0">0</span>
-        </div>
-      </td>
-    </tr></tbody>
-    </table></div>
-  </div></div>
+  </div>
 </div>
 <script>
 /* ═══════════════════════════════════════════
@@ -425,8 +531,8 @@ const SHOP_HIST = {
 };
 
 /* ── PIPELINE ── */
-const PIPELINE_AMB = [{"id":1779221533119,"cliente":"VERONA","qty":1,"prob":80,"fReq":"2026-06","duracion":24,"estado":"Negociación avanzada","notas":"Empresa RM"},{"id":1778860204201,"cliente":"FUSAT RANCAGUA","qty":3,"prob":10,"fReq":"2026-07","duracion":36,"estado":"Prospecto","notas":"Licitación hospital público"},{"id":1779221586045,"cliente":"GRUPO COSTANERA-LITORAL","qty":1,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Negociación","notas":""},{"id":1778860117802,"cliente":"MUNICIPALIDAD LAS CONDES","qty":4,"prob":50,"fReq":"2026-08","duracion":24,"estado":"Propuesta","notas":""},{"id":1779221610895,"cliente":"COSAYACH","qty":3,"prob":10,"fReq":"2026-08","duracion":24,"estado":"Negociación","notas":"Compañía de Salitre y Yodo"},{"id":1779221740465,"cliente":"SACYR RUTA 68","qty":3,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Propuesta","notas":""},{"id":1779221698227,"cliente":"SACYR COPIAPO","qty":2,"prob":10,"fReq":"2026-08","duracion":36,"estado":"Prospecto","notas":""},{"id":1779221756425,"cliente":"SACYR RUTA DEL ALGARROBO","qty":2,"prob":10,"fReq":"2026-07","duracion":36,"estado":"Prospecto","notas":""},{"id":1778853574689,"cliente":"HOSPITAL SAN JUAN DE DIOS","qty":7,"prob":25,"fReq":"2026-08","duracion":12,"estado":"Prospecto","notas":""},{"id":1779221825771,"cliente":"RUTA MINERA","qty":1,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Propuesta","notas":""},{"id":1779221892251,"cliente":"AES LOS CURUROS","qty":1,"prob":20,"fReq":"2026-07","duracion":12,"estado":"Prospecto","notas":""},{"id":1779221926783,"cliente":"PAMPA CAMARONES","qty":1,"prob":30,"fReq":"2026-08","duracion":24,"estado":"Prospecto","notas":""},{"id":1779810489850,"cliente":"HOSPITAL LUIS TISNE","qty":1,"prob":50,"fReq":"2026-06","duracion":3,"estado":"Prospecto","notas":""}];
-const PIPELINE_4X4 = [{"id":1779221985448,"cliente":"ACCIONA","qty":1,"prob":90,"fReq":"2026-06","duracion":24,"estado":"Adjudicado","notas":"Proyecto minero norte"},{"id":1779137734484,"cliente":"AURYN","qty":1,"prob":100,"fReq":"2026-05","duracion":24,"estado":"Adjudicado","notas":""},{"id":1779222043677,"cliente":"ANDEX MINERALS","qty":1,"prob":20,"fReq":"2026-08","duracion":12,"estado":"Negociación","notas":""},{"id":1779221974587,"cliente":"OBSERVATORIO AURA","qty":2,"prob":20,"fReq":"2026-08","duracion":36,"estado":"Propuesta","notas":""},{"id":1779222087238,"cliente":"COLLAHUASI","qty":1,"prob":5,"fReq":"2026-08","duracion":12,"estado":"Prospecto","notas":""},{"id":1779810431947,"cliente":"GRUPO COX","qty":1,"prob":100,"fReq":"2026-07","duracion":12,"estado":"Adjudicado","notas":""},{"id":1779810421384,"cliente":"GRUPO COX - II REGION","qty":2,"prob":10,"fReq":"2026-06","duracion":12,"estado":"Prospecto","notas":""},{"id":1779810438236,"cliente":"GRUPO COX - III REGION","qty":3,"prob":5,"fReq":"2026-08","duracion":12,"estado":"Propuesta","notas":""},{"id":1779810411023,"cliente":"GRUPO COX - I REGION","qty":1,"prob":60,"fReq":"2026-06","duracion":12,"estado":"Propuesta","notas":""},{"id":1780323078531,"cliente":"METLEN","qty":1,"prob":10,"fReq":"2026-06","duracion":12,"estado":"Propuesta","notas":""},{"id":1780323130268,"cliente":"BESALCO - ZALDIVAR","qty":2,"prob":10,"fReq":"2026-08","duracion":12,"estado":"Propuesta","notas":""}];
+const PIPELINE_AMB = [{"id":1779221533119,"cliente":"VERONA","qty":1,"prob":80,"fReq":"2026-06","duracion":24,"estado":"Negociación avanzada","notas":"Empresa RM"},{"id":1778860204201,"cliente":"FUSAT RANCAGUA","qty":3,"prob":10,"fReq":"2026-07","duracion":36,"estado":"Prospecto","notas":"Licitación hospital público"},{"id":1779221586045,"cliente":"GRUPO COSTANERA-LITORAL","qty":1,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Negociación","notas":""},{"id":1778860117802,"cliente":"MUNICIPALIDAD LAS CONDES","qty":4,"prob":50,"fReq":"2026-08","duracion":24,"estado":"Propuesta","notas":""},{"id":1779221610895,"cliente":"COSAYACH","qty":3,"prob":10,"fReq":"2026-08","duracion":24,"estado":"Negociación","notas":"Compañía de Salitre y Yodo"},{"id":1779221740465,"cliente":"SACYR RUTA 68","qty":3,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Propuesta","notas":""},{"id":1779221698227,"cliente":"SACYR COPIAPO","qty":2,"prob":10,"fReq":"2026-08","duracion":36,"estado":"Prospecto","notas":""},{"id":1779221756425,"cliente":"SACYR RUTA DEL ALGARROBO","qty":2,"prob":10,"fReq":"2026-07","duracion":36,"estado":"Prospecto","notas":""},{"id":1778853574689,"cliente":"HOSPITAL SAN JUAN DE DIOS","qty":7,"prob":25,"fReq":"2026-08","duracion":12,"estado":"Prospecto","notas":""},{"id":1779221825771,"cliente":"RUTA MINERA","qty":1,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Propuesta","notas":""},{"id":1779221892251,"cliente":"AES LOS CURUROS","qty":1,"prob":20,"fReq":"2026-07","duracion":12,"estado":"Prospecto","notas":""},{"id":1779221926783,"cliente":"PAMPA CAMARONES","qty":1,"prob":30,"fReq":"2026-08","duracion":24,"estado":"Prospecto","notas":""},{"id":1779810489850,"cliente":"HOSPITAL LUIS TISNE","qty":1,"prob":50,"fReq":"2026-06","duracion":3,"estado":"Prospecto","notas":""},{"id":1780431100670,"cliente":"POWER CHINA","qty":1,"prob":10,"fReq":"2026-07","duracion":12,"estado":"Prospecto","notas":""}];
+const PIPELINE_4X4 = [{"id":1779221985448,"cliente":"ACCIONA","qty":1,"prob":90,"fReq":"2026-06","duracion":24,"estado":"Adjudicado","notas":"Proyecto minero norte"},{"id":1779222043677,"cliente":"ANDEX MINERALS","qty":1,"prob":20,"fReq":"2026-08","duracion":12,"estado":"Negociación","notas":""},{"id":1780430730098,"cliente":"OBSERVATORIO AURA","qty":2,"prob":20,"fReq":"2026-08","duracion":36,"estado":"Propuesta","notas":""},{"id":1779222087238,"cliente":"COLLAHUASI","qty":1,"prob":5,"fReq":"2026-08","duracion":12,"estado":"Prospecto","notas":""},{"id":1780430646202,"cliente":"GRUPO COX - II REGION","qty":1,"prob":10,"fReq":"2026-06","duracion":12,"estado":"Prospecto","notas":""},{"id":1780430653929,"cliente":"GRUPO COX - III REGION","qty":1,"prob":5,"fReq":"2026-08","duracion":12,"estado":"Propuesta","notas":""},{"id":1779810411023,"cliente":"GRUPO COX - I REGION","qty":1,"prob":60,"fReq":"2026-06","duracion":12,"estado":"Propuesta","notas":""},{"id":1780323078531,"cliente":"METLEN","qty":1,"prob":10,"fReq":"2026-06","duracion":12,"estado":"Propuesta","notas":""},{"id":1780430752282,"cliente":"BESALCO - ZALDIVAR","qty":3,"prob":10,"fReq":"2026-08","duracion":12,"estado":"Propuesta","notas":"Puede ser que sean 4x2 y no 4x4"}];
 const PIPELINE_VAN = [];
 
 /* ══════════════════════════════════════
@@ -2695,7 +2801,7 @@ function syncReqsFromFleet(){
 render();
 </script>
 
-<div id="gtip" style="position: fixed; background: rgb(15, 23, 42); color: rgb(255, 255, 255); padding: 7px 12px; border-radius: 7px; font-size: 11px; pointer-events: none; z-index: 9999; max-width: 260px; line-height: 1.5; box-shadow: rgba(0, 0, 0, 0.3) 0px 4px 16px; display: none; left: 1640px; top: 581px;">Sobrante/Faltante − Demanda pipeline. Negativo = hay que adquirir flota para cubrir contratos actuales y pipeline esperado.</div>
+<div id="gtip" style="position: fixed; background: rgb(15, 23, 42); color: rgb(255, 255, 255); padding: 7px 12px; border-radius: 7px; font-size: 11px; pointer-events: none; z-index: 9999; max-width: 260px; line-height: 1.5; box-shadow: rgba(0, 0, 0, 0.3) 0px 4px 16px; display: none; left: 1088px; top: 581px;">Unidades que quedan libres al vencer contratos este mes. Pasa el cursor sobre el número para ver detalle por cliente.</div>
 
 <!-- ── CHANGELOG MODAL ── -->
 <div id="cl-overlay" onclick="if(event.target===this)cerrarChangelog()" class="">
@@ -2707,9 +2813,56 @@ render();
     <div id="cl-body">
     <div class="cl-version">
       <div class="cl-ver-hdr">
+        <span class="cl-ver-num">v2.5.1</span>
+        <span class="cl-ver-date">2026-06-02</span>
+        <span class="cl-ver-badge latest">✓ Versión actual</span>
+      </div>
+      
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Ajuste de Pipeline luego de reunion comercial 02/06</span>
+        </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 16px">
+    <div class="cl-version">
+      <div class="cl-ver-hdr">
+        <span class="cl-ver-num">v2.5.0</span>
+        <span class="cl-ver-date">2026-06-01</span>
+        
+      </div>
+      
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Gráfico de leasing (evolución de cuota mensual) arranca dinámicamente en el mes del último reporte, igual que la proyección. Se mueve solo con el tiempo.</span>
+        </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 16px">
+    <div class="cl-version">
+      <div class="cl-ver-hdr">
+        <span class="cl-ver-num">v2.4.0</span>
+        <span class="cl-ver-date">2026-06-01</span>
+        
+      </div>
+      
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Proyección dinámica: gráfico y tabla arrancan en el mes del último reporte y avanzan 24 meses. Se mueve solo a medida que se cargan reportes.</span>
+        </div>
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Reserva taller: mes actual usa unidades reales en taller; reserva estructural % aplica desde el mes siguiente en adelante.</span>
+        </div>
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Pipeline: alerta visual en oportunidades con fecha de inicio vencida — para eliminar o actualizar.</span>
+        </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 16px">
+    <div class="cl-version">
+      <div class="cl-ver-hdr">
         <span class="cl-ver-num">v2.3.3</span>
         <span class="cl-ver-date">2026-06-01</span>
-        <span class="cl-ver-badge latest">✓ Versión actual</span>
+        
       </div>
       
         <div class="cl-entry">
@@ -3172,7 +3325,7 @@ render();
    y actualizar APP_VERSION.
 ──────────────────────────────────────────────────────────────── */
 let APP_VERSION = document.querySelector('meta[name="app-version"]')?.content || "2.0.5";
-const CHANGELOG = [{"version":"2.5.0","date":"2026-06-01","latest":true,"entries":[{"type":"feat","text":"Gráfico de leasing (evolución de cuota mensual) arranca dinámicamente en el mes del último reporte, igual que la proyección. Se mueve solo con el tiempo."}]},{"version":"2.4.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Proyección dinámica: gráfico y tabla arrancan en el mes del último reporte y avanzan 24 meses. Se mueve solo a medida que se cargan reportes."},{"type":"feat","text":"Reserva taller: mes actual usa unidades reales en taller; reserva estructural % aplica desde el mes siguiente en adelante."},{"type":"feat","text":"Pipeline: alerta visual en oportunidades con fecha de inicio vencida — para eliminar o actualizar."}]},{"version":"2.3.3","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Ajustes Asignaciones"}]},{"version":"2.3.2","date":"2026-06-01","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.3.1","date":"2026-06-01","entries":[{"type":"feat","text":"Ajuste de Asignaciones"}]},{"version":"2.3.0","date":"2026-06-01","entries":[{"type":"fix","text":"Carga xlsx: AUTOS ahora usa hoja 'Status Autos 2026' con match por patente — funciona aunque cambien los números de móvil."},{"type":"fix","text":"Carga xlsx: Rangers renumerados 501/503→37/39, Hilux 409→41, Sail 401-408→1-8 con patentes reales."},{"type":"feat","text":"Carga xlsx: updatedAutos incluido en el resumen de la carga."}]},{"version":"2.2.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Proyección: alerta de compra recomendada — indica 1ª o 2ª quincena del mes en que debe iniciarse la adquisición (45 días antes del déficit proyectado)."},{"type":"feat","text":"Alerta se colorea según urgencia: azul (tiempo suficiente), ámbar (menos de 30 días), rojo (plazo vencido)."}]},{"version":"2.1.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Versioning semántico: MAYOR.MENOR.PARCHE — código cambia MENOR, datos cambian PARCHE."},{"type":"fix","text":"Proyección: reserva estructural de taller calculada dinámicamente por mes según flota entregada."},{"type":"fix","text":"Flota tab: KPIs ahora usan isNonOp() correctamente — muestra taller y FS por separado."},{"type":"feat","text":"Taller: historial anual y ranking SHOP_HIST filtrados por flota activa. Todos los vehículos visibles aunque tengan 0 semanas."},{"type":"feat","text":"Panel: botón Ver todas las flotas consolida KPIs de todas las flotas."}]},{"version":"2.0.13","date":"2026-06-01","latest":false,"entries":[{"type":"fix","text":"Proyección: reserva estructural de taller calculada dinámicamente por mes — crece a medida que entran vehículos de producción según su fEntrega."},{"type":"fix","text":"Reserva estructural usa flota entregada en cada mes (total - FS - en producción ese mes), no el total fijo actual."}]},{"version":"2.0.12","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline"}]},{"version":"2.0.11","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de Asignación de Autos Comudef"},{"type":"feat","text":"Ingreso a Producción Hylux URT"}]},{"version":"2.0.10","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.9","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.8","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.7","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.6","date":"2026-05-22","entries":[{"type":"feat","text":"Mejoras en la Hoja Taller"},{"type":"feat","text":"Arreglo en el número de version"}]},{"version":"2.0.5","date":"2026-05-22","entries":[{"type":"feat","text":"Ajuste Pipeline"}]},{"version":"2.0.4","date":"2026-05-19","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.3","date":"2026-05-19","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.2","date":"2026-05-19","entries":[{"type":"feat","text":"Se arreglaron los Pipeline de Ambulancias 4x2 y 4x4"}]},{"version":"2.0.1","date":"2026-05-19","entries":[{"type":"feat","text":"Versionado automático al guardar: la versión se incrementa sola (patch), sin intervención manual."},{"type":"fix","text":"downloadUpdatedHTML: APP_VERSION y CHANGELOG ahora se serializan correctamente usando funciones arrow en replace() para evitar interpretación errónea de $ en JSON."},{"type":"feat","text":"Nombre del archivo incluye fecha y versión: UCM_Fleet_Intelligence_YYYYMMDD_vX-Y-Z.html."}]},{"version":"2.0.0","date":"2026-05-19","entries":[{"type":"feat","text":"Panel: botón 'Ver todas las flotas' consolida KPIs de AMB 4×2, 4×4, VAN y AUTOS en una sola vista."},{"type":"feat","text":"Diagnóstico: rediseñado como modal instantáneo (sin file picker). Muestra estado de librerías, condiciones por flota, estados sin REQS, semana cargada y versión."}]},{"version":"1.9.0","date":"2026-05-19","entries":[{"type":"feat","text":"Requerimientos temporales recurrentes por contrato: campo tempReqs con mesIni/mesFin/qty/motivo. Se aplica todos los años en ese rango de meses."},{"type":"feat","text":"getReqOp(r, ym): función helper que calcula requerimiento base + boosts temporales para un mes dado."},{"type":"feat","text":"Proyección: demandaContratos varía mes a mes según tempReqs activos — la línea azul ya no es plana."},{"type":"feat","text":"Asignaciones: columna Req. Operación muestra badge morado +N cuando hay boost temporal activo."},{"type":"fix","text":"Proyección: data-freed y data-net del gráfico Pipeline usan getReqOp y getAsigReal con variable local flt (no fl del scope externo)."}]},{"version":"1.8.1","date":"2026-05-19","entries":[{"type":"fix","text":"Asignaciones: REQS_AMB reconstruido con nombres exactos que vienen del xlsx (TRASLADO BÁSICO, CORP. LAS CONDES, etc.)."},{"type":"fix","text":"syncReqsFromFleet: purga entradas fantasma (asig=0 sin fFin futura) — resuelve duplicados por cambio de nombre en xlsx."},{"type":"fix","text":"REQS_4X4: TECHINT renombrado a TECHINT TOCOPILLA, BESS LIBRILLO agregado."},{"type":"fix","text":"editContrato: acepta clientes nuevos (string), agrega fIni, elimina campo asig (ahora es solo lectura desde FLEET)."}]},{"version":"1.8.0","date":"2026-05-18","entries":[{"type":"feat","text":"Asignaciones: tabla unificada — asig desde FLEET.estado (automático), metadata desde REQS (manual). Clientes nuevos detectados con badge NUEVO."},{"type":"feat","text":"buildTodasFilas() y getAsigReal(): helpers compartidos entre Asignaciones y Proyección."},{"type":"fix","text":"Proyección: demandaContratos y unidadesLibres usan getAsigReal en lugar de r.asig (que era siempre 0)."},{"type":"fix","text":"Carga de reporte: EN PRODUCCION y FUERA DE SERVICIO protegidos contra sobreescritura."},{"type":"fix","text":"Carga de reporte: normalizarCond() mapea variantes del xlsx (OPERATIVO C/OBS, NO OP, etc.)."},{"type":"feat","text":"Changelog incorporado: badge de versión en topbar abre historial de cambios."}]},{"version":"1.7.0","date":"2026-05-18","entries":[{"type":"feat","text":"Panel: botón 'Ver todas las flotas' en Leasing (ya existía)."},{"type":"feat","text":"4×4: contrato RESCATE RM (rol 4×2) para móvil 365."},{"type":"fix","text":"Capital remanente calculado dinámicamente con amortización lineal según fecha actual."}]},{"version":"1.6.0","date":"2026-05-15","entries":[{"type":"fix","text":"Proyección: pipeDemanda considera duración de cada oportunidad — línea naranja sube y baja correctamente."},{"type":"fix","text":"Ambulancias en pipeline y reserva taller redondeadas al entero más cercano."}]},{"version":"1.5.0","date":"2026-05-15","entries":[{"type":"data","text":"Datos leasing actualizados desde Detalle_Vehiculos_UCM_Emecar_11-May-26.xlsx."},{"type":"feat","text":"Cuotas PMT 1%/mes para móviles 241, 243, 245, 253, 255, 257. Los Cuatro y Rio Branco con datos completos."}]}];
+const CHANGELOG = [{"version":"2.5.1","date":"2026-06-02","latest":true,"entries":[{"type":"feat","text":"Ajuste de Pipeline luego de reunion comercial 02/06"}]},{"version":"2.5.0","date":"2026-06-01","entries":[{"type":"feat","text":"Gráfico de leasing (evolución de cuota mensual) arranca dinámicamente en el mes del último reporte, igual que la proyección. Se mueve solo con el tiempo."}]},{"version":"2.4.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Proyección dinámica: gráfico y tabla arrancan en el mes del último reporte y avanzan 24 meses. Se mueve solo a medida que se cargan reportes."},{"type":"feat","text":"Reserva taller: mes actual usa unidades reales en taller; reserva estructural % aplica desde el mes siguiente en adelante."},{"type":"feat","text":"Pipeline: alerta visual en oportunidades con fecha de inicio vencida — para eliminar o actualizar."}]},{"version":"2.3.3","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Ajustes Asignaciones"}]},{"version":"2.3.2","date":"2026-06-01","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.3.1","date":"2026-06-01","entries":[{"type":"feat","text":"Ajuste de Asignaciones"}]},{"version":"2.3.0","date":"2026-06-01","entries":[{"type":"fix","text":"Carga xlsx: AUTOS ahora usa hoja 'Status Autos 2026' con match por patente — funciona aunque cambien los números de móvil."},{"type":"fix","text":"Carga xlsx: Rangers renumerados 501/503→37/39, Hilux 409→41, Sail 401-408→1-8 con patentes reales."},{"type":"feat","text":"Carga xlsx: updatedAutos incluido en el resumen de la carga."}]},{"version":"2.2.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Proyección: alerta de compra recomendada — indica 1ª o 2ª quincena del mes en que debe iniciarse la adquisición (45 días antes del déficit proyectado)."},{"type":"feat","text":"Alerta se colorea según urgencia: azul (tiempo suficiente), ámbar (menos de 30 días), rojo (plazo vencido)."}]},{"version":"2.1.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Versioning semántico: MAYOR.MENOR.PARCHE — código cambia MENOR, datos cambian PARCHE."},{"type":"fix","text":"Proyección: reserva estructural de taller calculada dinámicamente por mes según flota entregada."},{"type":"fix","text":"Flota tab: KPIs ahora usan isNonOp() correctamente — muestra taller y FS por separado."},{"type":"feat","text":"Taller: historial anual y ranking SHOP_HIST filtrados por flota activa. Todos los vehículos visibles aunque tengan 0 semanas."},{"type":"feat","text":"Panel: botón Ver todas las flotas consolida KPIs de todas las flotas."}]},{"version":"2.0.13","date":"2026-06-01","latest":false,"entries":[{"type":"fix","text":"Proyección: reserva estructural de taller calculada dinámicamente por mes — crece a medida que entran vehículos de producción según su fEntrega."},{"type":"fix","text":"Reserva estructural usa flota entregada en cada mes (total - FS - en producción ese mes), no el total fijo actual."}]},{"version":"2.0.12","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline"}]},{"version":"2.0.11","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de Asignación de Autos Comudef"},{"type":"feat","text":"Ingreso a Producción Hylux URT"}]},{"version":"2.0.10","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.9","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.8","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.7","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.6","date":"2026-05-22","entries":[{"type":"feat","text":"Mejoras en la Hoja Taller"},{"type":"feat","text":"Arreglo en el número de version"}]},{"version":"2.0.5","date":"2026-05-22","entries":[{"type":"feat","text":"Ajuste Pipeline"}]},{"version":"2.0.4","date":"2026-05-19","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.3","date":"2026-05-19","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.2","date":"2026-05-19","entries":[{"type":"feat","text":"Se arreglaron los Pipeline de Ambulancias 4x2 y 4x4"}]},{"version":"2.0.1","date":"2026-05-19","entries":[{"type":"feat","text":"Versionado automático al guardar: la versión se incrementa sola (patch), sin intervención manual."},{"type":"fix","text":"downloadUpdatedHTML: APP_VERSION y CHANGELOG ahora se serializan correctamente usando funciones arrow en replace() para evitar interpretación errónea de $ en JSON."},{"type":"feat","text":"Nombre del archivo incluye fecha y versión: UCM_Fleet_Intelligence_YYYYMMDD_vX-Y-Z.html."}]},{"version":"2.0.0","date":"2026-05-19","entries":[{"type":"feat","text":"Panel: botón 'Ver todas las flotas' consolida KPIs de AMB 4×2, 4×4, VAN y AUTOS en una sola vista."},{"type":"feat","text":"Diagnóstico: rediseñado como modal instantáneo (sin file picker). Muestra estado de librerías, condiciones por flota, estados sin REQS, semana cargada y versión."}]},{"version":"1.9.0","date":"2026-05-19","entries":[{"type":"feat","text":"Requerimientos temporales recurrentes por contrato: campo tempReqs con mesIni/mesFin/qty/motivo. Se aplica todos los años en ese rango de meses."},{"type":"feat","text":"getReqOp(r, ym): función helper que calcula requerimiento base + boosts temporales para un mes dado."},{"type":"feat","text":"Proyección: demandaContratos varía mes a mes según tempReqs activos — la línea azul ya no es plana."},{"type":"feat","text":"Asignaciones: columna Req. Operación muestra badge morado +N cuando hay boost temporal activo."},{"type":"fix","text":"Proyección: data-freed y data-net del gráfico Pipeline usan getReqOp y getAsigReal con variable local flt (no fl del scope externo)."}]},{"version":"1.8.1","date":"2026-05-19","entries":[{"type":"fix","text":"Asignaciones: REQS_AMB reconstruido con nombres exactos que vienen del xlsx (TRASLADO BÁSICO, CORP. LAS CONDES, etc.)."},{"type":"fix","text":"syncReqsFromFleet: purga entradas fantasma (asig=0 sin fFin futura) — resuelve duplicados por cambio de nombre en xlsx."},{"type":"fix","text":"REQS_4X4: TECHINT renombrado a TECHINT TOCOPILLA, BESS LIBRILLO agregado."},{"type":"fix","text":"editContrato: acepta clientes nuevos (string), agrega fIni, elimina campo asig (ahora es solo lectura desde FLEET)."}]},{"version":"1.8.0","date":"2026-05-18","entries":[{"type":"feat","text":"Asignaciones: tabla unificada — asig desde FLEET.estado (automático), metadata desde REQS (manual). Clientes nuevos detectados con badge NUEVO."},{"type":"feat","text":"buildTodasFilas() y getAsigReal(): helpers compartidos entre Asignaciones y Proyección."},{"type":"fix","text":"Proyección: demandaContratos y unidadesLibres usan getAsigReal en lugar de r.asig (que era siempre 0)."},{"type":"fix","text":"Carga de reporte: EN PRODUCCION y FUERA DE SERVICIO protegidos contra sobreescritura."},{"type":"fix","text":"Carga de reporte: normalizarCond() mapea variantes del xlsx (OPERATIVO C/OBS, NO OP, etc.)."},{"type":"feat","text":"Changelog incorporado: badge de versión en topbar abre historial de cambios."}]},{"version":"1.7.0","date":"2026-05-18","entries":[{"type":"feat","text":"Panel: botón 'Ver todas las flotas' en Leasing (ya existía)."},{"type":"feat","text":"4×4: contrato RESCATE RM (rol 4×2) para móvil 365."},{"type":"fix","text":"Capital remanente calculado dinámicamente con amortización lineal según fecha actual."}]},{"version":"1.6.0","date":"2026-05-15","entries":[{"type":"fix","text":"Proyección: pipeDemanda considera duración de cada oportunidad — línea naranja sube y baja correctamente."},{"type":"fix","text":"Ambulancias en pipeline y reserva taller redondeadas al entero más cercano."}]},{"version":"1.5.0","date":"2026-05-15","entries":[{"type":"data","text":"Datos leasing actualizados desde Detalle_Vehiculos_UCM_Emecar_11-May-26.xlsx."},{"type":"feat","text":"Cuotas PMT 1%/mes para móviles 241, 243, 245, 253, 255, 257. Los Cuatro y Rio Branco con datos completos."}]}];
 function initChangelog(){
   const badge=document.getElementById("ver-badge");
   if(badge) badge.textContent="v"+APP_VERSION;
