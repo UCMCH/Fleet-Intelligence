@@ -1,6 +1,6 @@
 <html lang="es"><head>
 <meta charset="UTF-8">
-<meta name="app-version" content="2.5.1">
+<meta name="app-version" content="2.14.0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UCM Fleet Intelligence</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -174,7 +174,7 @@ tfoot td{padding:8px 10px;font-weight:700;border-right:1px solid var(--border)}
   <div id="topbar">
     <h1>🚑 UCM Fleet Intelligence</h1>
     <span class="sep">|</span>
-    <button id="ver-badge" onclick="abrirChangelog()">v2.5.1</button>
+    <button id="ver-badge" onclick="abrirChangelog()">v2.11.1</button>
     <div id="fleet-selector">
       <button class="fs-btn active" onclick="setFlota('4x2')">🚑 AMB 4×2</button>
       <button class="fs-btn" onclick="setFlota('4x4')">🚑 AMB 4×4</button>
@@ -193,309 +193,867 @@ tfoot td{padding:8px 10px;font-weight:700;border-right:1px solid var(--border)}
   <div id="tabs">
     <button class="tab-btn" onclick="setTab('panel')">📊 Panel</button>
     <button class="tab-btn" onclick="setTab('flota')">🚑 Flota</button>
-    <button class="tab-btn" onclick="setTab('leasing')">🏦 Leasing</button>
+    <button class="tab-btn active" onclick="setTab('leasing')">🏦 Leasing</button>
     <button class="tab-btn" onclick="setTab('asignaciones')">📋 Asignaciones</button>
     <button class="tab-btn" onclick="setTab('taller')">🔧 Taller <span id="taller-badge" class="tab-badge" style="display: inline;">6</span></button>
     <button class="tab-btn" onclick="setTab('proyeccion')">📈 Proyección</button>
-    <button class="tab-btn active" onclick="setTab('pipeline')">🎯 Pipeline</button>
+    <button class="tab-btn" onclick="setTab('pipeline')">🎯 Pipeline</button>
+    <button class="tab-btn" onclick="setTab('concentracion')">⚖️ Concentración</button>
   </div>
   <div id="content">
-  <div class="sec-hdr"><h3>Pipeline de Negocios — AMB 4×2</h3><span class="sub">Oportunidades activas</span></div>
-  <div class="kpi-row">
-    <div class="kpi" style="border-left-color:#7c3aed"><div class="lbl">Oportunidades</div><div class="val">14</div></div>
-    <div class="kpi" style="border-left-color:#1d4ed8"><div class="lbl">Demanda potencial</div><div class="val">31 und.</div></div>
-    <div class="kpi" style="border-left-color:#16a34a">
-      <div class="lbl">Demanda ponderada</div>
-      <div class="val">8 und.</div>
-      <div class="sub">7.6 → redondeado al entero</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">
+    <div>
+      <span style="font-size:14px;font-weight:700;color:var(--navy)">Leasing vigente — AMB 4×2</span>
+      <span style="font-size:11px;color:var(--text-s);margin-left:10px">50 contratos · ordenado por vencimiento</span>
     </div>
+    <button onclick="toggleLeasingView()" style="padding:5px 14px;border-radius:20px;border:1px solid var(--blue);background:#fff;color:var(--blue);font-size:11px;font-weight:600;cursor:pointer">
+      Ver todas las flotas
+    </button>
+  </div>
+  <div class="alert alert-warn">📋 <strong>6 contratos próximos a vencer</strong>: Móvil 287 (Jun-2026), Móvil 259 (Sep-2026), Móvil 261 (Sep-2026), Móvil 241 (Oct-2026), Móvil 243 (Oct-2026), Móvil 267 (Nov-2026) — al término pasan a ser propiedad de UCM</div>
+  <div class="kpi-row">
+    <div class="kpi" style="border-left-color:#1d4ed8"><div class="lbl">Contratos activos</div><div class="val">50</div></div>
+    <div class="kpi" style="border-left-color:#7c3aed">
+    <div class="lbl">Cuota mensual total</div>
+    <div class="val" style="font-size:18px">$96.8M</div>
+    <div class="sub">46 informadas · 4 estimadas al 1%/m</div>
+  </div>
+    <div class="kpi" style="border-left-color:#d97706"><div class="lbl">Monto financiado total</div><div class="val" style="font-size:18px">$2.4B</div></div>
+    <div class="kpi" style="border-left-color:#16a34a"><div class="lbl">% Remanente / Financiado</div><div class="val" style="font-size:22px">32%</div><div class="sub">$772.2M de $2.4B</div></div>
+    <div class="kpi" style="border-left-color:#dc2626"><div class="lbl">Remanente K total</div><div class="val" style="font-size:18px">$772.2M</div><div class="sub">capital pendiente</div></div>
   </div>
 
-  <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
-    <button onclick="abrirFormPipeline(null)" style="padding:5px 14px;background:#1d4ed8;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600">+ Agregar oportunidad</button>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:16px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <span style="font-weight:700;font-size:13px;color:var(--navy)">🧱 Muro de vencimientos de leasing</span>
+      <span style="font-size:11px;color:var(--text-s)">Cuota mensual que se libera al vencer · la unidad pasa a propiedad UCM</span>
+    </div>
+    <div style="position:relative"><canvas id="chartMuroLeasing" style="width: 1850px; height: 180px; display: block; box-sizing: border-box;" width="1850" height="180"></canvas></div>
+    <div id="muro-leasing-data" data-muro="[{&quot;q&quot;:&quot;2026-Q2&quot;,&quot;cuota&quot;:2283548,&quot;unidades&quot;:1,&quot;moviles&quot;:[287]},{&quot;q&quot;:&quot;2026-Q3&quot;,&quot;cuota&quot;:4150843,&quot;unidades&quot;:2,&quot;moviles&quot;:[259,261]},{&quot;q&quot;:&quot;2026-Q4&quot;,&quot;cuota&quot;:25998575,&quot;unidades&quot;:12,&quot;moviles&quot;:[241,243,267,253,315,317,323,269,271,273,275,277]},{&quot;q&quot;:&quot;2027-Q1&quot;,&quot;cuota&quot;:27544394,&quot;unidades&quot;:11,&quot;moviles&quot;:[245,279,281,283,285,319,321,325,255,257,327]},{&quot;q&quot;:&quot;2027-Q3&quot;,&quot;cuota&quot;:13726512,&quot;unidades&quot;:6,&quot;moviles&quot;:[353,355,361,363,263,265]},{&quot;q&quot;:&quot;2028-Q1&quot;,&quot;cuota&quot;:3503585,&quot;unidades&quot;:2,&quot;moviles&quot;:[333,335]},{&quot;q&quot;:&quot;2028-Q2&quot;,&quot;cuota&quot;:18007716,&quot;unidades&quot;:11,&quot;moviles&quot;:[359,289,291,293,295,297,299,301,303,305,307]},{&quot;q&quot;:&quot;2028-Q3&quot;,&quot;cuota&quot;:1561375,&quot;unidades&quot;:1,&quot;moviles&quot;:[357]}]" style="display:none"></div>
   </div>
-  
 
-  <div id="pipeline-form-container"></div>
-
-  <div class="tbl-wrap"><table>
+  <div class="tbl-wrap">
+  <table>
     <thead><tr>
-      <th class="sortable" data-sort-dir="none">Cliente</th>
-      <th class="sortable" data-sort-dir="none">Unidades</th>
-      <th class="sortable" data-sort-dir="none">Prob. %</th>
-      <th class="sortable" data-sort-dir="none">Dem. pond.</th>
-      <th class="sortable" data-sort-dir="none">F. Requerida</th>
-      <th class="sortable" data-sort-dir="none">Duración (m)</th>
+      
+      <th class="sortable" data-sort-dir="none">Prop.</th><th class="sortable" data-sort-dir="none">Móvil</th><th class="sortable" data-sort-dir="none">Marca / Modelo</th><th class="sortable" data-sort-dir="none">Patente</th>
+      <th class="sortable" data-sort-dir="none">Banco / Entidad</th><th class="sortable" data-sort-dir="none">F. Inicio</th><th class="sortable" data-sort-dir="none">F. Término</th><th class="sortable" data-sort-dir="none">M. Rest.</th>
+      <th style="text-align:right" class="sortable" data-sort-dir="none">Monto Financ.</th>
+      <th style="text-align:right" class="sortable" data-sort-dir="none">Cuota Mensual</th>
+      <th style="text-align:right" class="sortable" data-sort-dir="none">Remanente K</th>
       <th class="sortable" data-sort-dir="none">Estado</th>
-      <th class="sortable" data-sort-dir="none">Notas</th>
-      <th></th>
     </tr></thead>
     <tbody>
-    <tr style="">
-      <td><strong>VERONA</strong></td>
-      <td style="text-align:center;font-weight:700">1</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:6px">
-          <div style="width:80px;max-width:100px;height:8px;border-radius:4px;background:#16a34a"></div>
-          <strong style="color:#16a34a">80%</strong>
-        </div>
-      </td>
-      <td style="text-align:center;font-weight:600;color:#7c3aed">0.8</td>
-      <td style="text-align:center">Jun-2026</td>
-      <td style="text-align:center">24 m</td>
-      <td><span class="badge b-green">Negociación avanzada</span></td>
-      <td class="wrap">Empresa RM</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="abrirFormPipeline(0)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="eliminarPipeline(0)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr style="">
-      <td><strong>FUSAT RANCAGUA</strong></td>
-      <td style="text-align:center;font-weight:700">3</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:6px">
-          <div style="width:10px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
-          <strong style="color:#94a3b8">10%</strong>
-        </div>
-      </td>
-      <td style="text-align:center;font-weight:600;color:#7c3aed">0.3</td>
-      <td style="text-align:center">Jul-2026</td>
-      <td style="text-align:center">36 m</td>
-      <td><span class="badge b-grey">Prospecto</span></td>
-      <td class="wrap">Licitación hospital público</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="abrirFormPipeline(1)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="eliminarPipeline(1)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr style="">
-      <td><strong>GRUPO COSTANERA-LITORAL</strong></td>
-      <td style="text-align:center;font-weight:700">1</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:6px">
-          <div style="width:20px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
-          <strong style="color:#94a3b8">20%</strong>
-        </div>
-      </td>
-      <td style="text-align:center;font-weight:600;color:#7c3aed">0.2</td>
-      <td style="text-align:center">Jul-2026</td>
-      <td style="text-align:center">36 m</td>
-      <td><span class="badge b-grey">Negociación</span></td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="abrirFormPipeline(2)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="eliminarPipeline(2)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr style="">
-      <td><strong>MUNICIPALIDAD LAS CONDES</strong></td>
-      <td style="text-align:center;font-weight:700">4</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:6px">
-          <div style="width:50px;max-width:100px;height:8px;border-radius:4px;background:#d97706"></div>
-          <strong style="color:#d97706">50%</strong>
-        </div>
-      </td>
-      <td style="text-align:center;font-weight:600;color:#7c3aed">2.0</td>
-      <td style="text-align:center">Ago-2026</td>
-      <td style="text-align:center">24 m</td>
-      <td><span class="badge b-amber">Propuesta</span></td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="abrirFormPipeline(3)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="eliminarPipeline(3)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr style="">
-      <td><strong>COSAYACH</strong></td>
-      <td style="text-align:center;font-weight:700">3</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:6px">
-          <div style="width:10px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
-          <strong style="color:#94a3b8">10%</strong>
-        </div>
-      </td>
-      <td style="text-align:center;font-weight:600;color:#7c3aed">0.3</td>
-      <td style="text-align:center">Ago-2026</td>
-      <td style="text-align:center">24 m</td>
-      <td><span class="badge b-grey">Negociación</span></td>
-      <td class="wrap">Compañía de Salitre y Yodo</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="abrirFormPipeline(4)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="eliminarPipeline(4)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr style="">
-      <td><strong>SACYR RUTA 68</strong></td>
-      <td style="text-align:center;font-weight:700">3</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:6px">
-          <div style="width:20px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
-          <strong style="color:#94a3b8">20%</strong>
-        </div>
-      </td>
-      <td style="text-align:center;font-weight:600;color:#7c3aed">0.6</td>
-      <td style="text-align:center">Jul-2026</td>
-      <td style="text-align:center">36 m</td>
-      <td><span class="badge b-grey">Propuesta</span></td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="abrirFormPipeline(5)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="eliminarPipeline(5)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr style="">
-      <td><strong>SACYR COPIAPO</strong></td>
-      <td style="text-align:center;font-weight:700">2</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:6px">
-          <div style="width:10px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
-          <strong style="color:#94a3b8">10%</strong>
-        </div>
-      </td>
-      <td style="text-align:center;font-weight:600;color:#7c3aed">0.2</td>
-      <td style="text-align:center">Ago-2026</td>
-      <td style="text-align:center">36 m</td>
-      <td><span class="badge b-grey">Prospecto</span></td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="abrirFormPipeline(6)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="eliminarPipeline(6)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr style="">
-      <td><strong>SACYR RUTA DEL ALGARROBO</strong></td>
-      <td style="text-align:center;font-weight:700">2</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:6px">
-          <div style="width:10px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
-          <strong style="color:#94a3b8">10%</strong>
-        </div>
-      </td>
-      <td style="text-align:center;font-weight:600;color:#7c3aed">0.2</td>
-      <td style="text-align:center">Jul-2026</td>
-      <td style="text-align:center">36 m</td>
-      <td><span class="badge b-grey">Prospecto</span></td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="abrirFormPipeline(7)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="eliminarPipeline(7)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr style="">
-      <td><strong>HOSPITAL SAN JUAN DE DIOS</strong></td>
-      <td style="text-align:center;font-weight:700">7</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:6px">
-          <div style="width:25px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
-          <strong style="color:#94a3b8">25%</strong>
-        </div>
-      </td>
-      <td style="text-align:center;font-weight:600;color:#7c3aed">1.8</td>
-      <td style="text-align:center">Ago-2026</td>
-      <td style="text-align:center">12 m</td>
-      <td><span class="badge b-grey">Prospecto</span></td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="abrirFormPipeline(8)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="eliminarPipeline(8)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr style="">
-      <td><strong>RUTA MINERA</strong></td>
-      <td style="text-align:center;font-weight:700">1</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:6px">
-          <div style="width:20px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
-          <strong style="color:#94a3b8">20%</strong>
-        </div>
-      </td>
-      <td style="text-align:center;font-weight:600;color:#7c3aed">0.2</td>
-      <td style="text-align:center">Jul-2026</td>
-      <td style="text-align:center">36 m</td>
-      <td><span class="badge b-grey">Propuesta</span></td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="abrirFormPipeline(9)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="eliminarPipeline(9)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr style="">
-      <td><strong>AES LOS CURUROS</strong></td>
-      <td style="text-align:center;font-weight:700">1</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:6px">
-          <div style="width:20px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
-          <strong style="color:#94a3b8">20%</strong>
-        </div>
-      </td>
-      <td style="text-align:center;font-weight:600;color:#7c3aed">0.2</td>
-      <td style="text-align:center">Jul-2026</td>
-      <td style="text-align:center">12 m</td>
-      <td><span class="badge b-grey">Prospecto</span></td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="abrirFormPipeline(10)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="eliminarPipeline(10)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr style="">
-      <td><strong>PAMPA CAMARONES</strong></td>
-      <td style="text-align:center;font-weight:700">1</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:6px">
-          <div style="width:30px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
-          <strong style="color:#94a3b8">30%</strong>
-        </div>
-      </td>
-      <td style="text-align:center;font-weight:600;color:#7c3aed">0.3</td>
-      <td style="text-align:center">Ago-2026</td>
-      <td style="text-align:center">24 m</td>
-      <td><span class="badge b-grey">Prospecto</span></td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="abrirFormPipeline(11)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="eliminarPipeline(11)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr style="">
-      <td><strong>HOSPITAL LUIS TISNE</strong></td>
-      <td style="text-align:center;font-weight:700">1</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:6px">
-          <div style="width:50px;max-width:100px;height:8px;border-radius:4px;background:#d97706"></div>
-          <strong style="color:#d97706">50%</strong>
-        </div>
-      </td>
-      <td style="text-align:center;font-weight:600;color:#7c3aed">0.5</td>
-      <td style="text-align:center">Jun-2026</td>
-      <td style="text-align:center">3 m</td>
-      <td><span class="badge b-amber">Prospecto</span></td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="abrirFormPipeline(12)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="eliminarPipeline(12)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr><tr style="">
-      <td><strong>POWER CHINA</strong></td>
-      <td style="text-align:center;font-weight:700">1</td>
-      <td style="text-align:center">
-        <div style="display:flex;align-items:center;gap:6px">
-          <div style="width:10px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
-          <strong style="color:#94a3b8">10%</strong>
-        </div>
-      </td>
-      <td style="text-align:center;font-weight:600;color:#7c3aed">0.1</td>
-      <td style="text-align:center">Jul-2026</td>
-      <td style="text-align:center">12 m</td>
-      <td><span class="badge b-grey">Prospecto</span></td>
-      <td class="wrap">—</td>
-      <td style="text-align:center;white-space:nowrap">
-        <button onclick="abrirFormPipeline(13)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="eliminarPipeline(13)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-      </td>
-    </tr>
+    <tr style="background:#fff7ed">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>287</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">TGFC-87</td>
+        <td><strong>Banco BCI</strong></td>
+        <td>Ene-2024</td>
+        <td style="font-weight:700;color:#d97706">Jun-2026</td>
+        <td style="text-align:center;font-weight:700;color:#d97706">1</td>
+        <td style="text-align:right">$52.0M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$2.3M</span>
+        </td>
+        <td style="text-align:right">—</td>
+        <td><span class="badge b-amber">Próximo</span></td>
+      </tr><tr style="background:#fffbeb">
+        
+        <td><span class="badge b-purple">EMECAR</span></td>
+        <td><strong>259</strong></td>
+        <td>MAXUS DELIVER 9 L3H3</td>
+        <td style="font-family:monospace;font-size:11px">SFPS-34</td>
+        <td><strong>Banco BCI</strong></td>
+        <td>Jul-2023</td>
+        <td style="font-weight:700;color:#d97706">Sep-2026</td>
+        <td style="text-align:center;font-weight:700;color:#d97706">4</td>
+        <td style="text-align:right">$56.2M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$2.2M</span>
+        </td>
+        <td style="text-align:right">$4.4M</td>
+        <td><span class="badge b-amber">Próximo</span></td>
+      </tr><tr style="background:#fffbeb">
+        
+        <td><span class="badge b-purple">EMECAR</span></td>
+        <td><strong>261</strong></td>
+        <td>MAXUS DELIVER 9 L3H3</td>
+        <td style="font-family:monospace;font-size:11px">SXSV-36</td>
+        <td><strong>Banco Santander</strong></td>
+        <td>Ago-2023</td>
+        <td style="font-weight:700;color:#d97706">Sep-2026</td>
+        <td style="text-align:center;font-weight:700;color:#d97706">4</td>
+        <td style="text-align:right">$54.4M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$2.0M</span>
+        </td>
+        <td style="text-align:right">$4.4M</td>
+        <td><span class="badge b-amber">Próximo</span></td>
+      </tr><tr style="background:#fffbeb">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>241</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">RHRC-51</td>
+        <td><strong>Banco de Chile</strong></td>
+        <td>Oct-2021</td>
+        <td style="font-weight:700;color:#d97706">Oct-2026</td>
+        <td style="text-align:center;font-weight:700;color:#d97706">5</td>
+        <td style="text-align:right">$51.0M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.1M</span>
+        </td>
+        <td style="text-align:right">$3.4M</td>
+        <td><span class="badge b-amber">Próximo</span></td>
+      </tr><tr style="background:#fffbeb">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>243</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">RHTK-96</td>
+        <td><strong>Banco de Chile</strong></td>
+        <td>Oct-2021</td>
+        <td style="font-weight:700;color:#d97706">Oct-2026</td>
+        <td style="text-align:center;font-weight:700;color:#d97706">5</td>
+        <td style="text-align:right">$51.0M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.1M</span>
+        </td>
+        <td style="text-align:right">$3.4M</td>
+        <td><span class="badge b-amber">Próximo</span></td>
+      </tr><tr style="background:#fffbeb">
+        
+        <td><span class="badge b-purple">EMECAR</span></td>
+        <td><strong>267</strong></td>
+        <td>MAXUS DELIVER 9 L3H3</td>
+        <td style="font-family:monospace;font-size:11px">TBYY-96</td>
+        <td><strong>Banco Santander</strong></td>
+        <td>Oct-2023</td>
+        <td style="font-weight:700;color:#d97706">Nov-2026</td>
+        <td style="text-align:center;font-weight:700;color:#d97706">6</td>
+        <td style="text-align:right">$50.0M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.8M</span>
+        </td>
+        <td style="text-align:right">$6.8M</td>
+        <td><span class="badge b-amber">Próximo</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>253</strong></td>
+        <td>MERCEDES BENZ SPRINTER</td>
+        <td style="font-family:monospace;font-size:11px">SKRG-89</td>
+        <td><strong>Banco Internacional</strong></td>
+        <td>Nov-2022</td>
+        <td style="font-weight:400;color:inherit">Dic-2026</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">7</td>
+        <td style="text-align:right">$75.6M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$2.0M</span>
+        </td>
+        <td style="text-align:right">$9.3M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>315</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">TFTT-58</td>
+        <td><strong>Banco BICE</strong></td>
+        <td>Nov-2024</td>
+        <td style="font-weight:400;color:inherit">Dic-2026</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">7</td>
+        <td style="text-align:right">$50.4M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$4.5M</span>
+        </td>
+        <td style="text-align:right">$12.1M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>317</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">TFTT-59</td>
+        <td><strong>Banco BICE</strong></td>
+        <td>Nov-2024</td>
+        <td style="font-weight:400;color:inherit">Dic-2026</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">7</td>
+        <td style="text-align:right">$50.4M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$4.5M</span>
+        </td>
+        <td style="text-align:right">$12.1M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>323</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">TYSZ-69</td>
+        <td><strong>Banco de Chile</strong></td>
+        <td>Dic-2024</td>
+        <td style="font-weight:400;color:inherit">Dic-2026</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">7</td>
+        <td style="text-align:right">$46.4M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$2.8M</span>
+        </td>
+        <td style="text-align:right">$11.6M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-purple">EMECAR</span></td>
+        <td><strong>269</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">SHXL-67</td>
+        <td><strong>Banco Internacional</strong></td>
+        <td>Dic-2023</td>
+        <td style="font-weight:400;color:inherit">Dic-2026</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">7</td>
+        <td style="text-align:right">$43.2M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
+        </td>
+        <td style="text-align:right">$7.2M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-purple">EMECAR</span></td>
+        <td><strong>271</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">SHXL-68</td>
+        <td><strong>Banco Internacional</strong></td>
+        <td>Dic-2023</td>
+        <td style="font-weight:400;color:inherit">Dic-2026</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">7</td>
+        <td style="text-align:right">$43.2M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
+        </td>
+        <td style="text-align:right">$7.2M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-purple">EMECAR</span></td>
+        <td><strong>273</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">SHXL-69</td>
+        <td><strong>Banco Internacional</strong></td>
+        <td>Dic-2023</td>
+        <td style="font-weight:400;color:inherit">Dic-2026</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">7</td>
+        <td style="text-align:right">$43.2M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
+        </td>
+        <td style="text-align:right">$7.2M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-purple">EMECAR</span></td>
+        <td><strong>275</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">SHXL-93</td>
+        <td><strong>Banco Internacional</strong></td>
+        <td>Dic-2023</td>
+        <td style="font-weight:400;color:inherit">Dic-2026</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">7</td>
+        <td style="text-align:right">$43.2M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
+        </td>
+        <td style="text-align:right">$7.2M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-purple">EMECAR</span></td>
+        <td><strong>277</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">SHXL-95</td>
+        <td><strong>Banco Internacional</strong></td>
+        <td>Dic-2023</td>
+        <td style="font-weight:400;color:inherit">Dic-2026</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">7</td>
+        <td style="text-align:right">$43.2M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
+        </td>
+        <td style="text-align:right">$7.2M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>245</strong></td>
+        <td>MERCEDES BENZ SPRINTER</td>
+        <td style="font-family:monospace;font-size:11px">RRTF-70</td>
+        <td><strong>Banco de Chile</strong></td>
+        <td>Dic-2021</td>
+        <td style="font-weight:400;color:inherit">Ene-2027</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">8</td>
+        <td style="text-align:right">$61.8M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.7M</span>
+        </td>
+        <td style="text-align:right">$7.1M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>279</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">TFJT-44</td>
+        <td><strong>Los Cuatro</strong></td>
+        <td>Ene-2024</td>
+        <td style="font-weight:400;color:inherit">Ene-2027</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">8</td>
+        <td style="text-align:right">$62.5M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$2.1M</span>
+        </td>
+        <td style="text-align:right">$12.2M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>281</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">TFJT-45</td>
+        <td><strong>Los Cuatro</strong></td>
+        <td>Ene-2024</td>
+        <td style="font-weight:400;color:inherit">Ene-2027</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">8</td>
+        <td style="text-align:right">$62.5M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$2.1M</span>
+        </td>
+        <td style="text-align:right">$12.2M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>283</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">TFJT-46</td>
+        <td><strong>Los Cuatro</strong></td>
+        <td>Ene-2024</td>
+        <td style="font-weight:400;color:inherit">Ene-2027</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">8</td>
+        <td style="text-align:right">$62.5M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$2.1M</span>
+        </td>
+        <td style="text-align:right">$12.2M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>285</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">TFJT-47</td>
+        <td><strong>Los Cuatro</strong></td>
+        <td>Ene-2024</td>
+        <td style="font-weight:400;color:inherit">Ene-2027</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">8</td>
+        <td style="text-align:right">$62.5M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$2.1M</span>
+        </td>
+        <td style="text-align:right">$12.2M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>319</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">TYLF-60</td>
+        <td><strong>Banco BICE</strong></td>
+        <td>Dic-2024</td>
+        <td style="font-weight:400;color:inherit">Ene-2027</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">8</td>
+        <td style="text-align:right">$46.4M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$4.5M</span>
+        </td>
+        <td style="text-align:right">$13.0M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>321</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">TYLF-83</td>
+        <td><strong>Banco BICE</strong></td>
+        <td>Dic-2024</td>
+        <td style="font-weight:400;color:inherit">Ene-2027</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">8</td>
+        <td style="text-align:right">$46.4M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$4.5M</span>
+        </td>
+        <td style="text-align:right">$13.0M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>325</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">TZHF-19</td>
+        <td><strong>Banco BCI</strong></td>
+        <td>Ene-2025</td>
+        <td style="font-weight:400;color:inherit">Feb-2027</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">9</td>
+        <td style="text-align:right">$46.4M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$2.5M</span>
+        </td>
+        <td style="text-align:right">$14.8M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>255</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">SSHC-51</td>
+        <td><strong>Banco Internacional</strong></td>
+        <td>Mar-2023</td>
+        <td style="font-weight:400;color:inherit">Mar-2027</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">10</td>
+        <td style="text-align:right">$65.8M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.7M</span>
+        </td>
+        <td style="text-align:right">$12.3M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>257</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">SSGZ-39</td>
+        <td><strong>Banco Internacional</strong></td>
+        <td>Mar-2023</td>
+        <td style="font-weight:400;color:inherit">Mar-2027</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">10</td>
+        <td style="text-align:right">$65.8M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.7M</span>
+        </td>
+        <td style="text-align:right">$12.3M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>327</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">TZVJ-71</td>
+        <td><strong>Banco BCI</strong></td>
+        <td>Ene-2025</td>
+        <td style="font-weight:400;color:inherit">Mar-2027</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">10</td>
+        <td style="text-align:right">$46.4M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$2.6M</span>
+        </td>
+        <td style="text-align:right">$16.1M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>353</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">VKKJ92</td>
+        <td><strong>Rio Branco</strong></td>
+        <td>Sep-2025</td>
+        <td style="font-weight:400;color:inherit">Sep-2027</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">16</td>
+        <td style="text-align:right">$56.3M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$2.6M</span>
+        </td>
+        <td style="text-align:right">$35.2M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>355</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">VKKJ96</td>
+        <td><strong>Rio Branco</strong></td>
+        <td>Sep-2025</td>
+        <td style="font-weight:400;color:inherit">Sep-2027</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">16</td>
+        <td style="text-align:right">$56.3M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$2.6M</span>
+        </td>
+        <td style="text-align:right">$35.2M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>361</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">VDSD-36</td>
+        <td><strong>Rio Branco</strong></td>
+        <td>Sep-2025</td>
+        <td style="font-weight:400;color:inherit">Sep-2027</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">16</td>
+        <td style="text-align:right">$56.3M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$2.6M</span>
+        </td>
+        <td style="text-align:right">$35.2M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>363</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">VDSD-37</td>
+        <td><strong>Rio Branco</strong></td>
+        <td>Sep-2025</td>
+        <td style="font-weight:400;color:inherit">Sep-2027</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">16</td>
+        <td style="text-align:right">$56.3M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$2.6M</span>
+        </td>
+        <td style="text-align:right">$35.2M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-purple">EMECAR</span></td>
+        <td><strong>263</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">SHXL-79</td>
+        <td><strong>Banco BCI</strong></td>
+        <td>Jul-2023</td>
+        <td style="font-weight:400;color:inherit">Sep-2027</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">16</td>
+        <td style="text-align:right">$50.7M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
+        </td>
+        <td style="text-align:right">$15.2M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-purple">EMECAR</span></td>
+        <td><strong>265</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">SHXL-94</td>
+        <td><strong>Banco BCI</strong></td>
+        <td>Jul-2023</td>
+        <td style="font-weight:400;color:inherit">Sep-2027</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">16</td>
+        <td style="text-align:right">$50.7M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
+        </td>
+        <td style="text-align:right">$15.2M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>333</strong></td>
+        <td>FORD TRANSIT 2.0 AT</td>
+        <td style="font-family:monospace;font-size:11px">RKXL74</td>
+        <td><strong>Banco BCI</strong></td>
+        <td>Feb-2025</td>
+        <td style="font-weight:400;color:inherit">Mar-2028</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">22</td>
+        <td style="text-align:right">$44.5M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.9M</span>
+        </td>
+        <td style="text-align:right">$25.2M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>335</strong></td>
+        <td>FORD TRANSIT 2.0 AT</td>
+        <td style="font-family:monospace;font-size:11px">RKXL75</td>
+        <td><strong>Banco BCI</strong></td>
+        <td>Feb-2025</td>
+        <td style="font-weight:400;color:inherit">Mar-2028</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">22</td>
+        <td style="text-align:right">$44.5M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
+        </td>
+        <td style="text-align:right">$25.2M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>359</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">VLPF-65</td>
+        <td><strong>Banco BCI</strong></td>
+        <td>Sep-2025</td>
+        <td style="font-weight:400;color:inherit">Abr-2028</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">23</td>
+        <td style="text-align:right">$51.0M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$2.3M</span>
+        </td>
+        <td style="text-align:right">$36.2M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-purple">EMECAR</span></td>
+        <td><strong>289</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">TJTL-96</td>
+        <td><strong>Banco BCI</strong></td>
+        <td>Mar-2024</td>
+        <td style="font-weight:400;color:inherit">Abr-2028</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">23</td>
+        <td style="text-align:right">$52.5M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
+        </td>
+        <td style="text-align:right">$23.6M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-purple">EMECAR</span></td>
+        <td><strong>291</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">TJTL-98</td>
+        <td><strong>Banco BCI</strong></td>
+        <td>Mar-2024</td>
+        <td style="font-weight:400;color:inherit">Abr-2028</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">23</td>
+        <td style="text-align:right">$52.5M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
+        </td>
+        <td style="text-align:right">$23.6M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-purple">EMECAR</span></td>
+        <td><strong>293</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">TKJH-97</td>
+        <td><strong>Banco Internacional</strong></td>
+        <td>Abr-2024</td>
+        <td style="font-weight:400;color:inherit">May-2028</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">24</td>
+        <td style="text-align:right">$52.0M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
+        </td>
+        <td style="text-align:right">$24.4M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-purple">EMECAR</span></td>
+        <td><strong>295</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">TKJH-99</td>
+        <td><strong>Banco Internacional</strong></td>
+        <td>Abr-2024</td>
+        <td style="font-weight:400;color:inherit">May-2028</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">24</td>
+        <td style="text-align:right">$52.0M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
+        </td>
+        <td style="text-align:right">$24.4M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-purple">EMECAR</span></td>
+        <td><strong>297</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">TKXZ-70</td>
+        <td><strong>Banco Internacional</strong></td>
+        <td>Abr-2024</td>
+        <td style="font-weight:400;color:inherit">May-2028</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">24</td>
+        <td style="text-align:right">$49.8M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
+        </td>
+        <td style="text-align:right">$23.4M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-purple">EMECAR</span></td>
+        <td><strong>299</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">TKXZ-71</td>
+        <td><strong>Banco Internacional</strong></td>
+        <td>Abr-2024</td>
+        <td style="font-weight:400;color:inherit">May-2028</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">24</td>
+        <td style="text-align:right">$49.8M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
+        </td>
+        <td style="text-align:right">$23.4M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-purple">EMECAR</span></td>
+        <td><strong>301</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">TKYL-33</td>
+        <td><strong>Banco Internacional</strong></td>
+        <td>Abr-2024</td>
+        <td style="font-weight:400;color:inherit">May-2028</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">24</td>
+        <td style="text-align:right">$49.8M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.5M</span>
+        </td>
+        <td style="text-align:right">$23.4M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-purple">EMECAR</span></td>
+        <td><strong>303</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">TKYL-34</td>
+        <td><strong>Banco Internacional</strong></td>
+        <td>Abr-2024</td>
+        <td style="font-weight:400;color:inherit">May-2028</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">24</td>
+        <td style="text-align:right">$49.8M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.5M</span>
+        </td>
+        <td style="text-align:right">$23.4M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-purple">EMECAR</span></td>
+        <td><strong>305</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">TKYL-35</td>
+        <td><strong>Banco Internacional</strong></td>
+        <td>Abr-2024</td>
+        <td style="font-weight:400;color:inherit">May-2028</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">24</td>
+        <td style="text-align:right">$49.8M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
+        </td>
+        <td style="text-align:right">$23.4M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-purple">EMECAR</span></td>
+        <td><strong>307</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">TKYP-59</td>
+        <td><strong>Banco Internacional</strong></td>
+        <td>Abr-2024</td>
+        <td style="font-weight:400;color:inherit">May-2028</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">24</td>
+        <td style="text-align:right">$49.8M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
+        </td>
+        <td style="text-align:right">$23.4M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>357</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px">VKZC-10</td>
+        <td><strong>Banco BICE</strong></td>
+        <td>Sep-2025</td>
+        <td style="font-weight:400;color:inherit">Sep-2028</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">28</td>
+        <td style="text-align:right">$50.1M</td>
+        <td style="text-align:right">
+          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
+        </td>
+        <td style="text-align:right">$37.6M</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>371</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px"></td>
+        <td><strong>Banco Santander</strong></td>
+        <td>—</td>
+        <td style="font-weight:400;color:inherit">—</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">999</td>
+        <td style="text-align:right">—</td>
+        <td style="text-align:right">
+          <span style="color:#94a3b8">—</span>
+        </td>
+        <td style="text-align:right">—</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>373</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px"></td>
+        <td><strong>Banco Santander</strong></td>
+        <td>—</td>
+        <td style="font-weight:400;color:inherit">—</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">999</td>
+        <td style="text-align:right">—</td>
+        <td style="text-align:right">
+          <span style="color:#94a3b8">—</span>
+        </td>
+        <td style="text-align:right">—</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>375</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px"></td>
+        <td><strong>Banco Santander</strong></td>
+        <td>—</td>
+        <td style="font-weight:400;color:inherit">—</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">999</td>
+        <td style="text-align:right">—</td>
+        <td style="text-align:right">
+          <span style="color:#94a3b8">—</span>
+        </td>
+        <td style="text-align:right">—</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr><tr style="background:">
+        
+        <td><span class="badge b-blue">UCM</span></td>
+        <td><strong>381</strong></td>
+        <td>FORD TRANSIT 2.2</td>
+        <td style="font-family:monospace;font-size:11px"></td>
+        <td><strong>Banco Santander</strong></td>
+        <td>—</td>
+        <td style="font-weight:400;color:inherit">—</td>
+        <td style="text-align:center;font-weight:700;color:#16a34a">999</td>
+        <td style="text-align:right">—</td>
+        <td style="text-align:right">
+          <span style="color:#94a3b8">—</span>
+        </td>
+        <td style="text-align:right">—</td>
+        <td><span class="badge b-green">Vigente</span></td>
+      </tr>
     </tbody>
-  </table></div>
-
-  <!-- Chart: unidades a comprar por mes -->
-  
-  <div class="card" style="margin-top:18px">
-    <div class="card-title">Unidades a adquirir por mes — según demanda ponderada del pipeline</div>
-    <div style="font-size:11px;color:#64748b;margin-bottom:10px">Azul = demanda bruta pipeline · Verde = se liberan de contratos · Naranja/Rojo = compra neta recomendada (demanda − liberadas). Pasa el cursor para ver detalle de cada mes.</div>
-    <div class="chart-wrap" style="height:220px"><canvas id="chartPipelineCompras" width="1854" height="220" style="display: block; box-sizing: border-box; height: 220px; width: 1854px;"></canvas></div>
-    <div id="pipeline-chart-data" data-labels="[&quot;jun. 26&quot;,&quot;jul. 26&quot;,&quot;ago. 26&quot;,&quot;sep. 26&quot;,&quot;oct. 26&quot;,&quot;nov. 26&quot;,&quot;dic. 26&quot;,&quot;ene. 27&quot;,&quot;feb. 27&quot;,&quot;mar. 27&quot;,&quot;abr. 27&quot;,&quot;may. 27&quot;,&quot;jun. 27&quot;,&quot;jul. 27&quot;,&quot;ago. 27&quot;,&quot;sep. 27&quot;,&quot;oct. 27&quot;,&quot;nov. 27&quot;,&quot;dic. 27&quot;,&quot;ene. 28&quot;,&quot;feb. 28&quot;,&quot;mar. 28&quot;,&quot;abr. 28&quot;,&quot;may. 28&quot;]" data-demand="[2,2,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]" data-freed="[0,0,12,0,0,0,0,5,0,0,0,0,1,0,0,0,0,0,0,22,0,0,0,0]" data-net="[2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]" style="display:none"></div>
-  </div>
-  </div>
+    <tfoot><tr>
+      <td colspan="8"><strong>TOTAL</strong></td>
+      <td style="text-align:right"><strong>$2.4B</strong></td>
+      <td style="text-align:right;color:#1d4ed8"><strong>$96.8M</strong></td>
+      <td style="text-align:right"><strong>$772.2M</strong></td>
+      <td></td>
+    </tr></tfoot>
+  </table></div></div>
 </div>
 <script>
 /* ═══════════════════════════════════════════
@@ -518,7 +1076,7 @@ const FLEET_AUTOS = [{"prop":"UCM","movil":1,"marca":"CHEVROLET","modelo":"SAIL 
 
 const REQS_AUTOS = [{"uso":"COMUDEF","asig":0,"reqOp":8,"reqBU":0,"fIni":"2026-05","fFin":"2029-05","tempReqs":[{"qty":2,"mesIni":"06","mesFin":"09","motivo":"Alta Temporada"}]},{"uso":"OPERACIONES RM","asig":0,"reqOp":2,"reqBU":0,"fIni":"2026-02","fFin":null,"tempReqs":[]},{"uso":"URT LA PINTANA","asig":0,"reqOp":1,"reqBU":0,"fIni":"2022-11","fFin":"2027-12","tempReqs":[]},{"uso":"URT AES ALTO MAIPO","asig":0,"reqOp":1,"reqBU":0,"fIni":"2026-06","fFin":"2028-06","tempReqs":[]}];
 
-const PIPELINE_AUTOS = [{"id":1778852784465,"cliente":"GRUPO COSTANERA-LITORAL","qty":3,"prob":30,"fReq":"2026-07","duracion":36,"estado":"Prospecto","notas":"Son Servicios de Patrulleros (Camionetas tipo Furgón con Pick up)"},{"id":1779477324773,"cliente":"AES","qty":1,"prob":100,"fReq":"2026-06","duracion":8,"estado":"Adjudicado","notas":"Pick Up Toyota Hylux 4x4"}];
+const PIPELINE_AUTOS = [{"id":1778852784465,"cliente":"GRUPO COSTANERA-LITORAL","qty":3,"prob":30,"fReq":"2026-07","duracion":36,"estado":"Prospecto","notas":"Son Servicios de Patrulleros (Camionetas tipo Furgón con Pick up)"}];
 
 /* ── TALLER HISTORIAL ── */
 const HIST_ANUAL = {"80":{"2024":{"count":11,"weeks":[{"date":"2024-04-08","obs":"Reparación Panel, carrocería y Falla A/C cabina sanitaria (C"},{"date":"2024-04-15","obs":"Reparación Panel, carrocería y Falla A/C cabina sanitaria en"},{"date":"2024-04-24","obs":"Reparación Panel, carrocería y Falla A/C cabina sanitaria en"},{"date":"2024-05-13","obs":"Reparación Panel, carrocería y Falla A/C cabina sanitaria en"},{"date":"2024-05-20","obs":"Reparación Panel, carrocería y Falla A/C cabina sanitaria en"},{"date":"2024-05-27","obs":"Reparación Panel, carrocería y Falla A/C cabina sanitaria en"},{"date":"2024-06-10","obs":"Taller solicita prórroga para ultimar detalles estéticos"},{"date":"2024-06-24","obs":"Perdida de combustible a través de bomba de  inyección de pe"},{"date":"2024-07-08","obs":"Perdida de combustible a través de bomba de  inyección de pe"},{"date":"2024-07-15","obs":"Perdida de combustible a través de bomba de  inyección de pe"},{"date":"2024-12-23","obs":"Falla en Inyector del Motor - A/C con falla sin reparación ,"}]},"2025":{"count":1,"weeks":[{"date":"2025-04-14","obs":"Falla en correa de alternador"}]}},"82":{"2024":{"count":12,"weeks":[{"date":"2024-04-08","obs":"Cigüeñal defectuoso, en búsqueda del accesorio"},{"date":"2024-04-15","obs":"Cigüeñal defectuoso, en proceso de montaje en taller UCM"},{"date":"2024-06-18","obs":"Filtración grave techo en cabina de conducción"},{"date":"2024-06-24","obs":"Presenta pérdida de fuerza, posible problema en válvula TGR "},{"date":"2024-07-22","obs":"Reparación techo cabina sanitaria y A/C"},{"date":"2024-07-29","obs":"Reparación techo cabina sanitaria y A/C"},{"date":"2024-08-12","obs":"En espera de cotizaciones para Reparación techo cabina sanit"},{"date":"2024-08-19","obs":"En espera de cotizaciones para Reparación techo cabina sanit"},{"date":"2024-08-26","obs":"En espera de cotizaciones para Reparación techo cabina sanit"},{"date":"2024-11-11","obs":"En espera de cotizaciones para Reparación techo cabina sanit"},{"date":"2024-11-18","obs":"En espera de cotizaciones para Reparación techo cabina sanit"},{"date":"2024-12-23","obs":"Falla en ventana de portalón lateral"}]}},"83":{"2024":{"count":7,"weeks":[{"date":"2024-05-27","obs":""},{"date":"2024-07-08","obs":"Perdida de agua y enfriador de temperatura + explosión de ba"},{"date":"2024-07-15","obs":"Perdida de agua y enfriador de temperatura + explosión de ba"},{"date":"2024-07-22","obs":"Perdida de agua y enfriador de temperatura + explosión de ba"},{"date":"2024-11-11","obs":"En instalación de A(C"},{"date":"2024-11-18","obs":"Falla en la dirección"},{"date":"2024-12-09","obs":"Falla en la dirección, sin posibilidad de periciar por cierr"}]}},"84":{"2024":{"count":17,"weeks":[{"date":"2024-05-20","obs":"Corte de correa y aparente falla en la chapa"},{"date":"2024-05-27","obs":"Corte de correa y aparente falla en la chapa"},{"date":"2024-06-10","obs":"Reparación techo cabina sanitaria"},{"date":"2024-06-18","obs":"Reparación techo cabina sanitaria"},{"date":"2024-06-24","obs":"Reparación techo cabina sanitaria en CURIFOR Placilla"},{"date":"2024-07-08","obs":"Reparación techo cabina sanitaria en CURIFOR Placilla"},{"date":"2024-07-15","obs":"Reparación techo cabina sanitaria en CURIFOR Placilla"},{"date":"2024-07-22","obs":"Reparación techo cabina sanitaria en CURIFOR Placilla"},{"date":"2024-07-29","obs":"Reparación techo cabina sanitaria en CURIFOR Placilla"},{"date":"2024-08-12","obs":"4to Retraso en la Reparación techo cabina sanitaria en CURIF"},{"date":"2024-08-19","obs":"5to Retraso en la Reparación techo cabina sanitaria en CURIF"},{"date":"2024-08-26","obs":"5to Retraso en la Reparación techo cabina sanitaria en CURIF"},{"date":"2024-11-11","obs":"TRAMITACIÓN EN CURSO CON ASEGURADORA"},{"date":"2024-11-18","obs":"TRAMITACIÓN EN CURSO CON ASEGURADORA"},{"date":"2024-12-09","obs":"En reparación por Aseguradora"},{"date":"2024-12-16","obs":"En reparación por Aseguradora"},{"date":"2024-12-23","obs":"En reparación por Aseguradora"}]},"2025":{"count":7,"weeks":[{"date":"2025-01-13","obs":"En reparación por Aseguradora"},{"date":"2025-01-20","obs":"En reparación por Aseguradora"},{"date":"2025-01-27","obs":"En reparación por Aseguradora"},{"date":"2025-02-10","obs":"En reparación por Aseguradora fecha probable de entrega 28-0"},{"date":"2025-02-17","obs":"En reparación por Aseguradora fecha probable de entrega 28-0"},{"date":"2025-02-24","obs":"En reparación por Aseguradora fecha probable de entrega 28-0"},{"date":"2025-03-10","obs":"En espera de respuestos para mantenimiento interno"}]}},"85":{"2026":{"count":4,"weeks":[{"date":"2026-04-20","obs":"Varios testigos encendidos en tabler, en revisión del comput"},{"date":"2026-04-27","obs":"Varios testigos encendidos en tabler, en revisión del comput"},{"date":"2026-05-04","obs":"Varios testigos encendidos en tabler, en revisión del comput"},{"date":"2026-05-11","obs":"Falta Caja Eléctrica Consola de Sirena y Baliza"}]}},"87":{"2024":{"count":7,"weeks":[{"date":"2024-05-20","obs":"Falla de chapa, en espera de repuesto"},{"date":"2024-05-27","obs":"Falla de chapa, en espera de repuesto"},{"date":"2024-06-10","obs":"falla en sistema de refirgeración y manguera de enfriamiento"},{"date":"2024-06-18","obs":"falla en sistema de refirgeración y manguera de enfriamiento"},{"date":"2024-06-24","obs":"Falla en motor de partida en CURIFOR Placilla"},{"date":"2024-07-08","obs":"Falla en motor de partida en CURIFOR Placilla"},{"date":"2024-07-15","obs":"Falla en motor de partida en CURIFOR Placilla"}]}},"223":{"2024":{"count":28,"weeks":[{"date":"2024-04-08","obs":"Inutilizable por falla total de motor"},{"date":"2024-04-15","obs":"Inutilizable por falla total de motor"},{"date":"2024-04-24","obs":"Inutilizable por falla total de motor"},{"date":"2024-05-13","obs":"Inutilizable por falla total de motor"},{"date":"2024-05-20","obs":"Inutilizable por falla total de motor"},{"date":"2024-05-27","obs":"Inutilizable por falla total de motor"},{"date":"2024-06-10","obs":"Inutilizable por falla total de motor"},{"date":"2024-06-18","obs":"Inutilizable por falla total de motor"},{"date":"2024-06-24","obs":"Inutilizable por falla total de motor"},{"date":"2024-07-08","obs":"Inutilizable por falla total de motor"},{"date":"2024-07-15","obs":"Inutilizable por falla total de motor"},{"date":"2024-07-22","obs":"Inutilizable por falla total de motor"},{"date":"2024-07-29","obs":"Inutilizable por falla total de motor"},{"date":"2024-08-12","obs":"Inutilizable por falla total de motor"},{"date":"2024-08-19","obs":"Inutilizable por falla total de motor"},{"date":"2024-08-26","obs":"Inutilizable por falla total de motor"},{"date":"2024-09-09","obs":"Inutilizable por falla total de motor"},{"date":"2024-09-16","obs":"Inutilizable por falla total de motor"},{"date":"2024-09-23","obs":"Inutilizable por falla total de motor"},{"date":"2024-09-30","obs":"Inutilizable por falla total de motor"},{"date":"2024-10-14","obs":"Inutilizable por falla total de motor"},{"date":"2024-10-21","obs":"Inutilizable por falla total de motor"},{"date":"2024-10-28","obs":"Inutilizable por falla total de motor"},{"date":"2024-11-11","obs":"Inutilizable por falla total de motor"},{"date":"2024-11-18","obs":"Inutilizable por falla total de motor"},{"date":"2024-12-09","obs":"Inutilizable por falla total de motor"},{"date":"2024-12-16","obs":"Inutilizable por falla total de motor"},{"date":"2024-12-23","obs":"Inutilizable por falla total de motor"}]},"2025":{"count":5,"weeks":[{"date":"2025-01-13","obs":"Inutilizable por falla total de motor"},{"date":"2025-01-20","obs":"Inutilizable por falla total de motor"},{"date":"2025-01-27","obs":"Inutilizable por falla total de motor"},{"date":"2025-02-10","obs":"Inutilizable por falla total de motor"},{"date":"2025-02-17","obs":"Inutilizable por falla total de motor"}]}},"225":{"2025":{"count":1,"weeks":[{"date":"2025-02-17","obs":"Problema con eje trasero, reparación será abordada con repue"}]}},"229":{"2024":{"count":7,"weeks":[{"date":"2024-04-08","obs":"En taller externo de aseguradora BCI"},{"date":"2024-04-15","obs":"En taller externo de aseguradora BCI"},{"date":"2024-04-24","obs":"En taller externo de aseguradora BCI"},{"date":"2024-05-13","obs":"En taller externo de aseguradora BCI (informaron demora en l"},{"date":"2024-05-20","obs":"En taller externo de aseguradora BCI (informaron demora en l"},{"date":"2024-05-27","obs":"En taller externo de aseguradora BCI (informaron demora en l"},{"date":"2024-06-10","obs":"En taller externo de aseguradora BCI (informaron estar a la "}]},"2025":{"count":5,"weeks":[{"date":"2025-01-13","obs":"Problema con eje delantero (cigüeñal)"},{"date":"2025-01-20","obs":"Problema con eje delantero (cigüeñal), en proceso de búsqued"},{"date":"2025-01-27","obs":"Problema con eje delantero (cigüeñal), puede estar Ok 72 hrs"},{"date":"2025-02-10","obs":"Problema con eje delantero (cigüeñal), puede estar Ok 72 hrs"},{"date":"2025-02-17","obs":"Problema con eje delantero (cigüeñal), puede estar Ok 72 hrs"}]},"2026":{"count":6,"weeks":[{"date":"2026-02-16","obs":"Falla de filtro TPF y Radiador. En búsqueda de repuestos dad"},{"date":"2026-02-23","obs":"Falla de filtro TPF y Radiador. En búsqueda de repuestos dad"},{"date":"2026-03-09","obs":"Falla de filtro TPF y Radiador. En espera de repuestos dado "},{"date":"2026-03-16","obs":"Falla de filtro TPF y Radiador. En espera de repuestos dado "},{"date":"2026-03-23","obs":"Falla de filtro TPF y Radiador. En espera de repuestos dado "},{"date":"2026-03-30","obs":"Falla de filtro TPF y Radiador. En espera de repuestos dado "}]}},"231":{"2026":{"count":4,"weeks":[{"date":"2026-04-20","obs":"Panne de Caja de Transmisión"},{"date":"2026-04-27","obs":"Panne de Caja de Transmisión"},{"date":"2026-05-04","obs":"Panne de Caja de Transmisión"},{"date":"2026-05-11","obs":"Panne de Caja de Transmisión"}]}},"233":{"2024":{"count":28,"weeks":[{"date":"2024-04-08","obs":"Inutilizable por falla total de motor"},{"date":"2024-04-15","obs":"Inutilizable por falla total de motor"},{"date":"2024-04-24","obs":"Inutilizable por falla total de motor y tren delantero"},{"date":"2024-05-13","obs":"Inutilizable por falla total de motor y tren delantero"},{"date":"2024-05-20","obs":"Inutilizable por falla total de motor y tren delantero"},{"date":"2024-05-27","obs":"Inutilizable por falla total de motor, caja de cambiio y tre"},{"date":"2024-06-10","obs":"Inutilizable por falla total de motor, caja de cambiio y tre"},{"date":"2024-06-18","obs":"Inutilizable por falla total de motor, caja de cambiio y tre"},{"date":"2024-06-24","obs":"Inutilizable por falla total de motor, caja de cambiio y tre"},{"date":"2024-07-08","obs":"Inutilizable por falla total de motor, caja de cambiio y tre"},{"date":"2024-07-15","obs":"Inutilizable por falla total de motor, caja de cambiio y tre"},{"date":"2024-07-22","obs":"Inutilizable por falla total de motor, caja de cambiio y tre"},{"date":"2024-07-29","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2024-08-12","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2024-08-19","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2024-08-26","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2024-09-09","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2024-09-16","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2024-09-23","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2024-09-30","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2024-10-14","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2024-10-21","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2024-10-28","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2024-11-11","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2024-11-18","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2024-12-09","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2024-12-16","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2024-12-23","obs":"Inutilizable por falla total de motor y caja de cambio"}]},"2025":{"count":35,"weeks":[{"date":"2025-01-13","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2025-01-20","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2025-01-27","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2025-02-10","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2025-02-17","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2025-02-24","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2025-03-10","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2025-03-17","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2025-03-24","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2025-03-31","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2025-04-14","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2025-04-21","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2025-04-28","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2025-05-19","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2025-05-26","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2025-06-09","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2025-07-14","obs":"Inutilizable por falla total de motor y caja de cambio"},{"date":"2025-07-21","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2025-07-28","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2025-08-11","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2025-08-18","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2025-08-25","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2025-09-08","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2025-09-15","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2025-09-22","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2025-09-29","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2025-10-13","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2025-10-20","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2025-10-27","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2025-11-10","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2025-11-17","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2025-11-24","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2025-12-15","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2025-12-22","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2025-12-29","obs":"Inutilizable por falla total de motor (el importado refaccio"}]},"2026":{"count":10,"weeks":[{"date":"2026-01-12","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2026-01-19","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2026-01-26","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2026-04-20","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2026-04-27","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2026-05-04","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2026-05-11","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2026-05-18","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2026-05-25","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2026-06-01","obs":"Inutilizable por falla total de motor (el importado refaccio"}]}},"235":{"2024":{"count":1,"weeks":[{"date":"2024-06-10","obs":"falla eléctrica cabina sanitaria"}]},"2025":{"count":15,"weeks":[{"date":"2025-04-21","obs":"Falla de motor, hay que esperar taller para abrirlo e identi"},{"date":"2025-04-28","obs":"Falla de motor, hay que esperar taller para abrirlo e identi"},{"date":"2025-05-19","obs":"Falla de motor, hay que esperar taller para abrirlo e identi"},{"date":"2025-05-26","obs":"Falla de motor, hay que esperar taller para abrirlo e identi"},{"date":"2025-06-09","obs":"Falla de motor, hay que esperar taller para abrirlo e identi"},{"date":"2025-07-14","obs":"Falla de motor, hay que esperar taller para abrirlo e identi"},{"date":"2025-07-21","obs":"Falla de motor, hay que esperar taller para abrirlo e identi"},{"date":"2025-07-28","obs":"Falla de motor, hay que esperar taller para abrirlo e identi"},{"date":"2025-08-11","obs":"Falla de motor, hay que esperar taller para abrirlo e identi"},{"date":"2025-08-18","obs":"Falla de motor, hay que esperar taller para abrirlo e identi"},{"date":"2025-08-25","obs":"Falla de motor, hay que esperar taller para abrirlo e identi"},{"date":"2025-09-08","obs":"Falla de motor, hay que esperar taller para abrirlo e identi"},{"date":"2025-09-15","obs":"Falla de motor, hay que esperar taller para abrirlo e identi"},{"date":"2025-09-22","obs":"Falla de motor, hay que esperar taller para abrirlo e identi"},{"date":"2025-09-29","obs":"Falla de motor, hay que esperar taller para abrirlo e identi"}]}},"237":{"2024":{"count":23,"weeks":[{"date":"2024-05-13","obs":"Falla en el filtro de caja de cambios"},{"date":"2024-05-20","obs":"Falla en caja de cambios"},{"date":"2024-05-27","obs":"Falla en caja de cambios"},{"date":"2024-06-10","obs":"Falla en caja de cambios y tren trasero"},{"date":"2024-06-18","obs":"Falla en caja de cambios y tren trasero"},{"date":"2024-06-24","obs":"Falla en caja de cambios y tren trasero"},{"date":"2024-07-08","obs":"Falla en caja de cambios y tren trasero"},{"date":"2024-07-15","obs":"Falla en caja de cambios y tren trasero"},{"date":"2024-07-22","obs":"Falla en caja de cambios y tren trasero"},{"date":"2024-07-29","obs":"Falla definitiva en caja de cambios y tren trasero"},{"date":"2024-08-12","obs":"Falla definitiva en caja de cambios y tren trasero"},{"date":"2024-08-19","obs":"Falla definitiva en caja de cambios y tren trasero"},{"date":"2024-08-26","obs":"Falla definitiva en caja de cambios y tren trasero"},{"date":"2024-09-09","obs":"Falla definitiva en caja de cambios y tren trasero"},{"date":"2024-09-16","obs":"Falla definitiva en caja de cambios y tren trasero"},{"date":"2024-09-23","obs":"Falla definitiva en caja de cambios y tren trasero"},{"date":"2024-09-30","obs":"Falla definitiva en caja de cambios y tren trasero"},{"date":"2024-10-14","obs":"Falla definitiva en caja de cambios y tren trasero"},{"date":"2024-10-21","obs":"Falla definitiva en caja de cambios y tren trasero"},{"date":"2024-10-28","obs":"Falla definitiva en caja de cambios y tren trasero"},{"date":"2024-12-09","obs":"Falla en caja automática, , sin posibilidad de periciar por "},{"date":"2024-12-16","obs":"Falla en caja automática, , sin posibilidad de periciar por "},{"date":"2024-12-23","obs":"Falla en caja automática, , sin posibilidad de periciar por "}]},"2025":{"count":9,"weeks":[{"date":"2025-04-14","obs":"Falla en la caja de cambio"},{"date":"2025-04-21","obs":"Falla en la caja de cambio"},{"date":"2025-04-28","obs":"Falla en la caja de cambio"},{"date":"2025-05-19","obs":"Falla en la caja de cambio"},{"date":"2025-05-26","obs":"Falla en la caja de cambio"},{"date":"2025-06-09","obs":"Falla en la caja de cambio"},{"date":"2025-07-14","obs":"Falla en la caja de cambio"},{"date":"2025-07-21","obs":"Falta firma notarial para tramitar patente en Registro Civil"},{"date":"2025-07-28","obs":"Hora agendada para el 30/07 en Registro Civil"}]}},"239":{"2024":{"count":9,"weeks":[{"date":"2024-06-18","obs":"Falla en caja de cambios"},{"date":"2024-07-08","obs":"Falla en caja de cambios"},{"date":"2024-07-15","obs":"Falla en caja de cambios"},{"date":"2024-07-22","obs":"Falla en caja de cambios"},{"date":"2024-11-11","obs":"Falla en caja automática"},{"date":"2024-11-18","obs":"Falla en caja automática"},{"date":"2024-12-09","obs":"Falla en caja automática"},{"date":"2024-12-16","obs":"Falla en caja automática"},{"date":"2024-12-23","obs":"Falla en caja automática"}]},"2025":{"count":19,"weeks":[{"date":"2025-01-13","obs":"Falla en caja automática"},{"date":"2025-01-20","obs":"Falla en caja automática"},{"date":"2025-01-27","obs":"Falla en caja automática, puede estar Ok 72 hrs post retiro "},{"date":"2025-02-10","obs":"Falla en caja automática, puede estar Ok 72 hrs post retiro "},{"date":"2025-02-17","obs":"Falla en caja automática, puede estar Ok 72 hrs post retiro "},{"date":"2025-02-24","obs":"Falla en caja automática, en proceso de cambio pero sin acce"},{"date":"2025-03-10","obs":"Falla en un Relé - en búsqueda de repuesto"},{"date":"2025-03-24","obs":"Falla bomba de bencina"},{"date":"2025-03-31","obs":"Falla bomba de bencina"},{"date":"2025-04-14","obs":"Falla bomba de bencina - En espera de autorización de OC por"},{"date":"2025-04-21","obs":"Falla bomba de bencina - En espera de autorización de OC por"},{"date":"2025-07-21","obs":"Falla en caja de cambio"},{"date":"2025-07-28","obs":"Falla en caja de cambio"},{"date":"2025-08-11","obs":"Falla en caja de cambio"},{"date":"2025-08-18","obs":"Falla en caja de cambio"},{"date":"2025-10-13","obs":"Falla de motor, hay que esperar taller para abrirlo e identi"},{"date":"2025-10-20","obs":"Falla de motor, hay que esperar taller para abrirlo e identi"},{"date":"2025-10-27","obs":"Falla de motor, hay que esperar taller para abrirlo e identi"},{"date":"2025-11-10","obs":"Falla de motor, hay que esperar taller para abrirlo e identi"}]},"2026":{"count":12,"weeks":[{"date":"2026-02-09","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2026-02-16","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2026-02-23","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2026-03-09","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2026-03-16","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2026-03-23","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2026-03-30","obs":"Inutilizable por falla total de motor (el importado refaccio"},{"date":"2026-05-04","obs":"Falla de Motor en revisión"},{"date":"2026-05-11","obs":"Falla de Motor en revisión"},{"date":"2026-05-18","obs":"Falla de Motor en revisión"},{"date":"2026-05-25","obs":"Falla de Motor en revisión"},{"date":"2026-06-01","obs":"Falla de Motor en revisión"}]}},"241":{"2024":{"count":1,"weeks":[{"date":"2024-12-23","obs":""}]},"2025":{"count":10,"weeks":[{"date":"2025-01-13","obs":"En espera de tensor importado"},{"date":"2025-01-20","obs":"En espera de tensor importado, la entrega para el 17/01 se r"},{"date":"2025-01-27","obs":"En espera de tensor importado, estamos evaluando compra dire"},{"date":"2025-09-22","obs":"falla en en sensor de temperatura, se cotizarán repuestos pa"},{"date":"2025-09-29","obs":"Repuestos estarán listos hoy PM y mañana a primera hora se c"},{"date":"2025-11-17","obs":"Se confirma falla total de motor y se está cotizando en merc"},{"date":"2025-11-24","obs":"Se confirma falla total de motor y se está cotizando en merc"},{"date":"2025-12-15","obs":"Falla de motor, importación gestionada por DIFOR llegan en 5"},{"date":"2025-12-22","obs":"Falla de motor, importación gestionada por DIFOR llegan en 5"},{"date":"2025-12-29","obs":"En espera de Motor adquirido en CURIFOR"}]},"2026":{"count":4,"weeks":[{"date":"2026-01-12","obs":"Motor en estapa de reinstalación"},{"date":"2026-01-19","obs":"Motor en etapa de reinstalación, se está a la espera de la e"},{"date":"2026-01-26","obs":"En reparación, respuestos llegaron al taller el viernes 23/0"},{"date":"2026-02-09","obs":"En reparación, fecha probable de alta 12/02"}]}},"243":{"2025":{"count":9,"weeks":[{"date":"2025-10-13","obs":"En traslado a taller UCM por probable fundimiento de motor"},{"date":"2025-10-20","obs":"Ambulancia llegó ayer desde Antofagasta y será inspeccionada"},{"date":"2025-10-27","obs":"Se confirma falla total de motor y se está cotizando en merc"},{"date":"2025-11-10","obs":"Se confirma falla total de motor y se está cotizando en merc"},{"date":"2025-11-17","obs":"Se confirma falla total de motor y se está cotizando en merc"},{"date":"2025-11-24","obs":"Se confirma falla total de motor y se está cotizando en merc"},{"date":"2025-12-15","obs":"Falla de motor, importación gestionada por DIFOR llegan en 5"},{"date":"2025-12-22","obs":"Falla de motor, importación gestionada por DIFOR llegan en 5"},{"date":"2025-12-29","obs":"En espera de Motor adquirido en CURIFOR"}]},"2026":{"count":11,"weeks":[{"date":"2026-01-12","obs":"En espera de Motor adquirido en CURIFOR"},{"date":"2026-01-19","obs":"En espera de Motor adquirido en CURIFOR"},{"date":"2026-01-26","obs":"En reparación, respuestos llegaron al taller el viernes 23/0"},{"date":"2026-02-09","obs":"En reparación, respuestos llegaron al taller el viernes 23/0"},{"date":"2026-02-16","obs":"En reparación, respuestos llegaron al taller el viernes 23/0"},{"date":"2026-02-23","obs":"En reparación, respuestos llegaron al taller el viernes 23/0"},{"date":"2026-03-09","obs":"En reparación, respuestos llegaron al taller el viernes 23/0"},{"date":"2026-03-16","obs":"En reparación, respuestos llegaron al taller el viernes 23/0"},{"date":"2026-03-23","obs":"En reparación, respuestos llegaron al taller el viernes 23/0"},{"date":"2026-03-30","obs":"En reparación, respuestos llegaron al taller el viernes 23/0"},{"date":"2026-04-20","obs":"Falla en manguera del refrigerante"}]}},"245":{"2025":{"count":3,"weeks":[{"date":"2025-11-10","obs":"ingresada al Seguro por Siniestro, Pertenece a Las Condes"},{"date":"2025-11-17","obs":"ingresada al Seguro por Siniestro, Pertenece a Licitación La"},{"date":"2025-11-24","obs":"ingresada al Seguro por Siniestro, Pertenece a Licitación La"}]},"2026":{"count":1,"weeks":[{"date":"2026-06-01","obs":"En espera de asignación de Taller por parte de Aseguradora"}]}},"251":{"2024":{"count":2,"weeks":[{"date":"2024-07-15","obs":"Falla código de llave - Kaufmann"},{"date":"2024-07-22","obs":"Falla código de llave - Kaufmann"}]},"2025":{"count":3,"weeks":[{"date":"2025-03-10","obs":"Falla en la masa de rueda delantera y bomba de agua - en bús"},{"date":"2025-03-17","obs":"Falla en la masa de rueda delantera y bomba de agua - Repues"},{"date":"2025-05-19","obs":"Falla de embragüe por uso"}]}},"253":{"2024":{"count":1,"weeks":[{"date":"2024-07-08","obs":"Falla en caja de cambio - Mantenimiento en Kaufmann"}]},"2025":{"count":1,"weeks":[{"date":"2025-06-09","obs":"En espera de instalación de embrague completo"}]}},"259":{"2025":{"count":3,"weeks":[{"date":"2025-03-17","obs":"Ingresada el 17-03 a Kauffman por encendido de Check falla d"},{"date":"2025-03-24","obs":"Ingresada el 17-03 a Kauffman por encendido de Check falla d"},{"date":"2025-03-31","obs":"Ingresada el 17-03 a Kauffman por encendido de Check falla d"}]}},"261":{"2024":{"count":1,"weeks":[{"date":"2024-09-09","obs":"Perdida de potencia (falla identificada, en espera de resolu"}]},"2025":{"count":7,"weeks":[{"date":"2025-05-19","obs":"Falla de testigo de airbag, ingresada a Kaufmann por garantí"},{"date":"2025-05-26","obs":"Falla de testigo de airbag, ingresada a Kaufmann por garantí"},{"date":"2025-06-09","obs":"Falla de testigo de airbag, ingresada a Kaufmann por garantí"},{"date":"2025-07-14","obs":"Falla de testigo de airbag, ingresada a Kaufmann por garantí"},{"date":"2025-07-21","obs":"Falla de testigo de airbag, ingresada a Kaufmann por garantí"},{"date":"2025-07-28","obs":"Falla de testigo de airbag, ingresada a Kaufmann por garantí"},{"date":"2025-08-25","obs":"Vehículo COMUDEF, ingresa a garntía por falla de A/C"}]}},"263":{"2026":{"count":1,"weeks":[{"date":"2026-03-23","obs":"Perteneciente a Licitación de Castro, presenta falla el 20/0"}]}},"267":{"2024":{"count":3,"weeks":[{"date":"2024-12-09","obs":"Ingresada a Kaufmann por posible corte de correa de distribu"},{"date":"2024-12-16","obs":"Ingresada a Kaufmann por posible corte de correa de distribu"},{"date":"2024-12-23","obs":"Ingresada a Kaufmann por posible corte de correa de distribu"}]},"2025":{"count":6,"weeks":[{"date":"2025-01-13","obs":"Ingresada a Kaufmann por posible corte de correa de distribu"},{"date":"2025-01-20","obs":"Ingresada a Kaufmann por posible corte de correa de distribu"},{"date":"2025-01-27","obs":"Ingresada a Kaufmann por falla de motor, en espera de que se"},{"date":"2025-02-10","obs":"Ingresada a Kaufmann por falla de motor, en espera llegada d"},{"date":"2025-02-17","obs":"Ingresada a Kaufmann por falla de motor, en espera llegada d"},{"date":"2025-02-24","obs":"Ingresada a Kaufmann por falla de motor, en espera llegada d"}]},"2026":{"count":5,"weeks":[{"date":"2026-05-04","obs":"Falla de embrague, en espera de kit para cambio"},{"date":"2026-05-11","obs":"Ingresa 11-05 a Kaufmann, a la espera de cotización"},{"date":"2026-05-18","obs":"Ingresa 11-05 a Kaufmann, a la espera de cotización"},{"date":"2026-05-25","obs":"Ingresa 11-05 a Kaufmann, a la espera de cotización"},{"date":"2026-06-01","obs":"Continua en Kaufmann a la espera de importación de repuestos"}]}},"271":{"2026":{"count":1,"weeks":[{"date":"2026-04-27","obs":"Panne 26/04 en Operación HLT, hoy le harán Diagnóstico"}]}},"277":{"2024":{"count":2,"weeks":[{"date":"2024-05-13","obs":"Falla de alternador, se solicita ingreso por Garantía e indi"},{"date":"2024-05-20","obs":"Falla de alternador, se solicita ingreso por Garantía e indi"}]}},"281":{"2025":{"count":6,"weeks":[{"date":"2025-05-19","obs":""},{"date":"2025-05-26","obs":""},{"date":"2025-06-09","obs":"Ingresada a taller DIFOR Quilicura"},{"date":"2025-07-14","obs":"Ingresada a taller DIFOR Quilicura"},{"date":"2025-07-21","obs":"Ingresada a taller DIFOR Quilicura // Pertenece a COMUDEF"},{"date":"2025-07-28","obs":"Ingresada a taller DIFOR Quilicura // Pertenece a COMUDEF"}]}},"287":{"2026":{"count":2,"weeks":[{"date":"2026-04-20","obs":"Siniestra por COMUDEF - Ingresada en Aseguradora"},{"date":"2026-04-27","obs":"Siniestra por COMUDEF - Ingresada en Aseguradora"}]}},"289":{"2024":{"count":2,"weeks":[{"date":"2024-04-08","obs":""},{"date":"2024-04-15","obs":""}]},"2026":{"count":4,"weeks":[{"date":"2026-05-11","obs":"Ingresa 11-05 a Curifor, a la espera de cotización"},{"date":"2026-05-18","obs":"Falla de conversor"},{"date":"2026-05-25","obs":"Falla de conversor"},{"date":"2026-06-01","obs":"Falla de conversor, a la espera de repuesto"}]}},"291":{"2024":{"count":2,"weeks":[{"date":"2024-04-08","obs":""},{"date":"2024-04-15","obs":""}]}},"297":{"2024":{"count":1,"weeks":[{"date":"2024-05-27","obs":"En proceso de branding y equipamiento"}]},"2025":{"count":5,"weeks":[{"date":"2025-09-08","obs":"Pertenece a Operaciones RM"},{"date":"2025-09-15","obs":"Pertenece a Operaciones RM"},{"date":"2025-09-22","obs":"Pertenece a Operaciones RM"},{"date":"2025-09-29","obs":"Pertenece a Operaciones RM"},{"date":"2025-10-13","obs":"Pertenece a Operaciones RM"}]},"2026":{"count":2,"weeks":[{"date":"2026-01-12","obs":"Panne por inyectores, en espera de repuestos"},{"date":"2026-03-16","obs":"Falla de alternador, en espera de importación"}]}},"299":{"2024":{"count":2,"weeks":[{"date":"2024-05-27","obs":"En proceso de branding y equipamiento"},{"date":"2024-06-10","obs":"Aun no entregada por VESPEK"}]}},"301":{"2024":{"count":1,"weeks":[{"date":"2024-05-27","obs":"Aun no entregada por VESPEK"}]},"2025":{"count":6,"weeks":[{"date":"2025-05-19","obs":"En taller DIFOR,  a la espera de fecha de ingreso por la ase"},{"date":"2025-05-26","obs":"En taller DIFOR,  a la espera de fecha de ingreso por la ase"},{"date":"2025-06-09","obs":"Ingresada a taller DIFOR Quilicura"},{"date":"2025-07-14","obs":"Ingresada a taller DIFOR Quilicura"},{"date":"2025-07-21","obs":"Ingresada a taller DIFOR Quilicura"},{"date":"2025-07-28","obs":"Ingresada a taller DIFOR Quilicura"}]}},"303":{"2024":{"count":2,"weeks":[{"date":"2024-05-27","obs":"Aun no entregada por VESPEK"},{"date":"2024-06-10","obs":"Aun no entregada por VESPEK"}]}},"305":{"2024":{"count":2,"weeks":[{"date":"2024-05-27","obs":"Aun no entregada por VESPEK"},{"date":"2024-06-10","obs":"Aun no entregada por VESPEK"}]}},"307":{"2024":{"count":2,"weeks":[{"date":"2024-05-27","obs":"Aun no entregada por VESPEK"},{"date":"2024-06-10","obs":"Aun no entregada por VESPEK"}]},"2025":{"count":3,"weeks":[{"date":"2025-11-10","obs":"SINIESTRADA EN HOSPITAL DE PUERTO MONTT"},{"date":"2025-11-17","obs":"SINIESTRADA EN HOSPITAL DE PUERTO MONTT, INGRESADA A DIFOR"},{"date":"2025-11-24","obs":"SINIESTRADA EN HOSPITAL DE PUERTO MONTT, INGRESADA A DIFOR"}]},"2026":{"count":2,"weeks":[{"date":"2026-05-25","obs":"Falla en enfriador de aceite"},{"date":"2026-06-01","obs":"Falla en enfriador de aceite, repuesto llegó el viernes 29 y"}]}},"309":{"2024":{"count":5,"weeks":[{"date":"2024-11-11","obs":"TRAMITACIÓN EN CURSO CON ASEGURADORA"},{"date":"2024-11-18","obs":"TRAMITACIÓN EN CURSO CON ASEGURADORA"},{"date":"2024-12-09","obs":"En reparación por Aseguradora"},{"date":"2024-12-16","obs":"En reparación por Aseguradora"},{"date":"2024-12-23","obs":"En reparación por Aseguradora"}]},"2025":{"count":16,"weeks":[{"date":"2025-01-13","obs":"En reparación por Aseguradora"},{"date":"2025-01-20","obs":"En reparación por Aseguradora, fecha probable de entrega 10/"},{"date":"2025-01-27","obs":"En reparación por Aseguradora, fecha probable de entrega 10/"},{"date":"2025-02-10","obs":"En reparación por Aseguradora, fecha probable de entrega inf"},{"date":"2025-02-17","obs":"En reparación por Aseguradora, fecha probable de entrega inf"},{"date":"2025-02-24","obs":"En reparación por Aseguradora, última fecha probable de entr"},{"date":"2025-03-10","obs":"En reparación por Aseguradora, última fecha probable de entr"},{"date":"2025-03-17","obs":"En reparación por Aseguradora, última fecha probable de entr"},{"date":"2025-03-24","obs":"En reparación por Aseguradora, última fecha probable de entr"},{"date":"2025-03-31","obs":"En reparación por Aseguradora, última fecha probable de entr"},{"date":"2025-04-14","obs":"En reparación por Aseguradora, última fecha probable de entr"},{"date":"2025-04-21","obs":"En reparación por Aseguradora, última fecha probable de entr"},{"date":"2025-04-28","obs":"En reparación por Aseguradora, última fecha probable de entr"},{"date":"2025-11-10","obs":"Ingresada a CURIFOR por Panne Electrica en Garantía"},{"date":"2025-11-17","obs":"Ingresada a CURIFOR por Panne Electrica en Garantía"},{"date":"2025-11-24","obs":"Ingresada a CURIFOR por Panne Electrica en Garantía"}]}},"313":{"2024":{"count":4,"weeks":[{"date":"2024-09-09","obs":""},{"date":"2024-09-16","obs":"Vespek programó entrega para la semana del 23/09"},{"date":"2024-09-23","obs":"Vespek programó entrega para la semana del 23/09"},{"date":"2024-09-30","obs":"Vespek entrega Ambulancia hoy 30-09"}]}},"315":{"2025":{"count":5,"weeks":[{"date":"2025-09-29","obs":""},{"date":"2025-10-13","obs":"Falla de motor, está en CURIFOR intentando descubrir el orig"},{"date":"2025-10-20","obs":"Falla de motor, está en CURIFOR intentando descubrir el orig"},{"date":"2025-10-27","obs":"Falla de motor, está en CURIFOR hace 42 días y aún no descub"},{"date":"2025-11-10","obs":"Falla de motor, está en CURIFOR hace 50 días. Pertenece a Li"}]}},"319":{"2025":{"count":12,"weeks":[{"date":"2025-01-13","obs":""},{"date":"2025-01-20","obs":""},{"date":"2025-01-27","obs":""},{"date":"2025-02-10","obs":""},{"date":"2025-07-21","obs":"Pertenece a COMUDEF"},{"date":"2025-07-28","obs":"Pertenece a COMUDEF"},{"date":"2025-08-11","obs":"Pertenece a COMUDEF"},{"date":"2025-08-18","obs":"Pertenece a COMUDEF"},{"date":"2025-08-25","obs":"Pertenece a COMUDEF, ruptura de sirena y baliza del casco su"},{"date":"2025-09-08","obs":"Pertenece a COMUDEF, ruptura de sirena y baliza del casco su"},{"date":"2025-09-15","obs":"Pertenece a COMUDEF, ruptura de sirena y baliza del casco su"},{"date":"2025-09-22","obs":"Pertenece a COMUDEF, ruptura de sirena y baliza del casco su"}]}},"321":{"2025":{"count":4,"weeks":[{"date":"2025-01-13","obs":""},{"date":"2025-01-20","obs":""},{"date":"2025-01-27","obs":""},{"date":"2025-02-10","obs":""}]}},"323":{"2025":{"count":4,"weeks":[{"date":"2025-01-13","obs":"Se retira hoy de VESPEK, el día 17-01 tiene fecha de brandin"},{"date":"2025-01-20","obs":""},{"date":"2025-01-27","obs":""},{"date":"2025-02-10","obs":""}]},"2026":{"count":4,"weeks":[{"date":"2026-01-26","obs":"Vehículo con falla grave en Licitación de Castro // Será ing"},{"date":"2026-02-09","obs":"Vehículo con falla grave en Licitación de Castro // Será ing"},{"date":"2026-02-16","obs":"Vehículo con falla grave en Licitación de Castro // Se encue"},{"date":"2026-02-23","obs":"Vehículo con falla grave en Licitación de Castro // Se encue"}]}},"325":{"2025":{"count":1,"weeks":[{"date":"2025-02-10","obs":"En espera de instalación de branding y equipamiento. Antes s"}]}},"327":{"2025":{"count":12,"weeks":[{"date":"2025-02-17","obs":"En espera de instalación de branding y equipamiento."},{"date":"2025-02-24","obs":"En espera de instalación de branding, GPS y equipamiento."},{"date":"2025-03-10","obs":""},{"date":"2025-03-17","obs":""},{"date":"2025-03-24","obs":""},{"date":"2025-03-31","obs":""},{"date":"2025-04-14","obs":""},{"date":"2025-04-21","obs":""},{"date":"2025-04-28","obs":""},{"date":"2025-05-19","obs":""},{"date":"2025-05-26","obs":""},{"date":"2025-06-09","obs":""}]}},"333":{"2025":{"count":9,"weeks":[{"date":"2025-03-17","obs":"En espera de GPS, Branding y permisos"},{"date":"2025-03-24","obs":"En espera de GPS, Branding y permisos"},{"date":"2025-03-31","obs":""},{"date":"2025-04-14","obs":""},{"date":"2025-04-21","obs":""},{"date":"2025-04-28","obs":""},{"date":"2025-05-19","obs":""},{"date":"2025-05-26","obs":""},{"date":"2025-06-09","obs":""}]}},"335":{"2025":{"count":9,"weeks":[{"date":"2025-03-17","obs":"En espera de GPS, Branding y permisos"},{"date":"2025-03-24","obs":"En espera de GPS, Branding y permisos"},{"date":"2025-03-31","obs":""},{"date":"2025-04-14","obs":""},{"date":"2025-04-21","obs":""},{"date":"2025-04-28","obs":""},{"date":"2025-05-19","obs":"Falla en caja de cambio y perdida de agua, ingresada en gara"},{"date":"2025-05-26","obs":"Falla en caja de cambio y perdida de agua, ingresada en gara"},{"date":"2025-06-09","obs":"Falla en caja de cambio y perdida de agua, ingresada en gara"}]}},"337":{"2025":{"count":4,"weeks":[{"date":"2025-04-14","obs":"Pendiente entrega"},{"date":"2025-04-21","obs":"En espera de GPS y Branding + Permisos de Circulación"},{"date":"2025-04-28","obs":"En espera de Branding"},{"date":"2025-05-19","obs":"En espera de Branding"}]}},"339":{"2025":{"count":4,"weeks":[{"date":"2025-04-14","obs":"Pendiente entrega"},{"date":"2025-04-21","obs":"En espera de GPS y Branding + Permisos de Circulación"},{"date":"2025-04-28","obs":"En espera de Branding"},{"date":"2025-05-19","obs":"En espera de Branding"}]},"2026":{"count":3,"weeks":[{"date":"2026-03-09","obs":"Vehículo con falla grave en Licitación de Castro // Se encue"},{"date":"2026-03-16","obs":"Vehículo con falla grave en Licitación de Castro // Se encue"},{"date":"2026-03-23","obs":"Vehículo con falla grave en Licitación de Castro // Se encue"}]}},"341":{"2025":{"count":6,"weeks":[{"date":"2025-04-14","obs":"Pendiente entrega"},{"date":"2025-04-21","obs":"En espera de GPS y Branding + Permisos de Circulación"},{"date":"2025-04-28","obs":"En espera de Branding"},{"date":"2025-12-15","obs":"AMBULANCIA DE EMECAR, SINIESTRADA EN VIÑA"},{"date":"2025-12-22","obs":"AMBULANCIA DE EMECAR, SINIESTRADA EN VIÑA"},{"date":"2025-12-29","obs":"AMBULANCIA DE EMECAR, SINIESTRADA EN VIÑA, EN ESPERA DE REPU"}]},"2026":{"count":4,"weeks":[{"date":"2026-01-12","obs":""},{"date":"2026-01-19","obs":""},{"date":"2026-01-26","obs":""},{"date":"2026-03-30","obs":"Ambulancia EMECAR, ingresada a CURIFOR por falla"}]}},"343":{"2025":{"count":3,"weeks":[{"date":"2025-04-14","obs":"Pendiente entrega"},{"date":"2025-04-21","obs":"Pendiente entrega"},{"date":"2025-04-28","obs":"En espera de GPS y Branding + Permisos de Circulación"}]},"2026":{"count":3,"weeks":[{"date":"2026-05-11","obs":"Falla de Embragüe, perteneciente a Hospital San Juan, será i"},{"date":"2026-05-18","obs":"Falla de Embragüe, perteneciente a Hospital San Juan, en CUR"},{"date":"2026-05-25","obs":"Falla de Embragüe, perteneciente a Hospital San Juan, en CUR"}]}},"345":{"2025":{"count":6,"weeks":[{"date":"2025-04-14","obs":"Pendiente entrega"},{"date":"2025-04-21","obs":"Pendiente entrega"},{"date":"2025-04-28","obs":"En espera de GPS y Branding + Permisos de Circulación"},{"date":"2025-05-19","obs":"En espera de GPS y Branding + Permisos de Circulación"},{"date":"2025-05-26","obs":"En espera de GPS y Branding + Permisos de Circulación"},{"date":"2025-06-09","obs":""}]}},"347":{"2025":{"count":6,"weeks":[{"date":"2025-04-14","obs":"Pendiente entrega"},{"date":"2025-04-21","obs":"Pendiente entrega"},{"date":"2025-04-28","obs":"En espera de GPS y Branding + Permisos de Circulación"},{"date":"2025-05-19","obs":"En espera de GPS y Branding + Permisos de Circulación"},{"date":"2025-05-26","obs":"En espera de GPS y Branding + Permisos de Circulación"},{"date":"2025-06-09","obs":"En espera Branding (proveedor a la espera del pago adeudado)"}]}},"349":{"2025":{"count":6,"weeks":[{"date":"2025-04-14","obs":"Pendiente entrega"},{"date":"2025-04-21","obs":"Pendiente entrega"},{"date":"2025-04-28","obs":"En espera de GPS y Branding + Permisos de Circulación"},{"date":"2025-05-19","obs":"En espera de GPS y Branding + Permisos de Circulación"},{"date":"2025-05-26","obs":"En espera de GPS y Branding + Permisos de Circulación"},{"date":"2025-06-09","obs":"En espera Branding (proveedor a la espera del pago adeudado)"}]}},"351":{"2025":{"count":6,"weeks":[{"date":"2025-04-14","obs":"Pendiente entrega"},{"date":"2025-04-21","obs":"Pendiente entrega"},{"date":"2025-04-28","obs":"En espera de GPS y Branding + Permisos de Circulación"},{"date":"2025-05-19","obs":"En espera de GPS y Branding + Permisos de Circulación"},{"date":"2025-05-26","obs":"En espera de GPS y Branding + Permisos de Circulación"},{"date":"2025-06-09","obs":"En espera Branding (proveedor a la espera del pago adeudado)"}]}},"353":{"2025":{"count":1,"weeks":[{"date":"2025-09-29","obs":"En espera de documentación, equipamiento y branding"}]},"2026":{"count":2,"weeks":[{"date":"2026-03-23","obs":"Ambulancia siniestrada, se ingresará a Aseguradora el lunes "},{"date":"2026-03-30","obs":"Ambulancia siniestrada, se ingresará a Aseguradora el lunes "}]}},"355":{"2025":{"count":5,"weeks":[{"date":"2025-09-29","obs":"En espera de documentación, equipamiento y branding"},{"date":"2025-11-17","obs":"Vehículo ingresado por Garantía a CURIFOR por aparente falla"},{"date":"2025-11-24","obs":"Vehículo ingresado por Garantía a CURIFOR por aparente falla"},{"date":"2025-12-15","obs":"Vehículo ingresado por Garantía a CURIFOR por aparente falla"},{"date":"2025-12-29","obs":"Falla eléctrica ingresada a DIFOR por Garantía"}]},"2026":{"count":1,"weeks":[{"date":"2026-01-12","obs":"Falla eléctrica ingresada a DIFOR por Garantía"}]}},"359":{"2025":{"count":4,"weeks":[{"date":"2025-10-13","obs":"En espera de GPS y branding"},{"date":"2025-10-20","obs":"En espera de GPS y branding"},{"date":"2025-10-27","obs":"En espera de GPS y branding"},{"date":"2025-11-10","obs":""}]}},"361":{"2025":{"count":3,"weeks":[{"date":"2025-10-20","obs":"En espera de GPS y branding"},{"date":"2025-10-27","obs":"En espera de GPS y branding"},{"date":"2025-11-10","obs":""}]}},"363":{"2025":{"count":3,"weeks":[{"date":"2025-10-20","obs":"En espera de GPS y branding"},{"date":"2025-10-27","obs":"En espera de GPS y branding"},{"date":"2025-11-10","obs":""}]}},"369":{"2026":{"count":1,"weeks":[{"date":"2026-06-01","obs":"En espera de Branding y GPS"}]}}};
@@ -545,6 +1103,26 @@ let charts = {};
 function getFleet(){return currentFlota==="4x2"?FLEET_AMB:currentFlota==="4x4"?FLEET_4X4:currentFlota==="van"?FLEET_VAN:FLEET_AUTOS;}
 function getReqs(){return currentFlota==="4x2"?REQS_AMB:currentFlota==="4x4"?REQS_4X4:currentFlota==="van"?REQS_VAN:REQS_AUTOS;}
 function getPipeline(){return currentFlota==="4x2"?PIPELINE_AMB:currentFlota==="4x4"?PIPELINE_4X4:currentFlota==="van"?PIPELINE_VAN:PIPELINE_AUTOS;}
+
+// Arriendos temporales: vehículos que un tercero nos entrega por un período acotado
+// para sumar a nuestra capacidad. Cada uno: {id, movil, proveedor, fIni, fFin, cantidad, notas}
+const ARRIENDOS_AMB = [];
+const ARRIENDOS_4X4 = [];
+const ARRIENDOS_VAN = [];
+const ARRIENDOS_AUTOS = [{"id":1780514003393,"movil":"AR1","cantidad":1,"proveedor":"","fIni":"2026-06","fFin":"2026-09","notas":"Peak Demanda","proyecto":"COMUDEF"},{"id":1780514022906,"movil":"AR2","cantidad":1,"proveedor":"","fIni":"2026-06","fFin":"2026-09","notas":"Peak Demanda","proyecto":"COMUDEF"}];
+function getArriendos(){return currentFlota==="4x2"?ARRIENDOS_AMB:currentFlota==="4x4"?ARRIENDOS_4X4:currentFlota==="van"?ARRIENDOS_VAN:ARRIENDOS_AUTOS;}
+// ¿Cuántas unidades arrendadas están activas en un mes dado (YYYY-MM)?
+function arriendosActivos(arr, ym){
+  const norm=d=>{
+    if(!d) return null;
+    const p=d.split("-");
+    return p.length===2&&p[1].length===1 ? p[0]+"-0"+p[1] : d;
+  };
+  return arr.filter(a=>{
+    const ini=norm(a.fIni)||"0000-00", fin=norm(a.fFin)||"9999-99";
+    return ini<=ym && ym<=fin;
+  });
+}
 
 /* ── HELPERS ── */
 const fCLP = n=>n?("$"+Math.round(n).toLocaleString("es-CL")):"-";
@@ -666,6 +1244,7 @@ function render(){
   else if(currentTab==="taller")el.innerHTML=renderTaller();
   else if(currentTab==="proyeccion")el.innerHTML=renderProyeccion();
   else if(currentTab==="pipeline")el.innerHTML=renderPipeline();
+  else if(currentTab==="concentracion")el.innerHTML=renderConcentracion();
   afterRender();
 }
 function updateBadges(){
@@ -738,7 +1317,15 @@ function renderPanel(){
   <div class="grid2 sec">
     <div class="card">
       <div class="card-title">Estado de flota</div>
-      <div class="chart-wrap"><canvas id="chartCondicion"></canvas></div>
+      ${panelViewAll
+        ? `<div id="estado-legend" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:10px;font-size:11px"></div>
+           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+             <div style="text-align:center"><div style="font-size:11px;font-weight:600;color:var(--text-s);margin-bottom:2px">AMB 4×2</div><div style="position:relative;height:120px"><canvas id="pie-4x2"></canvas></div></div>
+             <div style="text-align:center"><div style="font-size:11px;font-weight:600;color:var(--text-s);margin-bottom:2px">AMB 4×4</div><div style="position:relative;height:120px"><canvas id="pie-4x4"></canvas></div></div>
+             <div style="text-align:center"><div style="font-size:11px;font-weight:600;color:var(--text-s);margin-bottom:2px">VAN</div><div style="position:relative;height:120px"><canvas id="pie-van"></canvas></div></div>
+             <div style="text-align:center"><div style="font-size:11px;font-weight:600;color:var(--text-s);margin-bottom:2px">AUTOS</div><div style="position:relative;height:120px"><canvas id="pie-autos"></canvas></div></div>
+           </div>`
+        : `<div class="chart-wrap"><canvas id="chartCondicion"></canvas></div>`}
     </div>
     <div class="card">
       <div class="card-title">Leasing activo por banco <span style="font-size:10px;color:#94a3b8;font-weight:400">— todas las flotas</span></div>
@@ -765,8 +1352,8 @@ function renderPanel(){
       <span style="font-weight:700;font-size:13px;color:var(--navy)">Evolución de cuota mensual de leasing</span>
       <span style="font-size:11px;color:var(--text-s)">todas las flotas · desde hoy hasta fin del último contrato</span>
     </div>
-    <div id="leasing-evo-wrap" style="position:relative;background:#fff;border:1px solid var(--border);border-radius:8px;padding:16px 14px 10px">
-      <canvas id="chartLeasingEvo" style="width:100%;height:220px"></canvas>
+    <div id="leasing-evo-wrap" style="position:relative;background:linear-gradient(180deg,#fafbfc 0%,#fff 60%);border:1px solid var(--border);border-radius:12px;padding:18px 16px 12px;box-shadow:0 1px 3px rgba(15,23,42,.04)">
+      <canvas id="chartLeasingEvo" style="width:100%;height:240px"></canvas>
       <div id="leasing-evo-tooltip" style="display:none;position:absolute;background:var(--navy);color:#fff;border-radius:8px;padding:10px 14px;font-size:11px;pointer-events:none;min-width:180px;box-shadow:0 4px 16px rgba(0,0,0,.25);z-index:10"></div>
     </div>
     <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px" id="leasing-evo-legend"></div>
@@ -820,6 +1407,11 @@ function renderFlota(){
   const inTaller=fl.filter(v=>isNonOp(v.cond)&&v.cond!=="EN PRODUCCION"&&v.cond!=="FUERA DE SERVICIO"&&v.estado!=="FUERA DE SERVICIO").length;
   const fs=fl.filter(v=>v.cond==="FUERA DE SERVICIO"||v.estado==="FUERA DE SERVICIO").length;
   const wL=fl.filter(v=>v.banco).length;
+  // Antigüedad: año dinámico del último reporte. 5-6 años = envejeciendo, 7+ = renovación
+  const anioActual=getMesBaseProyeccion().year;
+  const edadDe=v=>v.anio?anioActual-v.anio:null;
+  const viejas=fl.filter(v=>{const e=edadDe(v);return e!==null&&e>=7;});
+  const envejeciendo=fl.filter(v=>{const e=edadDe(v);return e!==null&&e>=5&&e<7;});
   return `
   <div class="toolbar">
     <input id="srch" type="text" placeholder="Buscar móvil, patente, chasis, estado…" style="width:240px" oninput="filterFlota()">
@@ -848,7 +1440,27 @@ function renderFlota(){
     <span style="font-size:12px;background:#dcfce7;border:1px solid #86efac;border-radius:20px;padding:4px 12px;color:#15803d"><strong>${fl.filter(v=>v.cond==="OPERATIVO").length}</strong> operativos</span>
     <span style="font-size:12px;background:#fee2e2;border:1px solid #fca5a5;border-radius:20px;padding:4px 12px;color:#b91c1c"><strong>${inTaller}</strong> en taller${fs>0?` · <strong>${fs}</strong> fuera de servicio`:""}</span>
     <span style="font-size:12px;background:#dbeafe;border:1px solid #93c5fd;border-radius:20px;padding:4px 12px;color:#1d4ed8"><strong>${wL}</strong> con leasing</span>
+    ${viejas.length>0?`<span style="font-size:12px;background:#fef2f2;border:1px solid #fca5a5;border-radius:20px;padding:4px 12px;color:#dc2626"><strong>${viejas.length}</strong> para renovación (7+ años)</span>`:""}
+    ${envejeciendo.length>0?`<span style="font-size:12px;background:#fffbeb;border:1px solid #fcd34d;border-radius:20px;padding:4px 12px;color:#d97706"><strong>${envejeciendo.length}</strong> envejeciendo (5-6 años)</span>`:""}
   </div>
+  ${viejas.length>0?`<div style="background:#fff;border:1px solid var(--border);border-left:3px solid var(--amber);border-radius:8px;padding:13px 16px;margin-bottom:14px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <span style="font-size:13px">🔧</span>
+      <span style="font-weight:700;font-size:12px;color:var(--navy)">Plan de renovación</span>
+      <span style="font-size:11px;color:var(--text-s)">${viejas.length} unidad(es) con 7+ años de antigüedad</span>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+    ${viejas.sort((a,b)=>edadDe(b)-edadDe(a)).map(v=>{
+      const ed=anioActual-v.anio;
+      const col=ed>=12?"#dc2626":ed>=9?"#ea580c":"#d97706";
+      return `<span style="display:inline-flex;align-items:baseline;gap:5px;background:var(--row-alt);border:1px solid var(--border);border-radius:6px;padding:3px 9px;font-size:11px">
+        <span style="color:var(--text-s)">Móvil</span><strong style="color:var(--navy)">${v.movil}</strong>
+        <span style="color:${col};font-weight:700">${ed} a&ntilde;os</span>
+        <span style="color:var(--text-xs);font-size:10px">'${String(v.anio).slice(2)}</span>
+      </span>`;
+    }).join("")}
+    </div>
+  </div>`:""}
   <div id="form-container"></div>
   <div class="tbl-wrap">
   <table id="flota-table">
@@ -1059,6 +1671,32 @@ function renderLeasing(){
   const totalDeuda=leasings.reduce((s,v)=>s+getRemanente(v),0);
   const totalMonto=leasings.reduce((s,v)=>s+v.monto,0);
   const urgentes=leasings.filter(v=>mLeft(v.fFin)<=6);
+
+  // ── Muro de vencimientos: capital y cuota que se libera por trimestre ──
+  // Cuando vence un leasing, la unidad pasa a propiedad UCM y deja de pagar cuota
+  const muro={}; // {YYYY-MM: {cuota, unidades, moviles:[]}}
+  leasings.forEach(v=>{
+    if(!v.fFin) return;
+    const key=v.fFin; // mes exacto de vencimiento
+    if(!muro[key]) muro[key]={cuota:0,unidades:0,moviles:[]};
+    muro[key].cuota+=getCuota(v);
+    muro[key].unidades++;
+    muro[key].moviles.push(v.movil);
+  });
+  // Rango continuo mensual: desde el mes base del reporte hasta el último vencimiento
+  const muroMeses=[];
+  if(Object.keys(muro).length>0){
+    const mbMuro=getMesBaseProyeccion();
+    const ultimoVenc=Object.keys(muro).sort().pop();
+    const [uy,um]=ultimoVenc.split("-").map(Number);
+    let cy=mbMuro.year, cm=mbMuro.month0+1;
+    while(cy<uy||(cy===uy&&cm<=um)){
+      muroMeses.push(cy+"-"+String(cm).padStart(2,"0"));
+      cm++; if(cm>12){cm=1;cy++;}
+    }
+  }
+  const muroKeys=muroMeses;
+  const muroData=JSON.stringify(muroMeses.map(k=>({q:k, cuota:muro[k]?.cuota||0, unidades:muro[k]?.unidades||0, moviles:muro[k]?.moviles||[]})));
   return `
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">
     <div>
@@ -1081,6 +1719,16 @@ function renderLeasing(){
     <div class="kpi" style="border-left-color:#16a34a"><div class="lbl">% Remanente / Financiado</div><div class="val" style="font-size:22px">${totalMonto>0?Math.round(totalDeuda/totalMonto*100)+"%":"—"}</div><div class="sub">${fM(totalDeuda)} de ${fM(totalMonto)}</div></div>
     <div class="kpi" style="border-left-color:#dc2626"><div class="lbl">Remanente K total</div><div class="val" style="font-size:18px">${fM(totalDeuda)}</div><div class="sub">capital pendiente</div></div>
   </div>
+
+  ${muroKeys.length>0?`<div style="background:linear-gradient(180deg,#fafbfc 0%,#fff 60%);border:1px solid var(--border);border-radius:12px;padding:14px 16px 10px;margin-bottom:16px;box-shadow:0 1px 3px rgba(15,23,42,.04)">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:4px">
+      <span style="font-weight:700;font-size:13px;color:var(--navy)">🧱 Muro de vencimientos de leasing</span>
+      <span style="font-size:11px;color:var(--text-s)">Cuota mensual que se libera al vencer · la unidad pasa a propiedad UCM</span>
+    </div>
+    <div style="position:relative;height:150px"><canvas id="chartMuroLeasing" style="width:100%;height:150px"></canvas></div>
+    <div id="muro-leasing-data" data-muro='${muroData}' style="display:none"></div>
+  </div>`:""}
+
   <div class="tbl-wrap">
   <table>
     <thead><tr>
@@ -1181,6 +1829,12 @@ function getAsigReal(r, fl){
     return !special.has(e) && !e.toUpperCase().includes("BACK UP") && e===r.uso;
   }).length;
 }
+// Arriendos activos asignados a un cliente en el mes actual (solo para vista Asignaciones)
+function arriendosAsignados(uso){
+  const mb=getMesBaseProyeccion();
+  const ymActual=mb.year+"-"+String(mb.month0+1).padStart(2,"0");
+  return arriendosActivos(getArriendos(),ymActual).filter(a=>a.proyecto===uso).length;
+}
 
 // Construye lista unificada de filas para la tabla asignaciones:
 // REQS con asig real + clientes nuevos detectados en FLEET
@@ -1194,13 +1848,13 @@ function buildTodasFilas(reqs, fl){
     if(!e||special.has(e)||e.toUpperCase().includes("BACK UP")) return;
     estadoCount[e]=(estadoCount[e]||0)+1;
   });
-  // REQS existentes con asig real
-  const reqsConAsig=reqs.map(r=>({...r,asig:estadoCount[r.uso]||0}));
+  // REQS existentes con asig real (FLEET + arriendos activos asignados)
+  const reqsConAsig=reqs.map(r=>({...r,asig:(estadoCount[r.uso]||0)+arriendosAsignados(r.uso),_arr:arriendosAsignados(r.uso)}));
   // Estados sin entrada en REQS = clientes nuevos
   const enReqs=new Set(reqs.map(r=>r.uso));
   const nuevos=Object.entries(estadoCount)
     .filter(([e])=>!enReqs.has(e))
-    .map(([uso,asig])=>({uso,asig,reqOp:0,reqBU:0,fIni:null,fFin:null,_nuevo:true}));
+    .map(([uso,asig])=>({uso,asig:asig+arriendosAsignados(uso),reqOp:0,reqBU:0,fIni:null,fFin:null,_nuevo:true,_arr:arriendosAsignados(uso)}));
   return [...reqsConAsig,...nuevos].sort((a,b)=>b.asig-a.asig||a.uso.localeCompare(b.uso));
 }
 
@@ -1283,7 +1937,7 @@ function renderAsignaciones(){
             ${r.uso}
             ${isNew?`<span style="font-size:9px;background:#f59e0b;color:#fff;border-radius:4px;padding:1px 6px;margin-left:6px;font-weight:700">NUEVO</span>`:""}
           </td>
-          <td style="text-align:center;font-weight:700">${r.asig}</td>
+          <td style="text-align:center;font-weight:700">${r.asig}${r._arr>0?` <span style="font-size:9px;background:#0891b2;color:#fff;border-radius:3px;padding:1px 5px;font-weight:700" title="${r._arr} unidad(es) arrendada(s)">🚐${r._arr}</span>`:""}</td>
           <td style="text-align:center">${(()=>{const ro=getReqOp(r);const boost=ro-(r.reqOp||0);return ro>0?(ro+(boost>0?` <span style="font-size:9px;background:#7c3aed;color:#fff;border-radius:3px;padding:1px 4px" title="${boost>0?'Req. temporal activo +'+boost:''}">${boost>0?"+"+boost:""}</span>`:"")):"—";})()}</td>
           <td style="text-align:center">${r.reqBU||"—"}</td>
           <td style="text-align:center;font-weight:600">${(()=>{const tot=getReqOp(r)+(r.reqBU||0);return tot||"—";})()}</td>
@@ -1602,8 +2256,10 @@ function renderProyeccion(){
     const prodAcumulado=fl.filter(v=>v.cond==="EN PRODUCCION"&&v.fEntrega&&v.fEntrega<=ym).length;
     // Entran exactamente ESTE mes (van en el paréntesis)
     const prodEstesMes=fl.filter(v=>v.cond==="EN PRODUCCION"&&v.fEntrega&&v.fEntrega===ym).length;
-    // Flota efectiva = base fija + todos los ya entregados
-    const flotaEfectiva=(total-fueraServ-tallerEsteMes-opObsCount-enProd)+prodAcumulado;
+    // Flota efectiva = base fija + todos los ya entregados + unidades arrendadas activas este mes
+    const arriendosMes=arriendosActivos(getArriendos(),ym);
+    const unidadesArrendadas=arriendosMes.length;
+    const flotaEfectiva=(total-fueraServ-tallerEsteMes-opObsCount-enProd)+prodAcumulado+unidadesArrendadas;
     // Base visible = efectiva menos los que entran este mes
     const prodOnline=prodEstesMes;
     const flotaBaseDisplay=flotaEfectiva-prodEstesMes;
@@ -1652,7 +2308,28 @@ function renderProyeccion(){
     const pipeDemandaInt=Math.round(pipeDemanda);
     const balanceTotal=balanceContratos-pipeDemandaInt;
 
-    months.push({ym,lbl,flotaEfectiva,flotaBase:flotaBaseDisplay,prodOnline,demandaContratos,contratosTerminan,unidadesLibres,balanceContratos,pipeDemanda:pipeDemandaInt,balanceTotal,detalleLiberados});
+    // Sensibilidad: piso (solo adjudicados 100%) y techo (todo el pipeline al 100%)
+    const pipeActivo=p=>{
+      const fReqN=p.fReq?(p.fReq.split("-")[1]?.length===1?p.fReq.slice(0,5)+"0"+p.fReq.slice(5):p.fReq):null;
+      const started=p.prob===100?(fReqN?fReqN<=ym:true):!!(fReqN&&fReqN<=ym);
+      if(!started) return false;
+      if(p.fReq&&p.duracion>0){
+        const [yy,mm]=p.fReq.split("-").map(Number);
+        const endD=new Date(yy,mm-1+p.duracion,1);
+        const endYm=endD.getFullYear()+"-"+String(endD.getMonth()+1).padStart(2,"0");
+        if(ym>=endYm) return false;
+      }
+      return true;
+    };
+    const pipePiso=pipe.filter(p=>p.prob===100&&pipeActivo(p)).reduce((s,p)=>s+p.qty,0);
+    const pipeTecho=pipe.filter(p=>pipeActivo(p)).reduce((s,p)=>s+p.qty,0);
+    const totalPiso=demandaContratos+pipePiso;
+    const totalTecho=demandaContratos+pipeTecho;
+
+    const detalleArriendos=arriendosMes.length>0
+      ? arriendosMes.map(a=>`móvil ${a.movil||"?"}${a.proyecto?" → "+a.proyecto:""} (${a.proveedor||"arriendo"})`).join(", ")
+      : "";
+    months.push({ym,lbl,flotaEfectiva,flotaBase:flotaBaseDisplay,prodOnline,demandaContratos,contratosTerminan,unidadesLibres,balanceContratos,pipeDemanda:pipeDemandaInt,balanceTotal,detalleLiberados,unidadesArrendadas,detalleArriendos,totalPiso,totalTecho});
   }
 
   // ── Alerta de compra: 45 días antes del primer mes con déficit ──
@@ -1719,6 +2396,7 @@ function renderProyeccion(){
       <span style="display:flex;align-items:center;gap:5px"><span style="width:16px;height:3px;background:#1d4ed8;display:inline-block;border-radius:2px"></span>Flota efectiva</span>
       <span style="display:flex;align-items:center;gap:5px"><span style="width:16px;height:3px;background:#16a34a;display:inline-block;border-radius:2px"></span>Demanda contratos activos</span>
       <span style="display:flex;align-items:center;gap:5px"><span style="width:16px;height:3px;background:#f97316;display:inline-block;border-radius:2px;border-bottom:2px dashed #f97316"></span>Demanda + pipeline ponderado</span>
+      <span style="display:flex;align-items:center;gap:5px"><span style="width:16px;height:10px;background:#f9731618;display:inline-block;border-radius:2px;border:1px dashed #f9731680"></span>Banda de sensibilidad (adjudicado ↔ todo el pipeline)</span>
     </div>
   </div>
 
@@ -1761,10 +2439,44 @@ function renderProyeccion(){
     </table></div>
   </div>
 
+  <div class="sec" style="margin-top:16px">
+    <div class="sec-hdr" style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <h3 style="margin:0">🚐 Arriendos temporales — ${flName}</h3>
+        <span class="sub">Unidades que un tercero nos entrega por un período acotado para sumar a la capacidad</span>
+      </div>
+      <button onclick="abrirFormArriendo(null)" style="padding:5px 14px;background:#0891b2;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600">+ Agregar arriendo</button>
+    </div>
+    <div class="tbl-wrap">
+      <table data-nosort="true">
+        <thead><tr>
+          <th>N° Móvil</th><th>Proveedor</th><th>Proyecto / Cliente</th><th>Desde</th><th>Hasta</th><th>Notas</th><th style="text-align:center">Acciones</th>
+        </tr></thead>
+        <tbody>
+        ${getArriendos().map((a,i)=>`<tr>
+          <td><strong>${a.movil||"—"}</strong></td>
+          <td>${a.proveedor||"—"}</td>
+          <td>${a.proyecto?`<span class="badge b-blue">${a.proyecto}</span>`:"<span style='color:#94a3b8'>Sin asignar</span>"}</td>
+          <td>${a.fIni?fmtYM(a.fIni):"—"}</td>
+          <td>${a.fFin?fmtYM(a.fFin):"—"}</td>
+          <td class="wrap" style="max-width:200px">${a.notas||""}</td>
+          <td style="text-align:center;white-space:nowrap">
+            <button onclick="abrirFormArriendo(${i})" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+            <button onclick="eliminarArriendo(${i})" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+          </td>
+        </tr>`).join("")||"<tr><td colspan='7' style='text-align:center;color:#94a3b8;padding:16px'>Sin arriendos temporales registrados</td></tr>"}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <div id="proy-chart-data"
     data-labels='${JSON.stringify(chartLabels)}'
     data-flota='${JSON.stringify(chartFlota)}'
     data-demanda='${JSON.stringify(chartDemanda)}'
+    data-arriendos='${JSON.stringify(months.map(m=>m.detalleArriendos||""))}'
+    data-piso='${JSON.stringify(months.map(m=>m.totalPiso))}'
+    data-techo='${JSON.stringify(months.map(m=>m.totalTecho))}'
     data-total='${JSON.stringify(chartTotal)}'
     style="display:none"></div>
   `;
@@ -1862,6 +2574,95 @@ function renderPipeline(){
   `;
 }
 
+function renderConcentracion(){
+  const fl=getFleet();
+  const flName=currentFlota==="4x2"?"AMB 4×2":currentFlota==="4x4"?"AMB 4×4":currentFlota==="van"?"VAN":"AUTOS";
+  const reqs=getReqs();
+  const filas=buildTodasFilas(reqs,fl); // {uso, asig, ...}
+  const totalAsig=filas.reduce((s,r)=>s+r.asig,0);
+  // Agrupación visual SOLO para concentración: las bases de rescate se unifican
+  const grupoConc=uso=>/^RESCATE BASE/i.test(uso)?"RESCATE UCM":uso;
+  // Concentración de flota: % de unidades asignadas que depende de cada cliente (agrupado)
+  const concMap={};
+  filas.filter(r=>r.asig>0).forEach(r=>{
+    const g=grupoConc(r.uso);
+    if(!concMap[g]) concMap[g]={uso:g,asig:0,fFin:r.fFin};
+    concMap[g].asig+=r.asig;
+    // Para el grupo, mostrar el vencimiento más próximo
+    if(r.fFin&&(!concMap[g].fFin||r.fFin<concMap[g].fFin)) concMap[g].fFin=r.fFin;
+  });
+  const conc=Object.values(concMap)
+    .map(c=>({...c,pct:totalAsig>0?(c.asig/totalAsig*100):0}))
+    .sort((a,b)=>b.asig-a.asig);
+  const maxAsig=conc[0]?.asig||1;
+  // Clientes con concentración alta (>=20%)
+  const altos=conc.filter(c=>c.pct>=20);
+  // Concentración temporal: vencimientos por trimestre (agrupado)
+  const vencTrim={};
+  reqs.forEach(r=>{
+    if(!r.fFin) return;
+    const asig=getAsigReal(r,fl);
+    if(asig===0) return;
+    const [y,m]=r.fFin.split("-").map(Number);
+    const q=Math.ceil(m/3);
+    const key=`${y}-Q${q}`;
+    if(!vencTrim[key]) vencTrim[key]={unidades:0,clientes:[]};
+    vencTrim[key].unidades+=asig;
+    vencTrim[key].clientes.push(`${grupoConc(r.uso)} (${asig})`);
+  });
+  const trimKeys=Object.keys(vencTrim).sort();
+
+  const COLS=["#1d4ed8","#7c3aed","#16a34a","#d97706","#dc2626","#0891b2","#db2777","#65a30d","#9333ea","#ea580c"];
+
+  return `
+  <div class="sec-hdr"><h3>Concentración de riesgo — ${flName}</h3><span class="sub">Dependencia de la flota por cliente y vencimientos</span></div>
+
+  <div class="kpi-row">
+    <div class="kpi" style="border-left-color:#1d4ed8"><div class="lbl">Clientes activos</div><div class="val">${conc.length}</div></div>
+    <div class="kpi" style="border-left-color:#7c3aed"><div class="lbl">Unidades asignadas</div><div class="val">${totalAsig}</div></div>
+    <div class="kpi" style="border-left-color:${altos.length>0?"#dc2626":"#16a34a"}"><div class="lbl">Clientes con alta concentración</div><div class="val">${altos.length}</div><div class="sub">≥20% de la flota</div></div>
+    <div class="kpi" style="border-left-color:#d97706"><div class="lbl">Mayor dependencia</div><div class="val" style="font-size:18px">${conc[0]?Math.round(conc[0].pct)+"%":"—"}</div><div class="sub">${conc[0]?.uso||""}</div></div>
+  </div>
+
+  ${altos.length>0?`<div class="alert alert-warn" style="margin-bottom:16px">⚠ <strong>Concentración alta:</strong> ${altos.map(c=>`${c.uso} (${Math.round(c.pct)}%${c.fFin?", vence "+fmtYM(c.fFin):""})`).join(" · ")}. Una baja de estos clientes liberaría una parte importante de la flota de golpe.</div>`:""}
+
+  <div class="sec" style="margin-bottom:16px">
+    <div class="sec-hdr"><h3 style="margin:0;font-size:13px">Distribución de flota por cliente</h3></div>
+    <div style="padding:4px 0">
+      ${conc.map((c,i)=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:7px">
+        <div style="width:160px;font-size:12px;font-weight:600;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${c.uso}">${c.uso}</div>
+        <div style="flex:1;background:#f1f5f9;border-radius:6px;height:24px;position:relative">
+          <div style="width:${Math.max(2,c.pct)}%;background:${COLS[i%COLS.length]};height:100%;border-radius:6px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px">
+            <span style="color:#fff;font-size:11px;font-weight:700">${c.asig}</span>
+          </div>
+        </div>
+        <div style="width:48px;font-size:12px;font-weight:700;color:${c.pct>=20?"#dc2626":"#475569"}">${Math.round(c.pct)}%</div>
+      </div>`).join("")||"<div style='color:#94a3b8;padding:20px;text-align:center'>Sin unidades asignadas en esta flota</div>"}
+    </div>
+  </div>
+
+  ${trimKeys.length>0?`<div class="sec">
+    <div class="sec-hdr"><h3 style="margin:0;font-size:13px">Concentración temporal de vencimientos</h3><span class="sub">Unidades cuyo contrato termina por trimestre</span></div>
+    <div class="tbl-wrap">
+      <table data-nosort="true">
+        <thead><tr><th>Trimestre</th><th style="text-align:center">Unidades que vencen</th><th>Clientes</th></tr></thead>
+        <tbody>
+        ${trimKeys.map(k=>{
+          const t=vencTrim[k];
+          const alto=t.unidades>=4;
+          return `<tr style="${alto?"background:#fff7ed":""}">
+            <td style="font-weight:700">${k.replace("-"," ")}</td>
+            <td style="text-align:center;font-weight:700;color:${alto?"#dc2626":"#475569"}">${t.unidades}${alto?" ⚠":""}</td>
+            <td class="wrap" style="font-size:12px">${t.clientes.join(" · ")}</td>
+          </tr>`;
+        }).join("")}
+        </tbody>
+      </table>
+    </div>
+  </div>`:""}
+  `;
+}
+
 function abrirFormPipeline(idx){
   const pipe=getPipeline();
   const p=idx!==null?pipe[idx]:null;
@@ -1926,6 +2727,71 @@ function eliminarPipeline(idx){
   if(!pipe[idx])return;
   if(!confirm("¿Eliminar oportunidad: "+pipe[idx].cliente+"?"))return;
   pipe.splice(idx,1);
+  destroyCharts();render();
+}
+
+/* ── Arriendos temporales ── */
+function abrirFormArriendo(idx){
+  const arr=getArriendos();
+  const a=idx!==null?arr[idx]:null;
+  const isNew=a===null;
+  // Insertar el formulario como modal flotante
+  const existing=document.getElementById("arriendo-overlay");
+  if(existing) existing.remove();
+  const ov=document.createElement("div");
+  ov.id="arriendo-overlay";
+  ov.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:4000;display:flex;align-items:center;justify-content:center";
+  ov.onclick=e=>{if(e.target===ov)ov.remove();};
+  ov.innerHTML=`
+    <div style="background:#fff;border-radius:12px;width:520px;max-width:95vw;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden">
+      <div style="background:#0891b2;color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center">
+        <strong style="font-size:13px">🚐 ${isNew?"Nuevo arriendo temporal":"Editar arriendo"}</strong>
+        <button onclick="document.getElementById('arriendo-overlay').remove()" style="background:none;border:none;color:#fff;opacity:.8;cursor:pointer;font-size:18px">✕</button>
+      </div>
+      <div style="padding:18px 20px">
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px 14px;margin-bottom:14px">
+          <div class="fld"><label>N° Móvil</label><input id="ar_movil" value="${a?.movil||""}" placeholder="Número de móvil" style="width:100%;box-sizing:border-box"></div>
+          <div class="fld"><label>Proveedor</label><input id="ar_prov" value="${a?.proveedor||""}" placeholder="¿Quién nos arrienda?" style="width:100%;box-sizing:border-box"></div>
+          <div class="fld" style="grid-column:span 2"><label>Asignar a proyecto / cliente</label>
+            <select id="ar_proyecto" style="width:100%;box-sizing:border-box">
+              <option value="">— Sin asignar —</option>
+              ${getReqs().map(r=>`<option ${a?.proyecto===r.uso?"selected":""}>${r.uso}</option>`).join("")}
+              ${a?.proyecto&&!getReqs().find(r=>r.uso===a.proyecto)?`<option selected>${a.proyecto}</option>`:""}
+            </select>
+          </div>
+          <div class="fld"><label>Desde (AAAA-MM)</label><input id="ar_ini" type="text" placeholder="YYYY-MM" value="${a?.fIni||""}" style="width:100%;box-sizing:border-box"></div>
+          <div class="fld"><label>Hasta (AAAA-MM)</label><input id="ar_fin" type="text" placeholder="YYYY-MM" value="${a?.fFin||""}" style="width:100%;box-sizing:border-box"></div>
+          <div class="fld" style="grid-column:span 2"><label>Notas</label><input id="ar_notas" value="${a?.notas||""}" placeholder="Motivo, destino, etc." style="width:100%;box-sizing:border-box"></div>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button onclick="document.getElementById('arriendo-overlay').remove()" style="padding:7px 16px;border:1px solid #e2e8f0;border-radius:6px;cursor:pointer;font-size:12px;color:#64748b">Cancelar</button>
+          <button onclick="guardarArriendo(${idx===null?"null":idx})" style="padding:7px 18px;background:#0891b2;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700">Guardar</button>
+        </div>
+      </div>
+    </div>`;
+  document.body.appendChild(ov);
+}
+function guardarArriendo(idx){
+  const arr=getArriendos();
+  const movil=document.getElementById("ar_movil").value.trim();
+  const proveedor=document.getElementById("ar_prov").value.trim();
+  const fIni=document.getElementById("ar_ini").value.trim();
+  const fFin=document.getElementById("ar_fin").value.trim();
+  const notas=document.getElementById("ar_notas").value.trim();
+  if(!fIni||!fFin){alert("Ingresa las fechas de inicio y fin (formato AAAA-MM).");return;}
+  // Normalizar fechas (2026-6 → 2026-06)
+  const normF=d=>{const p=d.split("-");return p.length===2&&p[1].length===1?p[0]+"-0"+p[1]:d;};
+  const obj={id:idx===null?Date.now():arr[idx].id, movil, cantidad:1, proveedor, fIni:normF(fIni), fFin:normF(fFin), notas, proyecto:document.getElementById("ar_proyecto")?.value?.trim()||""};
+  if(idx===null) arr.push(obj);
+  else arr[idx]=obj;
+  document.getElementById("arriendo-overlay")?.remove();
+  destroyCharts();render();
+}
+function eliminarArriendo(idx){
+  const arr=getArriendos();
+  if(!arr[idx])return;
+  if(!confirm(`¿Eliminar arriendo del móvil ${arr[idx].movil||"?"}?`))return;
+  arr.splice(idx,1);
   destroyCharts();render();
 }
 
@@ -2169,7 +3035,7 @@ function buildLeasingEvoChart(){
   }
 
   const BCLR={
-    "Banco Internacional":"#3b82f6","Banco BCI":"#ef4444","Banco BICE":"#22c55e",
+    "Banco Internacional":"#3b82f6","Banco BCI":"#ef4444","Banco BICE":"#10b981",
     "Banco de Chile":"#a855f7","Banco Santander":"#f97316","Los Cuatro":"#06b6d4",
     "Rio Branco":"#eab308","Banco Scotiabank":"#64748b"
   };
@@ -2189,17 +3055,40 @@ function buildLeasingEvoChart(){
     return "";
   });
 
-  const datasets=bankNames.map(b=>({
-    label:b,data:bankData[b],
-    backgroundColor:(BCLR[b]||"#94a3b8")+"50",
-    borderColor:BCLR[b]||"#94a3b8",
-    borderWidth:1.5,fill:true,tension:0.3,pointRadius:0,
-  }));
+  // Ordenar bancos por monto total (los más grandes abajo en el stack)
+  const bankOrder=[...bankNames].sort((a,b)=>
+    bankData[b].reduce((s,x)=>s+x,0)-bankData[a].reduce((s,x)=>s+x,0)
+  );
+
+  const ctxG=canvas.getContext("2d");
+  const gH=canvas.clientHeight||canvas.height||240;
+  const mkGradient=(hex)=>{
+    const g=ctxG.createLinearGradient(0,0,0,gH);
+    g.addColorStop(0,hex+"55");
+    g.addColorStop(1,hex+"08");
+    return g;
+  };
+
+  const datasets=bankOrder.map(b=>{
+    const col=BCLR[b]||"#94a3b8";
+    return {
+      label:b,data:bankData[b],
+      backgroundColor:mkGradient(col),
+      borderColor:col,
+      borderWidth:1.25,fill:true,tension:0.4,pointRadius:0,
+      pointHoverRadius:0,
+    };
+  });
+  // Línea TOTAL con punto destacado en el mes actual (índice 0)
   datasets.push({
     label:"TOTAL",data:totalLine,
     borderColor:"#0f172a",backgroundColor:"transparent",
-    borderWidth:3,fill:false,tension:0.3,pointRadius:0,order:0,
-    yAxisID:"y2",
+    borderWidth:2.5,fill:false,tension:0.4,
+    pointRadius:totalLine.map((_,i)=>i===0?5:0),
+    pointBackgroundColor:"#0f172a",
+    pointBorderColor:"#fff",pointBorderWidth:2,
+    pointHoverRadius:5,
+    order:0,yAxisID:"y2",
   });
 
   charts.leasingEvo=new Chart(canvas,{
@@ -2210,12 +3099,12 @@ function buildLeasingEvoChart(){
       interaction:{mode:"index",intersect:false},
       plugins:{legend:{display:false},tooltip:{enabled:false}},
       scales:{
-        x:{grid:{display:false},ticks:{font:{size:10},maxRotation:0}},
-        y:{stacked:true,grid:{color:"#f1f5f9"},
-           ticks:{font:{size:10},callback:v=>v>=1e6?"$"+(v/1e6).toFixed(1)+"M":v>=1e3?"$"+(v/1e3).toFixed(0)+"K":""}},
+        x:{grid:{display:false},border:{display:false},ticks:{font:{size:10},color:"#94a3b8",maxRotation:0}},
+        y:{stacked:true,grid:{color:"#f1f5f9",drawTicks:false},border:{display:false},
+           ticks:{font:{size:10},color:"#94a3b8",padding:8,callback:v=>v>=1e6?"$"+(v/1e6).toFixed(1)+"M":v>=1e3?"$"+(v/1e3).toFixed(0)+"K":""}},
         y2:{display:false,stacked:false,min:0},
       },
-      animation:{duration:600}
+      animation:{duration:700,easing:"easeOutQuart"}
     }
   });
 
@@ -2333,7 +3222,8 @@ function downloadUpdatedHTML(versionOverride){
   const arrays={
     FLEET_AMB, FLEET_4X4, FLEET_VAN, FLEET_AUTOS,
     REQS_AMB, REQS_4X4, REQS_VAN, REQS_AUTOS,
-    PIPELINE_AMB, PIPELINE_4X4, PIPELINE_VAN, PIPELINE_AUTOS
+    PIPELINE_AMB, PIPELINE_4X4, PIPELINE_VAN, PIPELINE_AUTOS,
+    ARRIENDOS_AMB, ARRIENDOS_4X4, ARRIENDOS_VAN, ARRIENDOS_AUTOS
   };
   Object.entries(arrays).forEach(([name,arr])=>{
     src=src.replace(
@@ -2551,18 +3441,98 @@ function initSortableTables(){
 function afterRender(){
   filterFlota();
   buildLeasingEvoChart();
+  // Muro de vencimientos de leasing
+  setTimeout(()=>{
+    const md=document.getElementById("muro-leasing-data");
+    if(md&&typeof Chart!=="undefined"){
+      const data=JSON.parse(md.dataset.muro||"[]");
+      const ctx=document.getElementById("chartMuroLeasing");
+      if(ctx&&data.length){
+        if(charts.muro){charts.muro.destroy();charts.muro=null;}
+        const gM=ctx.getContext("2d");
+        const gradBar=gM.createLinearGradient(0,0,0,ctx.clientHeight||150);
+        gradBar.addColorStop(0,"#16a34acc");
+        gradBar.addColorStop(1,"#16a34a55");
+        charts.muro=new Chart(ctx,{type:"bar",data:{
+          labels:data.map(d=>{
+            const [y,m]=d.q.split("-").map(Number);
+            // Mostrar solo enero y julio para no saturar el eje
+            if(m===1||m===7) return new Date(y,m-1,1).toLocaleDateString("es-CL",{month:"short",year:"2-digit"});
+            return "";
+          }),
+          datasets:[{
+            label:"Cuota mensual liberada",
+            data:data.map(d=>Math.round(d.cuota)),
+            backgroundColor:gradBar,borderColor:"#15803d",borderWidth:0,
+            borderRadius:4,borderSkipped:false,
+            maxBarThickness:22,
+          }]
+        },options:{responsive:true,maintainAspectRatio:false,
+          layout:{padding:{top:8}},
+          plugins:{legend:{display:false},tooltip:{
+            backgroundColor:"#0f172a",padding:10,cornerRadius:8,titleFont:{size:11},bodyFont:{size:11},
+            callbacks:{
+            title:items=>{const [y,m]=data[items[0].dataIndex].q.split("-").map(Number);return new Date(y,m-1,1).toLocaleDateString("es-CL",{month:"long",year:"numeric"});},
+            label:c=>{const d=data[c.dataIndex];if(d.unidades===0)return "Sin vencimientos";return [`$${(d.cuota/1e6).toFixed(1)}M/mes liberados`,`${d.unidades} unidad(es): ${d.moviles.join(", ")}`,`→ pasan a propiedad UCM`];}
+          }}},
+          scales:{y:{min:0,grid:{color:"#f1f5f9",drawTicks:false},border:{display:false},
+                     ticks:{font:{size:10},color:"#94a3b8",padding:8,maxTicksLimit:5,callback:v=>"$"+(v/1e6).toFixed(0)+"M"}},
+                  x:{grid:{display:false},border:{display:false},ticks:{font:{size:10},color:"#64748b"}}}}});
+      }
+    }
+  },180);
   setTimeout(initSortableTables, 200);
   setTimeout(()=>{
     // Panel chart
     const panelData=document.getElementById("panel-chart-data");
     if(panelData&&typeof Chart!=="undefined"){
-      const ctx=document.getElementById("chartCondicion");
-      if(ctx){
-        const labels=JSON.parse(panelData.dataset.labels||"[]");
-        const values=JSON.parse(panelData.dataset.values||"[]");
-        // Use COND_COLORS for consistent mapping
-        const colors=labels.map(l=>COND_COLORS[l]||"#94a3b8");
-        charts.condicion=new Chart(ctx,{type:"doughnut",data:{labels,datasets:[{data:values,backgroundColor:colors,borderWidth:2,borderColor:"#fff"}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"right",labels:{font:{size:11},boxWidth:12}}}}});
+      // Orden y colores fijos de estados para consistencia entre los 4 pies
+      const ESTADOS=["OPERATIVO","OP. CON OBS.","EN TALLER","FUERA SERVICIO","EN PRODUCCIÓN"];
+      const condCount=(arr)=>{
+        const d={OPERATIVO:0,"OP. CON OBS.":0,"EN TALLER":0,"FUERA SERVICIO":0,"EN PRODUCCIÓN":0};
+        arr.forEach(v=>{
+          if(v.cond==="EN PRODUCCION"){d["EN PRODUCCIÓN"]++;return;}
+          if(v.cond==="FUERA DE SERVICIO"||v.estado==="FUERA DE SERVICIO"){d["FUERA SERVICIO"]++;return;}
+          if(isNonOp(v.cond)){d["EN TALLER"]++;return;}
+          if(v.cond==="OPERATIVO CON OBS."){d["OP. CON OBS."]++;return;}
+          d.OPERATIVO++;
+        });
+        return d;
+      };
+      const mkPie=(canvasId,arr)=>{
+        const ctx=document.getElementById(canvasId);
+        if(!ctx)return;
+        const d=condCount(arr);
+        const labels=ESTADOS.filter(e=>d[e]>0);
+        const values=labels.map(e=>d[e]);
+        const colors=labels.map(e=>COND_COLORS[e]||"#94a3b8");
+        charts[canvasId]=new Chart(ctx,{type:"doughnut",data:{labels,datasets:[{data:values,backgroundColor:colors,borderWidth:2,borderColor:"#fff"}]},
+          options:{responsive:true,maintainAspectRatio:false,cutout:"55%",
+            plugins:{legend:{display:false},tooltip:{backgroundColor:"#0f172a",padding:8,cornerRadius:6,callbacks:{label:c=>`${c.label}: ${c.parsed}`}}}}});
+      };
+      // Modo "todas las flotas": 4 mini-pies + leyenda compartida
+      if(document.getElementById("pie-4x2")){
+        mkPie("pie-4x2",FLEET_AMB);
+        mkPie("pie-4x4",FLEET_4X4);
+        mkPie("pie-van",FLEET_VAN);
+        mkPie("pie-autos",FLEET_AUTOS);
+        // Leyenda compartida: todos los estados presentes en cualquier flota
+        const allV=[...FLEET_AMB,...FLEET_4X4,...FLEET_VAN,...FLEET_AUTOS];
+        const present=condCount(allV);
+        const leg=document.getElementById("estado-legend");
+        if(leg){
+          leg.innerHTML=ESTADOS.filter(e=>present[e]>0).map(e=>
+            `<span style="display:inline-flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:${COND_COLORS[e]||"#94a3b8"};display:inline-block"></span>${e}</span>`
+          ).join("");
+        }
+      } else {
+        const ctx=document.getElementById("chartCondicion");
+        if(ctx){
+          const labels=JSON.parse(panelData.dataset.labels||"[]");
+          const values=JSON.parse(panelData.dataset.values||"[]");
+          const colors=labels.map(l=>COND_COLORS[l]||"#94a3b8");
+          charts.condicion=new Chart(ctx,{type:"doughnut",data:{labels,datasets:[{data:values,backgroundColor:colors,borderWidth:2,borderColor:"#fff"}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"right",labels:{font:{size:11},boxWidth:12}}}}});
+        }
       }
     }
     // Pipeline compras chart
@@ -2644,15 +3614,29 @@ function afterRender(){
       const flota=JSON.parse(proyData.dataset.flota||"[]");
       const demanda=JSON.parse(proyData.dataset.demanda||"[]");
       const total=JSON.parse(proyData.dataset.total||"[]");
+      const arriendos=JSON.parse(proyData.dataset.arriendos||"[]"); // detalle por mes
+      const piso=JSON.parse(proyData.dataset.piso||"[]");
+      const techo=JSON.parse(proyData.dataset.techo||"[]");
       const c1=document.getElementById("chartProy");
       if(c1){
         if(charts.proy){charts.proy.destroy();charts.proy=null;}
         charts.proy=new Chart(c1,{type:"line",data:{labels,datasets:[
+          {label:"Escenario optimista (todo el pipeline)",data:techo,borderColor:"transparent",backgroundColor:"#f9731618",fill:"+1",pointRadius:0,tension:.3,borderWidth:0},
+          {label:"Escenario pesimista (solo adjudicado)",data:piso,borderColor:"#f9731640",backgroundColor:"transparent",fill:false,pointRadius:0,tension:.3,borderWidth:1,borderDash:[2,2]},
           {label:"Flota efectiva",data:flota,borderColor:"#1d4ed8",backgroundColor:"#dbeafe30",fill:true,tension:.3,pointRadius:2,borderWidth:2},
           {label:"Demanda contratos",data:demanda,borderColor:"#16a34a",backgroundColor:"transparent",fill:false,tension:.3,pointRadius:2,borderWidth:2},
           {label:"Demanda + pipeline",data:total,borderColor:"#f97316",backgroundColor:"transparent",fill:false,tension:.3,pointRadius:2,borderWidth:2,borderDash:[5,3]},
         ]},options:{responsive:true,maintainAspectRatio:false,
-          plugins:{legend:{display:false},tooltip:{mode:"index",intersect:false}},
+          plugins:{legend:{display:false},tooltip:{mode:"index",intersect:false,
+            callbacks:{
+              afterBody:function(items){
+                const i=items[0]?.dataIndex;
+                if(i==null) return "";
+                const det=arriendos[i];
+                return det?["","🚐 Arrendadas: "+det]:"";
+              }
+            }
+          }},
           scales:{y:{min:0,grid:{color:"#f1f5f9"},ticks:{font:{size:10}}},
                   x:{grid:{display:false},ticks:{font:{size:10},maxRotation:0}}}}});
       }
@@ -2801,7 +3785,7 @@ function syncReqsFromFleet(){
 render();
 </script>
 
-<div id="gtip" style="position: fixed; background: rgb(15, 23, 42); color: rgb(255, 255, 255); padding: 7px 12px; border-radius: 7px; font-size: 11px; pointer-events: none; z-index: 9999; max-width: 260px; line-height: 1.5; box-shadow: rgba(0, 0, 0, 0.3) 0px 4px 16px; display: none; left: 1088px; top: 581px;">Unidades que quedan libres al vencer contratos este mes. Pasa el cursor sobre el número para ver detalle por cliente.</div>
+<div id="gtip" style="position: fixed; background: rgb(15, 23, 42); color: rgb(255, 255, 255); padding: 7px 12px; border-radius: 7px; font-size: 11px; pointer-events: none; z-index: 9999; max-width: 260px; line-height: 1.5; box-shadow: rgba(0, 0, 0, 0.3) 0px 4px 16px; display: none; left: 654px; top: 232px;">Cantidad de contratos cuya fecha de término es exactamente este mes.</div>
 
 <!-- ── CHANGELOG MODAL ── -->
 <div id="cl-overlay" onclick="if(event.target===this)cerrarChangelog()" class="">
@@ -2813,9 +3797,141 @@ render();
     <div id="cl-body">
     <div class="cl-version">
       <div class="cl-ver-hdr">
+        <span class="cl-ver-num">v2.11.1</span>
+        <span class="cl-ver-date">2026-06-03</span>
+        <span class="cl-ver-badge latest">✓ Versión actual</span>
+      </div>
+      
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Ajuste de Pipeline</span>
+        </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 16px">
+    <div class="cl-version">
+      <div class="cl-ver-hdr">
+        <span class="cl-ver-num">v2.11.0</span>
+        <span class="cl-ver-date">2026-06-03</span>
+        
+      </div>
+      
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Concentración: las bases de rescate (RESCATE BASE 1/2/8) se agrupan bajo RESCATE UCM solo en esta vista. En Asignaciones siguen separadas por base.</span>
+        </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 16px">
+    <div class="cl-version">
+      <div class="cl-ver-hdr">
+        <span class="cl-ver-num">v2.10.0</span>
+        <span class="cl-ver-date">2026-06-03</span>
+        
+      </div>
+      
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Mejora estética del gráfico de evolución de cuota de leasing: rellenos con degradado por banco, áreas ordenadas por monto, línea TOTAL más refinada con punto destacado en el mes actual, ejes y grid más limpios, contenedor con fondo degradado.</span>
+        </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 16px">
+    <div class="cl-version">
+      <div class="cl-ver-hdr">
+        <span class="cl-ver-num">v2.9.0</span>
+        <span class="cl-ver-date">2026-06-02</span>
+        
+      </div>
+      
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Antigüedad de flota (hoja Flota): alerta informativa de unidades 5-6 años (envejeciendo) y 7+ años (para renovación), usando el año dinámico del último reporte.</span>
+        </div>
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Muro de vencimientos de leasing (hoja Leasing): gráfico de barras con la cuota mensual que se libera por trimestre. Al vencer, la unidad pasa a propiedad UCM.</span>
+        </div>
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Nueva pestaña Concentración: distribución de flota por cliente (barras) y concentración temporal de vencimientos por trimestre, con alertas de dependencia ≥20%.</span>
+        </div>
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Proyección: banda de sensibilidad del pipeline — área sombreada entre escenario pesimista (solo adjudicado) y optimista (todo el pipeline al 100%).</span>
+        </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 16px">
+    <div class="cl-version">
+      <div class="cl-ver-hdr">
+        <span class="cl-ver-num">v2.8.0</span>
+        <span class="cl-ver-date">2026-06-02</span>
+        
+      </div>
+      
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Asignaciones: los arriendos temporales asignados a un cliente se suman a sus unidades asignadas, pero solo si están activos en el mes actual. Badge 🚐 indica cuántas son arrendadas.</span>
+        </div>
+        <div class="cl-entry">
+          <span class="cl-dot fix"></span>
+          <span>getAsigReal se mantiene puro (sin arriendos) para no afectar el cálculo de la proyección a 24 meses.</span>
+        </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 16px">
+    <div class="cl-version">
+      <div class="cl-ver-hdr">
+        <span class="cl-ver-num">v2.7.1</span>
+        <span class="cl-ver-date">2026-06-02</span>
+        
+      </div>
+      
+        <div class="cl-entry">
+          <span class="cl-dot fix"></span>
+          <span>Arriendos: cada arriendo es ahora 1 unidad con su propio N° móvil. Se eliminó el campo cantidad — para arrendar varias, se crea un registro por vehículo.</span>
+        </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 16px">
+    <div class="cl-version">
+      <div class="cl-ver-hdr">
+        <span class="cl-ver-num">v2.7.0</span>
+        <span class="cl-ver-date">2026-06-02</span>
+        
+      </div>
+      
+        <div class="cl-entry">
+          <span class="cl-dot fix"></span>
+          <span>Arriendos: fechas normalizadas (2026-6 → 2026-06) — la línea azul de flota efectiva ahora sube correctamente durante el período del arriendo.</span>
+        </div>
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Arriendos: campo para asignar la unidad a un proyecto/cliente (dropdown con contratos existentes). Se muestra en tabla y tooltip de la curva.</span>
+        </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 16px">
+    <div class="cl-version">
+      <div class="cl-ver-hdr">
+        <span class="cl-ver-num">v2.6.0</span>
+        <span class="cl-ver-date">2026-06-02</span>
+        
+      </div>
+      
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Arriendos temporales: nueva sección en Proyección para registrar vehículos que un tercero nos entrega por un período acotado. Suman a la flota efectiva durante los meses activos.</span>
+        </div>
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Cada arriendo: N° móvil, proveedor, fecha desde/hasta, cantidad y notas. Array propio por flota (ARRIENDOS_AMB/4X4/VAN/AUTOS).</span>
+        </div>
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>El tooltip de la curva de proyección muestra las unidades arrendadas activas en cada mes.</span>
+        </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 16px">
+    <div class="cl-version">
+      <div class="cl-ver-hdr">
         <span class="cl-ver-num">v2.5.1</span>
         <span class="cl-ver-date">2026-06-02</span>
-        <span class="cl-ver-badge latest">✓ Versión actual</span>
+        
       </div>
       
         <div class="cl-entry">
@@ -3325,7 +4441,7 @@ render();
    y actualizar APP_VERSION.
 ──────────────────────────────────────────────────────────────── */
 let APP_VERSION = document.querySelector('meta[name="app-version"]')?.content || "2.0.5";
-const CHANGELOG = [{"version":"2.5.1","date":"2026-06-02","latest":true,"entries":[{"type":"feat","text":"Ajuste de Pipeline luego de reunion comercial 02/06"}]},{"version":"2.5.0","date":"2026-06-01","entries":[{"type":"feat","text":"Gráfico de leasing (evolución de cuota mensual) arranca dinámicamente en el mes del último reporte, igual que la proyección. Se mueve solo con el tiempo."}]},{"version":"2.4.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Proyección dinámica: gráfico y tabla arrancan en el mes del último reporte y avanzan 24 meses. Se mueve solo a medida que se cargan reportes."},{"type":"feat","text":"Reserva taller: mes actual usa unidades reales en taller; reserva estructural % aplica desde el mes siguiente en adelante."},{"type":"feat","text":"Pipeline: alerta visual en oportunidades con fecha de inicio vencida — para eliminar o actualizar."}]},{"version":"2.3.3","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Ajustes Asignaciones"}]},{"version":"2.3.2","date":"2026-06-01","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.3.1","date":"2026-06-01","entries":[{"type":"feat","text":"Ajuste de Asignaciones"}]},{"version":"2.3.0","date":"2026-06-01","entries":[{"type":"fix","text":"Carga xlsx: AUTOS ahora usa hoja 'Status Autos 2026' con match por patente — funciona aunque cambien los números de móvil."},{"type":"fix","text":"Carga xlsx: Rangers renumerados 501/503→37/39, Hilux 409→41, Sail 401-408→1-8 con patentes reales."},{"type":"feat","text":"Carga xlsx: updatedAutos incluido en el resumen de la carga."}]},{"version":"2.2.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Proyección: alerta de compra recomendada — indica 1ª o 2ª quincena del mes en que debe iniciarse la adquisición (45 días antes del déficit proyectado)."},{"type":"feat","text":"Alerta se colorea según urgencia: azul (tiempo suficiente), ámbar (menos de 30 días), rojo (plazo vencido)."}]},{"version":"2.1.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Versioning semántico: MAYOR.MENOR.PARCHE — código cambia MENOR, datos cambian PARCHE."},{"type":"fix","text":"Proyección: reserva estructural de taller calculada dinámicamente por mes según flota entregada."},{"type":"fix","text":"Flota tab: KPIs ahora usan isNonOp() correctamente — muestra taller y FS por separado."},{"type":"feat","text":"Taller: historial anual y ranking SHOP_HIST filtrados por flota activa. Todos los vehículos visibles aunque tengan 0 semanas."},{"type":"feat","text":"Panel: botón Ver todas las flotas consolida KPIs de todas las flotas."}]},{"version":"2.0.13","date":"2026-06-01","latest":false,"entries":[{"type":"fix","text":"Proyección: reserva estructural de taller calculada dinámicamente por mes — crece a medida que entran vehículos de producción según su fEntrega."},{"type":"fix","text":"Reserva estructural usa flota entregada en cada mes (total - FS - en producción ese mes), no el total fijo actual."}]},{"version":"2.0.12","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline"}]},{"version":"2.0.11","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de Asignación de Autos Comudef"},{"type":"feat","text":"Ingreso a Producción Hylux URT"}]},{"version":"2.0.10","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.9","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.8","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.7","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.6","date":"2026-05-22","entries":[{"type":"feat","text":"Mejoras en la Hoja Taller"},{"type":"feat","text":"Arreglo en el número de version"}]},{"version":"2.0.5","date":"2026-05-22","entries":[{"type":"feat","text":"Ajuste Pipeline"}]},{"version":"2.0.4","date":"2026-05-19","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.3","date":"2026-05-19","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.2","date":"2026-05-19","entries":[{"type":"feat","text":"Se arreglaron los Pipeline de Ambulancias 4x2 y 4x4"}]},{"version":"2.0.1","date":"2026-05-19","entries":[{"type":"feat","text":"Versionado automático al guardar: la versión se incrementa sola (patch), sin intervención manual."},{"type":"fix","text":"downloadUpdatedHTML: APP_VERSION y CHANGELOG ahora se serializan correctamente usando funciones arrow en replace() para evitar interpretación errónea de $ en JSON."},{"type":"feat","text":"Nombre del archivo incluye fecha y versión: UCM_Fleet_Intelligence_YYYYMMDD_vX-Y-Z.html."}]},{"version":"2.0.0","date":"2026-05-19","entries":[{"type":"feat","text":"Panel: botón 'Ver todas las flotas' consolida KPIs de AMB 4×2, 4×4, VAN y AUTOS en una sola vista."},{"type":"feat","text":"Diagnóstico: rediseñado como modal instantáneo (sin file picker). Muestra estado de librerías, condiciones por flota, estados sin REQS, semana cargada y versión."}]},{"version":"1.9.0","date":"2026-05-19","entries":[{"type":"feat","text":"Requerimientos temporales recurrentes por contrato: campo tempReqs con mesIni/mesFin/qty/motivo. Se aplica todos los años en ese rango de meses."},{"type":"feat","text":"getReqOp(r, ym): función helper que calcula requerimiento base + boosts temporales para un mes dado."},{"type":"feat","text":"Proyección: demandaContratos varía mes a mes según tempReqs activos — la línea azul ya no es plana."},{"type":"feat","text":"Asignaciones: columna Req. Operación muestra badge morado +N cuando hay boost temporal activo."},{"type":"fix","text":"Proyección: data-freed y data-net del gráfico Pipeline usan getReqOp y getAsigReal con variable local flt (no fl del scope externo)."}]},{"version":"1.8.1","date":"2026-05-19","entries":[{"type":"fix","text":"Asignaciones: REQS_AMB reconstruido con nombres exactos que vienen del xlsx (TRASLADO BÁSICO, CORP. LAS CONDES, etc.)."},{"type":"fix","text":"syncReqsFromFleet: purga entradas fantasma (asig=0 sin fFin futura) — resuelve duplicados por cambio de nombre en xlsx."},{"type":"fix","text":"REQS_4X4: TECHINT renombrado a TECHINT TOCOPILLA, BESS LIBRILLO agregado."},{"type":"fix","text":"editContrato: acepta clientes nuevos (string), agrega fIni, elimina campo asig (ahora es solo lectura desde FLEET)."}]},{"version":"1.8.0","date":"2026-05-18","entries":[{"type":"feat","text":"Asignaciones: tabla unificada — asig desde FLEET.estado (automático), metadata desde REQS (manual). Clientes nuevos detectados con badge NUEVO."},{"type":"feat","text":"buildTodasFilas() y getAsigReal(): helpers compartidos entre Asignaciones y Proyección."},{"type":"fix","text":"Proyección: demandaContratos y unidadesLibres usan getAsigReal en lugar de r.asig (que era siempre 0)."},{"type":"fix","text":"Carga de reporte: EN PRODUCCION y FUERA DE SERVICIO protegidos contra sobreescritura."},{"type":"fix","text":"Carga de reporte: normalizarCond() mapea variantes del xlsx (OPERATIVO C/OBS, NO OP, etc.)."},{"type":"feat","text":"Changelog incorporado: badge de versión en topbar abre historial de cambios."}]},{"version":"1.7.0","date":"2026-05-18","entries":[{"type":"feat","text":"Panel: botón 'Ver todas las flotas' en Leasing (ya existía)."},{"type":"feat","text":"4×4: contrato RESCATE RM (rol 4×2) para móvil 365."},{"type":"fix","text":"Capital remanente calculado dinámicamente con amortización lineal según fecha actual."}]},{"version":"1.6.0","date":"2026-05-15","entries":[{"type":"fix","text":"Proyección: pipeDemanda considera duración de cada oportunidad — línea naranja sube y baja correctamente."},{"type":"fix","text":"Ambulancias en pipeline y reserva taller redondeadas al entero más cercano."}]},{"version":"1.5.0","date":"2026-05-15","entries":[{"type":"data","text":"Datos leasing actualizados desde Detalle_Vehiculos_UCM_Emecar_11-May-26.xlsx."},{"type":"feat","text":"Cuotas PMT 1%/mes para móviles 241, 243, 245, 253, 255, 257. Los Cuatro y Rio Branco con datos completos."}]}];
+const CHANGELOG = [{"version":"2.14.0","date":"2026-06-03","latest":true,"entries":[{"type":"feat","text":"Panel \"Ver todas las flotas\": el gráfico Estado de flota ahora muestra 4 mini-doughnuts (uno por tipo de vehículo) con una leyenda de colores compartida, para comparar el estado de las flotas de un vistazo. En vista de flota individual se mantiene el pie único."}]},{"version":"2.13.0","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Muro de vencimientos de leasing ahora es mensual (antes trimestral): eje temporal continuo desde el mes del reporte hasta el último vencimiento, con barras delgadas. Etiquetas en ene/jul, mes completo en el tooltip. Muestra mejor la concentración real de vencimientos."}]},{"version":"2.12.0","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Muro de vencimientos de leasing rediseñado: barras más compactas (150px de alto) con relleno degradado sólido, esquinas redondeadas, ejes limpios y tooltip oscuro. Contenedor alineado al gráfico de evolución."},{"type":"feat","text":"Bloque de plan de renovación (hoja Flota) rediseñado como card al estilo de los KPIs, con pills sobrias y edad coloreada por severidad."}]},{"version":"2.11.1","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline"}]},{"version":"2.11.0","date":"2026-06-03","entries":[{"type":"feat","text":"Concentración: las bases de rescate (RESCATE BASE 1/2/8) se agrupan bajo RESCATE UCM solo en esta vista. En Asignaciones siguen separadas por base."}]},{"version":"2.10.0","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Mejora estética del gráfico de evolución de cuota de leasing: rellenos con degradado por banco, áreas ordenadas por monto, línea TOTAL más refinada con punto destacado en el mes actual, ejes y grid más limpios, contenedor con fondo degradado."}]},{"version":"2.9.0","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Antigüedad de flota (hoja Flota): alerta informativa de unidades 5-6 años (envejeciendo) y 7+ años (para renovación), usando el año dinámico del último reporte."},{"type":"feat","text":"Muro de vencimientos de leasing (hoja Leasing): gráfico de barras con la cuota mensual que se libera por trimestre. Al vencer, la unidad pasa a propiedad UCM."},{"type":"feat","text":"Nueva pestaña Concentración: distribución de flota por cliente (barras) y concentración temporal de vencimientos por trimestre, con alertas de dependencia ≥20%."},{"type":"feat","text":"Proyección: banda de sensibilidad del pipeline — área sombreada entre escenario pesimista (solo adjudicado) y optimista (todo el pipeline al 100%)."}]},{"version":"2.8.0","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Asignaciones: los arriendos temporales asignados a un cliente se suman a sus unidades asignadas, pero solo si están activos en el mes actual. Badge 🚐 indica cuántas son arrendadas."},{"type":"fix","text":"getAsigReal se mantiene puro (sin arriendos) para no afectar el cálculo de la proyección a 24 meses."}]},{"version":"2.7.1","date":"2026-06-02","latest":false,"entries":[{"type":"fix","text":"Arriendos: cada arriendo es ahora 1 unidad con su propio N° móvil. Se eliminó el campo cantidad — para arrendar varias, se crea un registro por vehículo."}]},{"version":"2.7.0","date":"2026-06-02","latest":false,"entries":[{"type":"fix","text":"Arriendos: fechas normalizadas (2026-6 → 2026-06) — la línea azul de flota efectiva ahora sube correctamente durante el período del arriendo."},{"type":"feat","text":"Arriendos: campo para asignar la unidad a un proyecto/cliente (dropdown con contratos existentes). Se muestra en tabla y tooltip de la curva."}]},{"version":"2.6.0","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Arriendos temporales: nueva sección en Proyección para registrar vehículos que un tercero nos entrega por un período acotado. Suman a la flota efectiva durante los meses activos."},{"type":"feat","text":"Cada arriendo: N° móvil, proveedor, fecha desde/hasta, cantidad y notas. Array propio por flota (ARRIENDOS_AMB/4X4/VAN/AUTOS)."},{"type":"feat","text":"El tooltip de la curva de proyección muestra las unidades arrendadas activas en cada mes."}]},{"version":"2.5.1","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline luego de reunion comercial 02/06"}]},{"version":"2.5.0","date":"2026-06-01","entries":[{"type":"feat","text":"Gráfico de leasing (evolución de cuota mensual) arranca dinámicamente en el mes del último reporte, igual que la proyección. Se mueve solo con el tiempo."}]},{"version":"2.4.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Proyección dinámica: gráfico y tabla arrancan en el mes del último reporte y avanzan 24 meses. Se mueve solo a medida que se cargan reportes."},{"type":"feat","text":"Reserva taller: mes actual usa unidades reales en taller; reserva estructural % aplica desde el mes siguiente en adelante."},{"type":"feat","text":"Pipeline: alerta visual en oportunidades con fecha de inicio vencida — para eliminar o actualizar."}]},{"version":"2.3.3","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Ajustes Asignaciones"}]},{"version":"2.3.2","date":"2026-06-01","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.3.1","date":"2026-06-01","entries":[{"type":"feat","text":"Ajuste de Asignaciones"}]},{"version":"2.3.0","date":"2026-06-01","entries":[{"type":"fix","text":"Carga xlsx: AUTOS ahora usa hoja 'Status Autos 2026' con match por patente — funciona aunque cambien los números de móvil."},{"type":"fix","text":"Carga xlsx: Rangers renumerados 501/503→37/39, Hilux 409→41, Sail 401-408→1-8 con patentes reales."},{"type":"feat","text":"Carga xlsx: updatedAutos incluido en el resumen de la carga."}]},{"version":"2.2.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Proyección: alerta de compra recomendada — indica 1ª o 2ª quincena del mes en que debe iniciarse la adquisición (45 días antes del déficit proyectado)."},{"type":"feat","text":"Alerta se colorea según urgencia: azul (tiempo suficiente), ámbar (menos de 30 días), rojo (plazo vencido)."}]},{"version":"2.1.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Versioning semántico: MAYOR.MENOR.PARCHE — código cambia MENOR, datos cambian PARCHE."},{"type":"fix","text":"Proyección: reserva estructural de taller calculada dinámicamente por mes según flota entregada."},{"type":"fix","text":"Flota tab: KPIs ahora usan isNonOp() correctamente — muestra taller y FS por separado."},{"type":"feat","text":"Taller: historial anual y ranking SHOP_HIST filtrados por flota activa. Todos los vehículos visibles aunque tengan 0 semanas."},{"type":"feat","text":"Panel: botón Ver todas las flotas consolida KPIs de todas las flotas."}]},{"version":"2.0.13","date":"2026-06-01","latest":false,"entries":[{"type":"fix","text":"Proyección: reserva estructural de taller calculada dinámicamente por mes — crece a medida que entran vehículos de producción según su fEntrega."},{"type":"fix","text":"Reserva estructural usa flota entregada en cada mes (total - FS - en producción ese mes), no el total fijo actual."}]},{"version":"2.0.12","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline"}]},{"version":"2.0.11","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de Asignación de Autos Comudef"},{"type":"feat","text":"Ingreso a Producción Hylux URT"}]},{"version":"2.0.10","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.9","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.8","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.7","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.6","date":"2026-05-22","entries":[{"type":"feat","text":"Mejoras en la Hoja Taller"},{"type":"feat","text":"Arreglo en el número de version"}]},{"version":"2.0.5","date":"2026-05-22","entries":[{"type":"feat","text":"Ajuste Pipeline"}]},{"version":"2.0.4","date":"2026-05-19","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.3","date":"2026-05-19","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.2","date":"2026-05-19","entries":[{"type":"feat","text":"Se arreglaron los Pipeline de Ambulancias 4x2 y 4x4"}]},{"version":"2.0.1","date":"2026-05-19","entries":[{"type":"feat","text":"Versionado automático al guardar: la versión se incrementa sola (patch), sin intervención manual."},{"type":"fix","text":"downloadUpdatedHTML: APP_VERSION y CHANGELOG ahora se serializan correctamente usando funciones arrow en replace() para evitar interpretación errónea de $ en JSON."},{"type":"feat","text":"Nombre del archivo incluye fecha y versión: UCM_Fleet_Intelligence_YYYYMMDD_vX-Y-Z.html."}]},{"version":"2.0.0","date":"2026-05-19","entries":[{"type":"feat","text":"Panel: botón 'Ver todas las flotas' consolida KPIs de AMB 4×2, 4×4, VAN y AUTOS en una sola vista."},{"type":"feat","text":"Diagnóstico: rediseñado como modal instantáneo (sin file picker). Muestra estado de librerías, condiciones por flota, estados sin REQS, semana cargada y versión."}]},{"version":"1.9.0","date":"2026-05-19","entries":[{"type":"feat","text":"Requerimientos temporales recurrentes por contrato: campo tempReqs con mesIni/mesFin/qty/motivo. Se aplica todos los años en ese rango de meses."},{"type":"feat","text":"getReqOp(r, ym): función helper que calcula requerimiento base + boosts temporales para un mes dado."},{"type":"feat","text":"Proyección: demandaContratos varía mes a mes según tempReqs activos — la línea azul ya no es plana."},{"type":"feat","text":"Asignaciones: columna Req. Operación muestra badge morado +N cuando hay boost temporal activo."},{"type":"fix","text":"Proyección: data-freed y data-net del gráfico Pipeline usan getReqOp y getAsigReal con variable local flt (no fl del scope externo)."}]},{"version":"1.8.1","date":"2026-05-19","entries":[{"type":"fix","text":"Asignaciones: REQS_AMB reconstruido con nombres exactos que vienen del xlsx (TRASLADO BÁSICO, CORP. LAS CONDES, etc.)."},{"type":"fix","text":"syncReqsFromFleet: purga entradas fantasma (asig=0 sin fFin futura) — resuelve duplicados por cambio de nombre en xlsx."},{"type":"fix","text":"REQS_4X4: TECHINT renombrado a TECHINT TOCOPILLA, BESS LIBRILLO agregado."},{"type":"fix","text":"editContrato: acepta clientes nuevos (string), agrega fIni, elimina campo asig (ahora es solo lectura desde FLEET)."}]},{"version":"1.8.0","date":"2026-05-18","entries":[{"type":"feat","text":"Asignaciones: tabla unificada — asig desde FLEET.estado (automático), metadata desde REQS (manual). Clientes nuevos detectados con badge NUEVO."},{"type":"feat","text":"buildTodasFilas() y getAsigReal(): helpers compartidos entre Asignaciones y Proyección."},{"type":"fix","text":"Proyección: demandaContratos y unidadesLibres usan getAsigReal en lugar de r.asig (que era siempre 0)."},{"type":"fix","text":"Carga de reporte: EN PRODUCCION y FUERA DE SERVICIO protegidos contra sobreescritura."},{"type":"fix","text":"Carga de reporte: normalizarCond() mapea variantes del xlsx (OPERATIVO C/OBS, NO OP, etc.)."},{"type":"feat","text":"Changelog incorporado: badge de versión en topbar abre historial de cambios."}]},{"version":"1.7.0","date":"2026-05-18","entries":[{"type":"feat","text":"Panel: botón 'Ver todas las flotas' en Leasing (ya existía)."},{"type":"feat","text":"4×4: contrato RESCATE RM (rol 4×2) para móvil 365."},{"type":"fix","text":"Capital remanente calculado dinámicamente con amortización lineal según fecha actual."}]},{"version":"1.6.0","date":"2026-05-15","entries":[{"type":"fix","text":"Proyección: pipeDemanda considera duración de cada oportunidad — línea naranja sube y baja correctamente."},{"type":"fix","text":"Ambulancias en pipeline y reserva taller redondeadas al entero más cercano."}]},{"version":"1.5.0","date":"2026-05-15","entries":[{"type":"data","text":"Datos leasing actualizados desde Detalle_Vehiculos_UCM_Emecar_11-May-26.xlsx."},{"type":"feat","text":"Cuotas PMT 1%/mes para móviles 241, 243, 245, 253, 255, 257. Los Cuatro y Rio Branco con datos completos."}]}];
 function initChangelog(){
   const badge=document.getElementById("ver-badge");
   if(badge) badge.textContent="v"+APP_VERSION;
