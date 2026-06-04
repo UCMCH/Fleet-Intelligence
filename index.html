@@ -1,6 +1,6 @@
 <html lang="es"><head>
 <meta charset="UTF-8">
-<meta name="app-version" content="2.14.0">
+<meta name="app-version" content="2.14.1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UCM Fleet Intelligence</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -174,7 +174,7 @@ tfoot td{padding:8px 10px;font-weight:700;border-right:1px solid var(--border)}
   <div id="topbar">
     <h1>🚑 UCM Fleet Intelligence</h1>
     <span class="sep">|</span>
-    <button id="ver-badge" onclick="abrirChangelog()">v2.11.1</button>
+    <button id="ver-badge" onclick="abrirChangelog()">v2.14.1</button>
     <div id="fleet-selector">
       <button class="fs-btn active" onclick="setFlota('4x2')">🚑 AMB 4×2</button>
       <button class="fs-btn" onclick="setFlota('4x4')">🚑 AMB 4×4</button>
@@ -193,867 +193,328 @@ tfoot td{padding:8px 10px;font-weight:700;border-right:1px solid var(--border)}
   <div id="tabs">
     <button class="tab-btn" onclick="setTab('panel')">📊 Panel</button>
     <button class="tab-btn" onclick="setTab('flota')">🚑 Flota</button>
-    <button class="tab-btn active" onclick="setTab('leasing')">🏦 Leasing</button>
+    <button class="tab-btn" onclick="setTab('leasing')">🏦 Leasing</button>
     <button class="tab-btn" onclick="setTab('asignaciones')">📋 Asignaciones</button>
     <button class="tab-btn" onclick="setTab('taller')">🔧 Taller <span id="taller-badge" class="tab-badge" style="display: inline;">6</span></button>
     <button class="tab-btn" onclick="setTab('proyeccion')">📈 Proyección</button>
-    <button class="tab-btn" onclick="setTab('pipeline')">🎯 Pipeline</button>
+    <button class="tab-btn active" onclick="setTab('pipeline')">🎯 Pipeline</button>
     <button class="tab-btn" onclick="setTab('concentracion')">⚖️ Concentración</button>
   </div>
   <div id="content">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">
-    <div>
-      <span style="font-size:14px;font-weight:700;color:var(--navy)">Leasing vigente — AMB 4×2</span>
-      <span style="font-size:11px;color:var(--text-s);margin-left:10px">50 contratos · ordenado por vencimiento</span>
-    </div>
-    <button onclick="toggleLeasingView()" style="padding:5px 14px;border-radius:20px;border:1px solid var(--blue);background:#fff;color:var(--blue);font-size:11px;font-weight:600;cursor:pointer">
-      Ver todas las flotas
-    </button>
-  </div>
-  <div class="alert alert-warn">📋 <strong>6 contratos próximos a vencer</strong>: Móvil 287 (Jun-2026), Móvil 259 (Sep-2026), Móvil 261 (Sep-2026), Móvil 241 (Oct-2026), Móvil 243 (Oct-2026), Móvil 267 (Nov-2026) — al término pasan a ser propiedad de UCM</div>
+  <div class="sec-hdr"><h3>Pipeline de Negocios — AMB 4×2</h3><span class="sub">Oportunidades activas</span></div>
   <div class="kpi-row">
-    <div class="kpi" style="border-left-color:#1d4ed8"><div class="lbl">Contratos activos</div><div class="val">50</div></div>
-    <div class="kpi" style="border-left-color:#7c3aed">
-    <div class="lbl">Cuota mensual total</div>
-    <div class="val" style="font-size:18px">$96.8M</div>
-    <div class="sub">46 informadas · 4 estimadas al 1%/m</div>
-  </div>
-    <div class="kpi" style="border-left-color:#d97706"><div class="lbl">Monto financiado total</div><div class="val" style="font-size:18px">$2.4B</div></div>
-    <div class="kpi" style="border-left-color:#16a34a"><div class="lbl">% Remanente / Financiado</div><div class="val" style="font-size:22px">32%</div><div class="sub">$772.2M de $2.4B</div></div>
-    <div class="kpi" style="border-left-color:#dc2626"><div class="lbl">Remanente K total</div><div class="val" style="font-size:18px">$772.2M</div><div class="sub">capital pendiente</div></div>
-  </div>
-
-  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:16px">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-      <span style="font-weight:700;font-size:13px;color:var(--navy)">🧱 Muro de vencimientos de leasing</span>
-      <span style="font-size:11px;color:var(--text-s)">Cuota mensual que se libera al vencer · la unidad pasa a propiedad UCM</span>
+    <div class="kpi" style="border-left-color:#7c3aed"><div class="lbl">Oportunidades</div><div class="val">15</div></div>
+    <div class="kpi" style="border-left-color:#1d4ed8"><div class="lbl">Demanda potencial</div><div class="val">32 und.</div></div>
+    <div class="kpi" style="border-left-color:#16a34a">
+      <div class="lbl">Demanda ponderada</div>
+      <div class="val">8 und.</div>
+      <div class="sub">8.1 → redondeado al entero</div>
     </div>
-    <div style="position:relative"><canvas id="chartMuroLeasing" style="width: 1850px; height: 180px; display: block; box-sizing: border-box;" width="1850" height="180"></canvas></div>
-    <div id="muro-leasing-data" data-muro="[{&quot;q&quot;:&quot;2026-Q2&quot;,&quot;cuota&quot;:2283548,&quot;unidades&quot;:1,&quot;moviles&quot;:[287]},{&quot;q&quot;:&quot;2026-Q3&quot;,&quot;cuota&quot;:4150843,&quot;unidades&quot;:2,&quot;moviles&quot;:[259,261]},{&quot;q&quot;:&quot;2026-Q4&quot;,&quot;cuota&quot;:25998575,&quot;unidades&quot;:12,&quot;moviles&quot;:[241,243,267,253,315,317,323,269,271,273,275,277]},{&quot;q&quot;:&quot;2027-Q1&quot;,&quot;cuota&quot;:27544394,&quot;unidades&quot;:11,&quot;moviles&quot;:[245,279,281,283,285,319,321,325,255,257,327]},{&quot;q&quot;:&quot;2027-Q3&quot;,&quot;cuota&quot;:13726512,&quot;unidades&quot;:6,&quot;moviles&quot;:[353,355,361,363,263,265]},{&quot;q&quot;:&quot;2028-Q1&quot;,&quot;cuota&quot;:3503585,&quot;unidades&quot;:2,&quot;moviles&quot;:[333,335]},{&quot;q&quot;:&quot;2028-Q2&quot;,&quot;cuota&quot;:18007716,&quot;unidades&quot;:11,&quot;moviles&quot;:[359,289,291,293,295,297,299,301,303,305,307]},{&quot;q&quot;:&quot;2028-Q3&quot;,&quot;cuota&quot;:1561375,&quot;unidades&quot;:1,&quot;moviles&quot;:[357]}]" style="display:none"></div>
   </div>
 
-  <div class="tbl-wrap">
-  <table>
+  <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
+    <button onclick="abrirFormPipeline(null)" style="padding:5px 14px;background:#1d4ed8;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600">+ Agregar oportunidad</button>
+  </div>
+  
+
+  <div id="pipeline-form-container"></div>
+
+  <div class="tbl-wrap"><table>
     <thead><tr>
-      
-      <th class="sortable" data-sort-dir="none">Prop.</th><th class="sortable" data-sort-dir="none">Móvil</th><th class="sortable" data-sort-dir="none">Marca / Modelo</th><th class="sortable" data-sort-dir="none">Patente</th>
-      <th class="sortable" data-sort-dir="none">Banco / Entidad</th><th class="sortable" data-sort-dir="none">F. Inicio</th><th class="sortable" data-sort-dir="none">F. Término</th><th class="sortable" data-sort-dir="none">M. Rest.</th>
-      <th style="text-align:right" class="sortable" data-sort-dir="none">Monto Financ.</th>
-      <th style="text-align:right" class="sortable" data-sort-dir="none">Cuota Mensual</th>
-      <th style="text-align:right" class="sortable" data-sort-dir="none">Remanente K</th>
+      <th class="sortable" data-sort-dir="none">Cliente</th>
+      <th class="sortable" data-sort-dir="none">Unidades</th>
+      <th class="sortable" data-sort-dir="none">Prob. %</th>
+      <th class="sortable" data-sort-dir="none">Dem. pond.</th>
+      <th class="sortable" data-sort-dir="none">F. Requerida</th>
+      <th class="sortable" data-sort-dir="none">Duración (m)</th>
       <th class="sortable" data-sort-dir="none">Estado</th>
+      <th class="sortable" data-sort-dir="none">Notas</th>
+      <th></th>
     </tr></thead>
     <tbody>
-    <tr style="background:#fff7ed">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>287</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">TGFC-87</td>
-        <td><strong>Banco BCI</strong></td>
-        <td>Ene-2024</td>
-        <td style="font-weight:700;color:#d97706">Jun-2026</td>
-        <td style="text-align:center;font-weight:700;color:#d97706">1</td>
-        <td style="text-align:right">$52.0M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$2.3M</span>
-        </td>
-        <td style="text-align:right">—</td>
-        <td><span class="badge b-amber">Próximo</span></td>
-      </tr><tr style="background:#fffbeb">
-        
-        <td><span class="badge b-purple">EMECAR</span></td>
-        <td><strong>259</strong></td>
-        <td>MAXUS DELIVER 9 L3H3</td>
-        <td style="font-family:monospace;font-size:11px">SFPS-34</td>
-        <td><strong>Banco BCI</strong></td>
-        <td>Jul-2023</td>
-        <td style="font-weight:700;color:#d97706">Sep-2026</td>
-        <td style="text-align:center;font-weight:700;color:#d97706">4</td>
-        <td style="text-align:right">$56.2M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$2.2M</span>
-        </td>
-        <td style="text-align:right">$4.4M</td>
-        <td><span class="badge b-amber">Próximo</span></td>
-      </tr><tr style="background:#fffbeb">
-        
-        <td><span class="badge b-purple">EMECAR</span></td>
-        <td><strong>261</strong></td>
-        <td>MAXUS DELIVER 9 L3H3</td>
-        <td style="font-family:monospace;font-size:11px">SXSV-36</td>
-        <td><strong>Banco Santander</strong></td>
-        <td>Ago-2023</td>
-        <td style="font-weight:700;color:#d97706">Sep-2026</td>
-        <td style="text-align:center;font-weight:700;color:#d97706">4</td>
-        <td style="text-align:right">$54.4M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$2.0M</span>
-        </td>
-        <td style="text-align:right">$4.4M</td>
-        <td><span class="badge b-amber">Próximo</span></td>
-      </tr><tr style="background:#fffbeb">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>241</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">RHRC-51</td>
-        <td><strong>Banco de Chile</strong></td>
-        <td>Oct-2021</td>
-        <td style="font-weight:700;color:#d97706">Oct-2026</td>
-        <td style="text-align:center;font-weight:700;color:#d97706">5</td>
-        <td style="text-align:right">$51.0M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.1M</span>
-        </td>
-        <td style="text-align:right">$3.4M</td>
-        <td><span class="badge b-amber">Próximo</span></td>
-      </tr><tr style="background:#fffbeb">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>243</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">RHTK-96</td>
-        <td><strong>Banco de Chile</strong></td>
-        <td>Oct-2021</td>
-        <td style="font-weight:700;color:#d97706">Oct-2026</td>
-        <td style="text-align:center;font-weight:700;color:#d97706">5</td>
-        <td style="text-align:right">$51.0M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.1M</span>
-        </td>
-        <td style="text-align:right">$3.4M</td>
-        <td><span class="badge b-amber">Próximo</span></td>
-      </tr><tr style="background:#fffbeb">
-        
-        <td><span class="badge b-purple">EMECAR</span></td>
-        <td><strong>267</strong></td>
-        <td>MAXUS DELIVER 9 L3H3</td>
-        <td style="font-family:monospace;font-size:11px">TBYY-96</td>
-        <td><strong>Banco Santander</strong></td>
-        <td>Oct-2023</td>
-        <td style="font-weight:700;color:#d97706">Nov-2026</td>
-        <td style="text-align:center;font-weight:700;color:#d97706">6</td>
-        <td style="text-align:right">$50.0M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.8M</span>
-        </td>
-        <td style="text-align:right">$6.8M</td>
-        <td><span class="badge b-amber">Próximo</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>253</strong></td>
-        <td>MERCEDES BENZ SPRINTER</td>
-        <td style="font-family:monospace;font-size:11px">SKRG-89</td>
-        <td><strong>Banco Internacional</strong></td>
-        <td>Nov-2022</td>
-        <td style="font-weight:400;color:inherit">Dic-2026</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">7</td>
-        <td style="text-align:right">$75.6M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$2.0M</span>
-        </td>
-        <td style="text-align:right">$9.3M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>315</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">TFTT-58</td>
-        <td><strong>Banco BICE</strong></td>
-        <td>Nov-2024</td>
-        <td style="font-weight:400;color:inherit">Dic-2026</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">7</td>
-        <td style="text-align:right">$50.4M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$4.5M</span>
-        </td>
-        <td style="text-align:right">$12.1M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>317</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">TFTT-59</td>
-        <td><strong>Banco BICE</strong></td>
-        <td>Nov-2024</td>
-        <td style="font-weight:400;color:inherit">Dic-2026</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">7</td>
-        <td style="text-align:right">$50.4M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$4.5M</span>
-        </td>
-        <td style="text-align:right">$12.1M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>323</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">TYSZ-69</td>
-        <td><strong>Banco de Chile</strong></td>
-        <td>Dic-2024</td>
-        <td style="font-weight:400;color:inherit">Dic-2026</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">7</td>
-        <td style="text-align:right">$46.4M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$2.8M</span>
-        </td>
-        <td style="text-align:right">$11.6M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-purple">EMECAR</span></td>
-        <td><strong>269</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">SHXL-67</td>
-        <td><strong>Banco Internacional</strong></td>
-        <td>Dic-2023</td>
-        <td style="font-weight:400;color:inherit">Dic-2026</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">7</td>
-        <td style="text-align:right">$43.2M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
-        </td>
-        <td style="text-align:right">$7.2M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-purple">EMECAR</span></td>
-        <td><strong>271</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">SHXL-68</td>
-        <td><strong>Banco Internacional</strong></td>
-        <td>Dic-2023</td>
-        <td style="font-weight:400;color:inherit">Dic-2026</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">7</td>
-        <td style="text-align:right">$43.2M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
-        </td>
-        <td style="text-align:right">$7.2M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-purple">EMECAR</span></td>
-        <td><strong>273</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">SHXL-69</td>
-        <td><strong>Banco Internacional</strong></td>
-        <td>Dic-2023</td>
-        <td style="font-weight:400;color:inherit">Dic-2026</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">7</td>
-        <td style="text-align:right">$43.2M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
-        </td>
-        <td style="text-align:right">$7.2M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-purple">EMECAR</span></td>
-        <td><strong>275</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">SHXL-93</td>
-        <td><strong>Banco Internacional</strong></td>
-        <td>Dic-2023</td>
-        <td style="font-weight:400;color:inherit">Dic-2026</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">7</td>
-        <td style="text-align:right">$43.2M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
-        </td>
-        <td style="text-align:right">$7.2M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-purple">EMECAR</span></td>
-        <td><strong>277</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">SHXL-95</td>
-        <td><strong>Banco Internacional</strong></td>
-        <td>Dic-2023</td>
-        <td style="font-weight:400;color:inherit">Dic-2026</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">7</td>
-        <td style="text-align:right">$43.2M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
-        </td>
-        <td style="text-align:right">$7.2M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>245</strong></td>
-        <td>MERCEDES BENZ SPRINTER</td>
-        <td style="font-family:monospace;font-size:11px">RRTF-70</td>
-        <td><strong>Banco de Chile</strong></td>
-        <td>Dic-2021</td>
-        <td style="font-weight:400;color:inherit">Ene-2027</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">8</td>
-        <td style="text-align:right">$61.8M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.7M</span>
-        </td>
-        <td style="text-align:right">$7.1M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>279</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">TFJT-44</td>
-        <td><strong>Los Cuatro</strong></td>
-        <td>Ene-2024</td>
-        <td style="font-weight:400;color:inherit">Ene-2027</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">8</td>
-        <td style="text-align:right">$62.5M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$2.1M</span>
-        </td>
-        <td style="text-align:right">$12.2M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>281</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">TFJT-45</td>
-        <td><strong>Los Cuatro</strong></td>
-        <td>Ene-2024</td>
-        <td style="font-weight:400;color:inherit">Ene-2027</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">8</td>
-        <td style="text-align:right">$62.5M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$2.1M</span>
-        </td>
-        <td style="text-align:right">$12.2M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>283</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">TFJT-46</td>
-        <td><strong>Los Cuatro</strong></td>
-        <td>Ene-2024</td>
-        <td style="font-weight:400;color:inherit">Ene-2027</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">8</td>
-        <td style="text-align:right">$62.5M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$2.1M</span>
-        </td>
-        <td style="text-align:right">$12.2M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>285</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">TFJT-47</td>
-        <td><strong>Los Cuatro</strong></td>
-        <td>Ene-2024</td>
-        <td style="font-weight:400;color:inherit">Ene-2027</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">8</td>
-        <td style="text-align:right">$62.5M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$2.1M</span>
-        </td>
-        <td style="text-align:right">$12.2M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>319</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">TYLF-60</td>
-        <td><strong>Banco BICE</strong></td>
-        <td>Dic-2024</td>
-        <td style="font-weight:400;color:inherit">Ene-2027</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">8</td>
-        <td style="text-align:right">$46.4M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$4.5M</span>
-        </td>
-        <td style="text-align:right">$13.0M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>321</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">TYLF-83</td>
-        <td><strong>Banco BICE</strong></td>
-        <td>Dic-2024</td>
-        <td style="font-weight:400;color:inherit">Ene-2027</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">8</td>
-        <td style="text-align:right">$46.4M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$4.5M</span>
-        </td>
-        <td style="text-align:right">$13.0M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>325</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">TZHF-19</td>
-        <td><strong>Banco BCI</strong></td>
-        <td>Ene-2025</td>
-        <td style="font-weight:400;color:inherit">Feb-2027</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">9</td>
-        <td style="text-align:right">$46.4M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$2.5M</span>
-        </td>
-        <td style="text-align:right">$14.8M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>255</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">SSHC-51</td>
-        <td><strong>Banco Internacional</strong></td>
-        <td>Mar-2023</td>
-        <td style="font-weight:400;color:inherit">Mar-2027</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">10</td>
-        <td style="text-align:right">$65.8M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.7M</span>
-        </td>
-        <td style="text-align:right">$12.3M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>257</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">SSGZ-39</td>
-        <td><strong>Banco Internacional</strong></td>
-        <td>Mar-2023</td>
-        <td style="font-weight:400;color:inherit">Mar-2027</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">10</td>
-        <td style="text-align:right">$65.8M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.7M</span>
-        </td>
-        <td style="text-align:right">$12.3M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>327</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">TZVJ-71</td>
-        <td><strong>Banco BCI</strong></td>
-        <td>Ene-2025</td>
-        <td style="font-weight:400;color:inherit">Mar-2027</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">10</td>
-        <td style="text-align:right">$46.4M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$2.6M</span>
-        </td>
-        <td style="text-align:right">$16.1M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>353</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">VKKJ92</td>
-        <td><strong>Rio Branco</strong></td>
-        <td>Sep-2025</td>
-        <td style="font-weight:400;color:inherit">Sep-2027</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">16</td>
-        <td style="text-align:right">$56.3M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$2.6M</span>
-        </td>
-        <td style="text-align:right">$35.2M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>355</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">VKKJ96</td>
-        <td><strong>Rio Branco</strong></td>
-        <td>Sep-2025</td>
-        <td style="font-weight:400;color:inherit">Sep-2027</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">16</td>
-        <td style="text-align:right">$56.3M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$2.6M</span>
-        </td>
-        <td style="text-align:right">$35.2M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>361</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">VDSD-36</td>
-        <td><strong>Rio Branco</strong></td>
-        <td>Sep-2025</td>
-        <td style="font-weight:400;color:inherit">Sep-2027</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">16</td>
-        <td style="text-align:right">$56.3M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$2.6M</span>
-        </td>
-        <td style="text-align:right">$35.2M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>363</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">VDSD-37</td>
-        <td><strong>Rio Branco</strong></td>
-        <td>Sep-2025</td>
-        <td style="font-weight:400;color:inherit">Sep-2027</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">16</td>
-        <td style="text-align:right">$56.3M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$2.6M</span>
-        </td>
-        <td style="text-align:right">$35.2M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-purple">EMECAR</span></td>
-        <td><strong>263</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">SHXL-79</td>
-        <td><strong>Banco BCI</strong></td>
-        <td>Jul-2023</td>
-        <td style="font-weight:400;color:inherit">Sep-2027</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">16</td>
-        <td style="text-align:right">$50.7M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
-        </td>
-        <td style="text-align:right">$15.2M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-purple">EMECAR</span></td>
-        <td><strong>265</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">SHXL-94</td>
-        <td><strong>Banco BCI</strong></td>
-        <td>Jul-2023</td>
-        <td style="font-weight:400;color:inherit">Sep-2027</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">16</td>
-        <td style="text-align:right">$50.7M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
-        </td>
-        <td style="text-align:right">$15.2M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>333</strong></td>
-        <td>FORD TRANSIT 2.0 AT</td>
-        <td style="font-family:monospace;font-size:11px">RKXL74</td>
-        <td><strong>Banco BCI</strong></td>
-        <td>Feb-2025</td>
-        <td style="font-weight:400;color:inherit">Mar-2028</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">22</td>
-        <td style="text-align:right">$44.5M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.9M</span>
-        </td>
-        <td style="text-align:right">$25.2M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>335</strong></td>
-        <td>FORD TRANSIT 2.0 AT</td>
-        <td style="font-family:monospace;font-size:11px">RKXL75</td>
-        <td><strong>Banco BCI</strong></td>
-        <td>Feb-2025</td>
-        <td style="font-weight:400;color:inherit">Mar-2028</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">22</td>
-        <td style="text-align:right">$44.5M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
-        </td>
-        <td style="text-align:right">$25.2M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>359</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">VLPF-65</td>
-        <td><strong>Banco BCI</strong></td>
-        <td>Sep-2025</td>
-        <td style="font-weight:400;color:inherit">Abr-2028</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">23</td>
-        <td style="text-align:right">$51.0M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$2.3M</span>
-        </td>
-        <td style="text-align:right">$36.2M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-purple">EMECAR</span></td>
-        <td><strong>289</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">TJTL-96</td>
-        <td><strong>Banco BCI</strong></td>
-        <td>Mar-2024</td>
-        <td style="font-weight:400;color:inherit">Abr-2028</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">23</td>
-        <td style="text-align:right">$52.5M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
-        </td>
-        <td style="text-align:right">$23.6M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-purple">EMECAR</span></td>
-        <td><strong>291</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">TJTL-98</td>
-        <td><strong>Banco BCI</strong></td>
-        <td>Mar-2024</td>
-        <td style="font-weight:400;color:inherit">Abr-2028</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">23</td>
-        <td style="text-align:right">$52.5M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
-        </td>
-        <td style="text-align:right">$23.6M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-purple">EMECAR</span></td>
-        <td><strong>293</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">TKJH-97</td>
-        <td><strong>Banco Internacional</strong></td>
-        <td>Abr-2024</td>
-        <td style="font-weight:400;color:inherit">May-2028</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">24</td>
-        <td style="text-align:right">$52.0M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
-        </td>
-        <td style="text-align:right">$24.4M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-purple">EMECAR</span></td>
-        <td><strong>295</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">TKJH-99</td>
-        <td><strong>Banco Internacional</strong></td>
-        <td>Abr-2024</td>
-        <td style="font-weight:400;color:inherit">May-2028</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">24</td>
-        <td style="text-align:right">$52.0M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
-        </td>
-        <td style="text-align:right">$24.4M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-purple">EMECAR</span></td>
-        <td><strong>297</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">TKXZ-70</td>
-        <td><strong>Banco Internacional</strong></td>
-        <td>Abr-2024</td>
-        <td style="font-weight:400;color:inherit">May-2028</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">24</td>
-        <td style="text-align:right">$49.8M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
-        </td>
-        <td style="text-align:right">$23.4M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-purple">EMECAR</span></td>
-        <td><strong>299</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">TKXZ-71</td>
-        <td><strong>Banco Internacional</strong></td>
-        <td>Abr-2024</td>
-        <td style="font-weight:400;color:inherit">May-2028</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">24</td>
-        <td style="text-align:right">$49.8M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
-        </td>
-        <td style="text-align:right">$23.4M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-purple">EMECAR</span></td>
-        <td><strong>301</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">TKYL-33</td>
-        <td><strong>Banco Internacional</strong></td>
-        <td>Abr-2024</td>
-        <td style="font-weight:400;color:inherit">May-2028</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">24</td>
-        <td style="text-align:right">$49.8M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.5M</span>
-        </td>
-        <td style="text-align:right">$23.4M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-purple">EMECAR</span></td>
-        <td><strong>303</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">TKYL-34</td>
-        <td><strong>Banco Internacional</strong></td>
-        <td>Abr-2024</td>
-        <td style="font-weight:400;color:inherit">May-2028</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">24</td>
-        <td style="text-align:right">$49.8M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.5M</span>
-        </td>
-        <td style="text-align:right">$23.4M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-purple">EMECAR</span></td>
-        <td><strong>305</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">TKYL-35</td>
-        <td><strong>Banco Internacional</strong></td>
-        <td>Abr-2024</td>
-        <td style="font-weight:400;color:inherit">May-2028</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">24</td>
-        <td style="text-align:right">$49.8M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
-        </td>
-        <td style="text-align:right">$23.4M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-purple">EMECAR</span></td>
-        <td><strong>307</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">TKYP-59</td>
-        <td><strong>Banco Internacional</strong></td>
-        <td>Abr-2024</td>
-        <td style="font-weight:400;color:inherit">May-2028</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">24</td>
-        <td style="text-align:right">$49.8M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
-        </td>
-        <td style="text-align:right">$23.4M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>357</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px">VKZC-10</td>
-        <td><strong>Banco BICE</strong></td>
-        <td>Sep-2025</td>
-        <td style="font-weight:400;color:inherit">Sep-2028</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">28</td>
-        <td style="text-align:right">$50.1M</td>
-        <td style="text-align:right">
-          <span style="color:#1d4ed8;font-weight:700">$1.6M</span>
-        </td>
-        <td style="text-align:right">$37.6M</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>371</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px"></td>
-        <td><strong>Banco Santander</strong></td>
-        <td>—</td>
-        <td style="font-weight:400;color:inherit">—</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">999</td>
-        <td style="text-align:right">—</td>
-        <td style="text-align:right">
-          <span style="color:#94a3b8">—</span>
-        </td>
-        <td style="text-align:right">—</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>373</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px"></td>
-        <td><strong>Banco Santander</strong></td>
-        <td>—</td>
-        <td style="font-weight:400;color:inherit">—</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">999</td>
-        <td style="text-align:right">—</td>
-        <td style="text-align:right">
-          <span style="color:#94a3b8">—</span>
-        </td>
-        <td style="text-align:right">—</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>375</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px"></td>
-        <td><strong>Banco Santander</strong></td>
-        <td>—</td>
-        <td style="font-weight:400;color:inherit">—</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">999</td>
-        <td style="text-align:right">—</td>
-        <td style="text-align:right">
-          <span style="color:#94a3b8">—</span>
-        </td>
-        <td style="text-align:right">—</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr><tr style="background:">
-        
-        <td><span class="badge b-blue">UCM</span></td>
-        <td><strong>381</strong></td>
-        <td>FORD TRANSIT 2.2</td>
-        <td style="font-family:monospace;font-size:11px"></td>
-        <td><strong>Banco Santander</strong></td>
-        <td>—</td>
-        <td style="font-weight:400;color:inherit">—</td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">999</td>
-        <td style="text-align:right">—</td>
-        <td style="text-align:right">
-          <span style="color:#94a3b8">—</span>
-        </td>
-        <td style="text-align:right">—</td>
-        <td><span class="badge b-green">Vigente</span></td>
-      </tr>
+    <tr style="">
+      <td><strong>VERONA</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:80px;max-width:100px;height:8px;border-radius:4px;background:#16a34a"></div>
+          <strong style="color:#16a34a">80%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.8</td>
+      <td style="text-align:center">Jun-2026</td>
+      <td style="text-align:center">24 m</td>
+      <td><span class="badge b-green">Negociación avanzada</span></td>
+      <td class="wrap">Empresa RM</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(0)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(0)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>FUSAT RANCAGUA</strong></td>
+      <td style="text-align:center;font-weight:700">3</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:10px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">10%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.3</td>
+      <td style="text-align:center">Jul-2026</td>
+      <td style="text-align:center">36 m</td>
+      <td><span class="badge b-grey">Prospecto</span></td>
+      <td class="wrap">Licitación hospital público</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(1)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(1)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>GRUPO COSTANERA-LITORAL</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:20px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">20%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.2</td>
+      <td style="text-align:center">Jul-2026</td>
+      <td style="text-align:center">36 m</td>
+      <td><span class="badge b-grey">Negociación</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(2)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(2)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>MUNICIPALIDAD LAS CONDES</strong></td>
+      <td style="text-align:center;font-weight:700">4</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:50px;max-width:100px;height:8px;border-radius:4px;background:#d97706"></div>
+          <strong style="color:#d97706">50%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">2.0</td>
+      <td style="text-align:center">Ago-2026</td>
+      <td style="text-align:center">24 m</td>
+      <td><span class="badge b-amber">Propuesta</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(3)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(3)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>COSAYACH</strong></td>
+      <td style="text-align:center;font-weight:700">3</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:10px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">10%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.3</td>
+      <td style="text-align:center">Ago-2026</td>
+      <td style="text-align:center">24 m</td>
+      <td><span class="badge b-grey">Negociación</span></td>
+      <td class="wrap">Compañía de Salitre y Yodo</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(4)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(4)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>SACYR RUTA 68</strong></td>
+      <td style="text-align:center;font-weight:700">3</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:20px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">20%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.6</td>
+      <td style="text-align:center">Jul-2026</td>
+      <td style="text-align:center">36 m</td>
+      <td><span class="badge b-grey">Propuesta</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(5)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(5)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>SACYR COPIAPO</strong></td>
+      <td style="text-align:center;font-weight:700">2</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:10px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">10%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.2</td>
+      <td style="text-align:center">Ago-2026</td>
+      <td style="text-align:center">36 m</td>
+      <td><span class="badge b-grey">Prospecto</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(6)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(6)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>SACYR RUTA DEL ALGARROBO</strong></td>
+      <td style="text-align:center;font-weight:700">2</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:10px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">10%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.2</td>
+      <td style="text-align:center">Jul-2026</td>
+      <td style="text-align:center">36 m</td>
+      <td><span class="badge b-grey">Prospecto</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(7)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(7)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>HOSPITAL SAN JUAN DE DIOS</strong></td>
+      <td style="text-align:center;font-weight:700">7</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:25px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">25%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">1.8</td>
+      <td style="text-align:center">Ago-2026</td>
+      <td style="text-align:center">12 m</td>
+      <td><span class="badge b-grey">Prospecto</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(8)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(8)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>RUTA MINERA</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:20px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">20%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.2</td>
+      <td style="text-align:center">Jul-2026</td>
+      <td style="text-align:center">36 m</td>
+      <td><span class="badge b-grey">Propuesta</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(9)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(9)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>AES LOS CURUROS</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:20px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">20%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.2</td>
+      <td style="text-align:center">Jul-2026</td>
+      <td style="text-align:center">12 m</td>
+      <td><span class="badge b-grey">Prospecto</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(10)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(10)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>PAMPA CAMARONES</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:30px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">30%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.3</td>
+      <td style="text-align:center">Ago-2026</td>
+      <td style="text-align:center">24 m</td>
+      <td><span class="badge b-grey">Prospecto</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(11)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(11)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>HOSPITAL LUIS TISNE</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:50px;max-width:100px;height:8px;border-radius:4px;background:#d97706"></div>
+          <strong style="color:#d97706">50%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.5</td>
+      <td style="text-align:center">Jun-2026</td>
+      <td style="text-align:center">3 m</td>
+      <td><span class="badge b-amber">Prospecto</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(12)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(12)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>POWER CHINA</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:20px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">20%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.2</td>
+      <td style="text-align:center">Jul-2026</td>
+      <td style="text-align:center">12 m</td>
+      <td><span class="badge b-grey">Prospecto</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(13)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(13)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>TANGHUA - CHILLAN VIEJO</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:30px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">30%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.3</td>
+      <td style="text-align:center">Ago-2026</td>
+      <td style="text-align:center">12 m</td>
+      <td><span class="badge b-grey">Propuesta</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(14)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(14)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr>
     </tbody>
-    <tfoot><tr>
-      <td colspan="8"><strong>TOTAL</strong></td>
-      <td style="text-align:right"><strong>$2.4B</strong></td>
-      <td style="text-align:right;color:#1d4ed8"><strong>$96.8M</strong></td>
-      <td style="text-align:right"><strong>$772.2M</strong></td>
-      <td></td>
-    </tr></tfoot>
-  </table></div></div>
+  </table></div>
+
+  <!-- Chart: unidades a comprar por mes -->
+  
+  <div class="card" style="margin-top:18px">
+    <div class="card-title">Unidades a adquirir por mes — según demanda ponderada del pipeline</div>
+    <div style="font-size:11px;color:#64748b;margin-bottom:10px">Azul = demanda bruta pipeline · Verde = se liberan de contratos · Naranja/Rojo = compra neta recomendada (demanda − liberadas). Pasa el cursor para ver detalle de cada mes.</div>
+    <div class="chart-wrap" style="height:220px"><canvas id="chartPipelineCompras" width="1854" height="220" style="display: block; box-sizing: border-box; height: 220px; width: 1854px;"></canvas></div>
+    <div id="pipeline-chart-data" data-labels="[&quot;jun. 26&quot;,&quot;jul. 26&quot;,&quot;ago. 26&quot;,&quot;sep. 26&quot;,&quot;oct. 26&quot;,&quot;nov. 26&quot;,&quot;dic. 26&quot;,&quot;ene. 27&quot;,&quot;feb. 27&quot;,&quot;mar. 27&quot;,&quot;abr. 27&quot;,&quot;may. 27&quot;,&quot;jun. 27&quot;,&quot;jul. 27&quot;,&quot;ago. 27&quot;,&quot;sep. 27&quot;,&quot;oct. 27&quot;,&quot;nov. 27&quot;,&quot;dic. 27&quot;,&quot;ene. 28&quot;,&quot;feb. 28&quot;,&quot;mar. 28&quot;,&quot;abr. 28&quot;,&quot;may. 28&quot;]" data-demand="[2,2,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]" data-freed="[0,0,12,0,0,0,0,5,0,0,0,0,1,0,0,0,0,0,0,22,0,0,0,0]" data-net="[2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]" style="display:none"></div>
+  </div>
+  </div>
 </div>
 <script>
 /* ═══════════════════════════════════════════
@@ -1089,8 +550,8 @@ const SHOP_HIST = {
 };
 
 /* ── PIPELINE ── */
-const PIPELINE_AMB = [{"id":1779221533119,"cliente":"VERONA","qty":1,"prob":80,"fReq":"2026-06","duracion":24,"estado":"Negociación avanzada","notas":"Empresa RM"},{"id":1778860204201,"cliente":"FUSAT RANCAGUA","qty":3,"prob":10,"fReq":"2026-07","duracion":36,"estado":"Prospecto","notas":"Licitación hospital público"},{"id":1779221586045,"cliente":"GRUPO COSTANERA-LITORAL","qty":1,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Negociación","notas":""},{"id":1778860117802,"cliente":"MUNICIPALIDAD LAS CONDES","qty":4,"prob":50,"fReq":"2026-08","duracion":24,"estado":"Propuesta","notas":""},{"id":1779221610895,"cliente":"COSAYACH","qty":3,"prob":10,"fReq":"2026-08","duracion":24,"estado":"Negociación","notas":"Compañía de Salitre y Yodo"},{"id":1779221740465,"cliente":"SACYR RUTA 68","qty":3,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Propuesta","notas":""},{"id":1779221698227,"cliente":"SACYR COPIAPO","qty":2,"prob":10,"fReq":"2026-08","duracion":36,"estado":"Prospecto","notas":""},{"id":1779221756425,"cliente":"SACYR RUTA DEL ALGARROBO","qty":2,"prob":10,"fReq":"2026-07","duracion":36,"estado":"Prospecto","notas":""},{"id":1778853574689,"cliente":"HOSPITAL SAN JUAN DE DIOS","qty":7,"prob":25,"fReq":"2026-08","duracion":12,"estado":"Prospecto","notas":""},{"id":1779221825771,"cliente":"RUTA MINERA","qty":1,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Propuesta","notas":""},{"id":1779221892251,"cliente":"AES LOS CURUROS","qty":1,"prob":20,"fReq":"2026-07","duracion":12,"estado":"Prospecto","notas":""},{"id":1779221926783,"cliente":"PAMPA CAMARONES","qty":1,"prob":30,"fReq":"2026-08","duracion":24,"estado":"Prospecto","notas":""},{"id":1779810489850,"cliente":"HOSPITAL LUIS TISNE","qty":1,"prob":50,"fReq":"2026-06","duracion":3,"estado":"Prospecto","notas":""},{"id":1780431100670,"cliente":"POWER CHINA","qty":1,"prob":10,"fReq":"2026-07","duracion":12,"estado":"Prospecto","notas":""}];
-const PIPELINE_4X4 = [{"id":1779221985448,"cliente":"ACCIONA","qty":1,"prob":90,"fReq":"2026-06","duracion":24,"estado":"Adjudicado","notas":"Proyecto minero norte"},{"id":1779222043677,"cliente":"ANDEX MINERALS","qty":1,"prob":20,"fReq":"2026-08","duracion":12,"estado":"Negociación","notas":""},{"id":1780430730098,"cliente":"OBSERVATORIO AURA","qty":2,"prob":20,"fReq":"2026-08","duracion":36,"estado":"Propuesta","notas":""},{"id":1779222087238,"cliente":"COLLAHUASI","qty":1,"prob":5,"fReq":"2026-08","duracion":12,"estado":"Prospecto","notas":""},{"id":1780430646202,"cliente":"GRUPO COX - II REGION","qty":1,"prob":10,"fReq":"2026-06","duracion":12,"estado":"Prospecto","notas":""},{"id":1780430653929,"cliente":"GRUPO COX - III REGION","qty":1,"prob":5,"fReq":"2026-08","duracion":12,"estado":"Propuesta","notas":""},{"id":1779810411023,"cliente":"GRUPO COX - I REGION","qty":1,"prob":60,"fReq":"2026-06","duracion":12,"estado":"Propuesta","notas":""},{"id":1780323078531,"cliente":"METLEN","qty":1,"prob":10,"fReq":"2026-06","duracion":12,"estado":"Propuesta","notas":""},{"id":1780430752282,"cliente":"BESALCO - ZALDIVAR","qty":3,"prob":10,"fReq":"2026-08","duracion":12,"estado":"Propuesta","notas":"Puede ser que sean 4x2 y no 4x4"}];
+const PIPELINE_AMB = [{"id":1779221533119,"cliente":"VERONA","qty":1,"prob":80,"fReq":"2026-06","duracion":24,"estado":"Negociación avanzada","notas":"Empresa RM"},{"id":1778860204201,"cliente":"FUSAT RANCAGUA","qty":3,"prob":10,"fReq":"2026-07","duracion":36,"estado":"Prospecto","notas":"Licitación hospital público"},{"id":1779221586045,"cliente":"GRUPO COSTANERA-LITORAL","qty":1,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Negociación","notas":""},{"id":1778860117802,"cliente":"MUNICIPALIDAD LAS CONDES","qty":4,"prob":50,"fReq":"2026-08","duracion":24,"estado":"Propuesta","notas":""},{"id":1779221610895,"cliente":"COSAYACH","qty":3,"prob":10,"fReq":"2026-08","duracion":24,"estado":"Negociación","notas":"Compañía de Salitre y Yodo"},{"id":1779221740465,"cliente":"SACYR RUTA 68","qty":3,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Propuesta","notas":""},{"id":1779221698227,"cliente":"SACYR COPIAPO","qty":2,"prob":10,"fReq":"2026-08","duracion":36,"estado":"Prospecto","notas":""},{"id":1779221756425,"cliente":"SACYR RUTA DEL ALGARROBO","qty":2,"prob":10,"fReq":"2026-07","duracion":36,"estado":"Prospecto","notas":""},{"id":1778853574689,"cliente":"HOSPITAL SAN JUAN DE DIOS","qty":7,"prob":25,"fReq":"2026-08","duracion":12,"estado":"Prospecto","notas":""},{"id":1779221825771,"cliente":"RUTA MINERA","qty":1,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Propuesta","notas":""},{"id":1779221892251,"cliente":"AES LOS CURUROS","qty":1,"prob":20,"fReq":"2026-07","duracion":12,"estado":"Prospecto","notas":""},{"id":1779221926783,"cliente":"PAMPA CAMARONES","qty":1,"prob":30,"fReq":"2026-08","duracion":24,"estado":"Prospecto","notas":""},{"id":1779810489850,"cliente":"HOSPITAL LUIS TISNE","qty":1,"prob":50,"fReq":"2026-06","duracion":3,"estado":"Prospecto","notas":""},{"id":1780579452866,"cliente":"POWER CHINA","qty":1,"prob":20,"fReq":"2026-07","duracion":12,"estado":"Prospecto","notas":""},{"id":1780579421526,"cliente":"TANGHUA - CHILLAN VIEJO","qty":1,"prob":30,"fReq":"2026-08","duracion":12,"estado":"Propuesta","notas":""}];
+const PIPELINE_4X4 = [{"id":1780579304620,"cliente":"ACCIONA","qty":1,"prob":90,"fReq":"2026-06","duracion":24,"estado":"Negociación avanzada","notas":""},{"id":1780579109042,"cliente":"ANDEX MINERALS","qty":1,"prob":20,"fReq":"2026-08","duracion":12,"estado":"Negociación","notas":"Solo Arriendo Fierro"},{"id":1780430730098,"cliente":"OBSERVATORIO AURA","qty":2,"prob":20,"fReq":"2026-08","duracion":36,"estado":"Propuesta","notas":""},{"id":1779222087238,"cliente":"COLLAHUASI","qty":1,"prob":5,"fReq":"2026-08","duracion":12,"estado":"Prospecto","notas":""},{"id":1780579223439,"cliente":"GRUPO COX - ANTOFAGASTA","qty":1,"prob":95,"fReq":"2026-06","duracion":12,"estado":"Negociación avanzada","notas":""},{"id":1780579241919,"cliente":"GRUPO COX - EL SALVADOR","qty":1,"prob":95,"fReq":"2026-08","duracion":12,"estado":"Negociación avanzada","notas":""},{"id":1780579272114,"cliente":"GRUPO COX - VICTORIA","qty":1,"prob":20,"fReq":"2026-08","duracion":12,"estado":"Propuesta","notas":""},{"id":1780323078531,"cliente":"METLEN","qty":1,"prob":10,"fReq":"2026-06","duracion":12,"estado":"Propuesta","notas":""},{"id":1780430752282,"cliente":"BESALCO - ZALDIVAR","qty":3,"prob":10,"fReq":"2026-08","duracion":12,"estado":"Propuesta","notas":"Puede ser que sean 4x2 y no 4x4"}];
 const PIPELINE_VAN = [];
 
 /* ══════════════════════════════════════
@@ -3797,9 +3258,65 @@ render();
     <div id="cl-body">
     <div class="cl-version">
       <div class="cl-ver-hdr">
+        <span class="cl-ver-num">v2.14.1</span>
+        <span class="cl-ver-date">2026-06-04</span>
+        <span class="cl-ver-badge latest">✓ Versión actual</span>
+      </div>
+      
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Ajuste Pipeline</span>
+        </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 16px">
+    <div class="cl-version">
+      <div class="cl-ver-hdr">
+        <span class="cl-ver-num">v2.14.0</span>
+        <span class="cl-ver-date">2026-06-03</span>
+        
+      </div>
+      
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Panel "Ver todas las flotas": el gráfico Estado de flota ahora muestra 4 mini-doughnuts (uno por tipo de vehículo) con una leyenda de colores compartida, para comparar el estado de las flotas de un vistazo. En vista de flota individual se mantiene el pie único.</span>
+        </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 16px">
+    <div class="cl-version">
+      <div class="cl-ver-hdr">
+        <span class="cl-ver-num">v2.13.0</span>
+        <span class="cl-ver-date">2026-06-03</span>
+        
+      </div>
+      
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Muro de vencimientos de leasing ahora es mensual (antes trimestral): eje temporal continuo desde el mes del reporte hasta el último vencimiento, con barras delgadas. Etiquetas en ene/jul, mes completo en el tooltip. Muestra mejor la concentración real de vencimientos.</span>
+        </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 16px">
+    <div class="cl-version">
+      <div class="cl-ver-hdr">
+        <span class="cl-ver-num">v2.12.0</span>
+        <span class="cl-ver-date">2026-06-03</span>
+        
+      </div>
+      
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Muro de vencimientos de leasing rediseñado: barras más compactas (150px de alto) con relleno degradado sólido, esquinas redondeadas, ejes limpios y tooltip oscuro. Contenedor alineado al gráfico de evolución.</span>
+        </div>
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Bloque de plan de renovación (hoja Flota) rediseñado como card al estilo de los KPIs, con pills sobrias y edad coloreada por severidad.</span>
+        </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 16px">
+    <div class="cl-version">
+      <div class="cl-ver-hdr">
         <span class="cl-ver-num">v2.11.1</span>
         <span class="cl-ver-date">2026-06-03</span>
-        <span class="cl-ver-badge latest">✓ Versión actual</span>
+        
       </div>
       
         <div class="cl-entry">
@@ -4441,7 +3958,7 @@ render();
    y actualizar APP_VERSION.
 ──────────────────────────────────────────────────────────────── */
 let APP_VERSION = document.querySelector('meta[name="app-version"]')?.content || "2.0.5";
-const CHANGELOG = [{"version":"2.14.0","date":"2026-06-03","latest":true,"entries":[{"type":"feat","text":"Panel \"Ver todas las flotas\": el gráfico Estado de flota ahora muestra 4 mini-doughnuts (uno por tipo de vehículo) con una leyenda de colores compartida, para comparar el estado de las flotas de un vistazo. En vista de flota individual se mantiene el pie único."}]},{"version":"2.13.0","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Muro de vencimientos de leasing ahora es mensual (antes trimestral): eje temporal continuo desde el mes del reporte hasta el último vencimiento, con barras delgadas. Etiquetas en ene/jul, mes completo en el tooltip. Muestra mejor la concentración real de vencimientos."}]},{"version":"2.12.0","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Muro de vencimientos de leasing rediseñado: barras más compactas (150px de alto) con relleno degradado sólido, esquinas redondeadas, ejes limpios y tooltip oscuro. Contenedor alineado al gráfico de evolución."},{"type":"feat","text":"Bloque de plan de renovación (hoja Flota) rediseñado como card al estilo de los KPIs, con pills sobrias y edad coloreada por severidad."}]},{"version":"2.11.1","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline"}]},{"version":"2.11.0","date":"2026-06-03","entries":[{"type":"feat","text":"Concentración: las bases de rescate (RESCATE BASE 1/2/8) se agrupan bajo RESCATE UCM solo en esta vista. En Asignaciones siguen separadas por base."}]},{"version":"2.10.0","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Mejora estética del gráfico de evolución de cuota de leasing: rellenos con degradado por banco, áreas ordenadas por monto, línea TOTAL más refinada con punto destacado en el mes actual, ejes y grid más limpios, contenedor con fondo degradado."}]},{"version":"2.9.0","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Antigüedad de flota (hoja Flota): alerta informativa de unidades 5-6 años (envejeciendo) y 7+ años (para renovación), usando el año dinámico del último reporte."},{"type":"feat","text":"Muro de vencimientos de leasing (hoja Leasing): gráfico de barras con la cuota mensual que se libera por trimestre. Al vencer, la unidad pasa a propiedad UCM."},{"type":"feat","text":"Nueva pestaña Concentración: distribución de flota por cliente (barras) y concentración temporal de vencimientos por trimestre, con alertas de dependencia ≥20%."},{"type":"feat","text":"Proyección: banda de sensibilidad del pipeline — área sombreada entre escenario pesimista (solo adjudicado) y optimista (todo el pipeline al 100%)."}]},{"version":"2.8.0","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Asignaciones: los arriendos temporales asignados a un cliente se suman a sus unidades asignadas, pero solo si están activos en el mes actual. Badge 🚐 indica cuántas son arrendadas."},{"type":"fix","text":"getAsigReal se mantiene puro (sin arriendos) para no afectar el cálculo de la proyección a 24 meses."}]},{"version":"2.7.1","date":"2026-06-02","latest":false,"entries":[{"type":"fix","text":"Arriendos: cada arriendo es ahora 1 unidad con su propio N° móvil. Se eliminó el campo cantidad — para arrendar varias, se crea un registro por vehículo."}]},{"version":"2.7.0","date":"2026-06-02","latest":false,"entries":[{"type":"fix","text":"Arriendos: fechas normalizadas (2026-6 → 2026-06) — la línea azul de flota efectiva ahora sube correctamente durante el período del arriendo."},{"type":"feat","text":"Arriendos: campo para asignar la unidad a un proyecto/cliente (dropdown con contratos existentes). Se muestra en tabla y tooltip de la curva."}]},{"version":"2.6.0","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Arriendos temporales: nueva sección en Proyección para registrar vehículos que un tercero nos entrega por un período acotado. Suman a la flota efectiva durante los meses activos."},{"type":"feat","text":"Cada arriendo: N° móvil, proveedor, fecha desde/hasta, cantidad y notas. Array propio por flota (ARRIENDOS_AMB/4X4/VAN/AUTOS)."},{"type":"feat","text":"El tooltip de la curva de proyección muestra las unidades arrendadas activas en cada mes."}]},{"version":"2.5.1","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline luego de reunion comercial 02/06"}]},{"version":"2.5.0","date":"2026-06-01","entries":[{"type":"feat","text":"Gráfico de leasing (evolución de cuota mensual) arranca dinámicamente en el mes del último reporte, igual que la proyección. Se mueve solo con el tiempo."}]},{"version":"2.4.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Proyección dinámica: gráfico y tabla arrancan en el mes del último reporte y avanzan 24 meses. Se mueve solo a medida que se cargan reportes."},{"type":"feat","text":"Reserva taller: mes actual usa unidades reales en taller; reserva estructural % aplica desde el mes siguiente en adelante."},{"type":"feat","text":"Pipeline: alerta visual en oportunidades con fecha de inicio vencida — para eliminar o actualizar."}]},{"version":"2.3.3","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Ajustes Asignaciones"}]},{"version":"2.3.2","date":"2026-06-01","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.3.1","date":"2026-06-01","entries":[{"type":"feat","text":"Ajuste de Asignaciones"}]},{"version":"2.3.0","date":"2026-06-01","entries":[{"type":"fix","text":"Carga xlsx: AUTOS ahora usa hoja 'Status Autos 2026' con match por patente — funciona aunque cambien los números de móvil."},{"type":"fix","text":"Carga xlsx: Rangers renumerados 501/503→37/39, Hilux 409→41, Sail 401-408→1-8 con patentes reales."},{"type":"feat","text":"Carga xlsx: updatedAutos incluido en el resumen de la carga."}]},{"version":"2.2.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Proyección: alerta de compra recomendada — indica 1ª o 2ª quincena del mes en que debe iniciarse la adquisición (45 días antes del déficit proyectado)."},{"type":"feat","text":"Alerta se colorea según urgencia: azul (tiempo suficiente), ámbar (menos de 30 días), rojo (plazo vencido)."}]},{"version":"2.1.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Versioning semántico: MAYOR.MENOR.PARCHE — código cambia MENOR, datos cambian PARCHE."},{"type":"fix","text":"Proyección: reserva estructural de taller calculada dinámicamente por mes según flota entregada."},{"type":"fix","text":"Flota tab: KPIs ahora usan isNonOp() correctamente — muestra taller y FS por separado."},{"type":"feat","text":"Taller: historial anual y ranking SHOP_HIST filtrados por flota activa. Todos los vehículos visibles aunque tengan 0 semanas."},{"type":"feat","text":"Panel: botón Ver todas las flotas consolida KPIs de todas las flotas."}]},{"version":"2.0.13","date":"2026-06-01","latest":false,"entries":[{"type":"fix","text":"Proyección: reserva estructural de taller calculada dinámicamente por mes — crece a medida que entran vehículos de producción según su fEntrega."},{"type":"fix","text":"Reserva estructural usa flota entregada en cada mes (total - FS - en producción ese mes), no el total fijo actual."}]},{"version":"2.0.12","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline"}]},{"version":"2.0.11","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de Asignación de Autos Comudef"},{"type":"feat","text":"Ingreso a Producción Hylux URT"}]},{"version":"2.0.10","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.9","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.8","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.7","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.6","date":"2026-05-22","entries":[{"type":"feat","text":"Mejoras en la Hoja Taller"},{"type":"feat","text":"Arreglo en el número de version"}]},{"version":"2.0.5","date":"2026-05-22","entries":[{"type":"feat","text":"Ajuste Pipeline"}]},{"version":"2.0.4","date":"2026-05-19","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.3","date":"2026-05-19","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.2","date":"2026-05-19","entries":[{"type":"feat","text":"Se arreglaron los Pipeline de Ambulancias 4x2 y 4x4"}]},{"version":"2.0.1","date":"2026-05-19","entries":[{"type":"feat","text":"Versionado automático al guardar: la versión se incrementa sola (patch), sin intervención manual."},{"type":"fix","text":"downloadUpdatedHTML: APP_VERSION y CHANGELOG ahora se serializan correctamente usando funciones arrow en replace() para evitar interpretación errónea de $ en JSON."},{"type":"feat","text":"Nombre del archivo incluye fecha y versión: UCM_Fleet_Intelligence_YYYYMMDD_vX-Y-Z.html."}]},{"version":"2.0.0","date":"2026-05-19","entries":[{"type":"feat","text":"Panel: botón 'Ver todas las flotas' consolida KPIs de AMB 4×2, 4×4, VAN y AUTOS en una sola vista."},{"type":"feat","text":"Diagnóstico: rediseñado como modal instantáneo (sin file picker). Muestra estado de librerías, condiciones por flota, estados sin REQS, semana cargada y versión."}]},{"version":"1.9.0","date":"2026-05-19","entries":[{"type":"feat","text":"Requerimientos temporales recurrentes por contrato: campo tempReqs con mesIni/mesFin/qty/motivo. Se aplica todos los años en ese rango de meses."},{"type":"feat","text":"getReqOp(r, ym): función helper que calcula requerimiento base + boosts temporales para un mes dado."},{"type":"feat","text":"Proyección: demandaContratos varía mes a mes según tempReqs activos — la línea azul ya no es plana."},{"type":"feat","text":"Asignaciones: columna Req. Operación muestra badge morado +N cuando hay boost temporal activo."},{"type":"fix","text":"Proyección: data-freed y data-net del gráfico Pipeline usan getReqOp y getAsigReal con variable local flt (no fl del scope externo)."}]},{"version":"1.8.1","date":"2026-05-19","entries":[{"type":"fix","text":"Asignaciones: REQS_AMB reconstruido con nombres exactos que vienen del xlsx (TRASLADO BÁSICO, CORP. LAS CONDES, etc.)."},{"type":"fix","text":"syncReqsFromFleet: purga entradas fantasma (asig=0 sin fFin futura) — resuelve duplicados por cambio de nombre en xlsx."},{"type":"fix","text":"REQS_4X4: TECHINT renombrado a TECHINT TOCOPILLA, BESS LIBRILLO agregado."},{"type":"fix","text":"editContrato: acepta clientes nuevos (string), agrega fIni, elimina campo asig (ahora es solo lectura desde FLEET)."}]},{"version":"1.8.0","date":"2026-05-18","entries":[{"type":"feat","text":"Asignaciones: tabla unificada — asig desde FLEET.estado (automático), metadata desde REQS (manual). Clientes nuevos detectados con badge NUEVO."},{"type":"feat","text":"buildTodasFilas() y getAsigReal(): helpers compartidos entre Asignaciones y Proyección."},{"type":"fix","text":"Proyección: demandaContratos y unidadesLibres usan getAsigReal en lugar de r.asig (que era siempre 0)."},{"type":"fix","text":"Carga de reporte: EN PRODUCCION y FUERA DE SERVICIO protegidos contra sobreescritura."},{"type":"fix","text":"Carga de reporte: normalizarCond() mapea variantes del xlsx (OPERATIVO C/OBS, NO OP, etc.)."},{"type":"feat","text":"Changelog incorporado: badge de versión en topbar abre historial de cambios."}]},{"version":"1.7.0","date":"2026-05-18","entries":[{"type":"feat","text":"Panel: botón 'Ver todas las flotas' en Leasing (ya existía)."},{"type":"feat","text":"4×4: contrato RESCATE RM (rol 4×2) para móvil 365."},{"type":"fix","text":"Capital remanente calculado dinámicamente con amortización lineal según fecha actual."}]},{"version":"1.6.0","date":"2026-05-15","entries":[{"type":"fix","text":"Proyección: pipeDemanda considera duración de cada oportunidad — línea naranja sube y baja correctamente."},{"type":"fix","text":"Ambulancias en pipeline y reserva taller redondeadas al entero más cercano."}]},{"version":"1.5.0","date":"2026-05-15","entries":[{"type":"data","text":"Datos leasing actualizados desde Detalle_Vehiculos_UCM_Emecar_11-May-26.xlsx."},{"type":"feat","text":"Cuotas PMT 1%/mes para móviles 241, 243, 245, 253, 255, 257. Los Cuatro y Rio Branco con datos completos."}]}];
+const CHANGELOG = [{"version":"2.14.1","date":"2026-06-04","latest":true,"entries":[{"type":"feat","text":"Ajuste Pipeline"}]},{"version":"2.14.0","date":"2026-06-03","entries":[{"type":"feat","text":"Panel \"Ver todas las flotas\": el gráfico Estado de flota ahora muestra 4 mini-doughnuts (uno por tipo de vehículo) con una leyenda de colores compartida, para comparar el estado de las flotas de un vistazo. En vista de flota individual se mantiene el pie único."}]},{"version":"2.13.0","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Muro de vencimientos de leasing ahora es mensual (antes trimestral): eje temporal continuo desde el mes del reporte hasta el último vencimiento, con barras delgadas. Etiquetas en ene/jul, mes completo en el tooltip. Muestra mejor la concentración real de vencimientos."}]},{"version":"2.12.0","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Muro de vencimientos de leasing rediseñado: barras más compactas (150px de alto) con relleno degradado sólido, esquinas redondeadas, ejes limpios y tooltip oscuro. Contenedor alineado al gráfico de evolución."},{"type":"feat","text":"Bloque de plan de renovación (hoja Flota) rediseñado como card al estilo de los KPIs, con pills sobrias y edad coloreada por severidad."}]},{"version":"2.11.1","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline"}]},{"version":"2.11.0","date":"2026-06-03","entries":[{"type":"feat","text":"Concentración: las bases de rescate (RESCATE BASE 1/2/8) se agrupan bajo RESCATE UCM solo en esta vista. En Asignaciones siguen separadas por base."}]},{"version":"2.10.0","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Mejora estética del gráfico de evolución de cuota de leasing: rellenos con degradado por banco, áreas ordenadas por monto, línea TOTAL más refinada con punto destacado en el mes actual, ejes y grid más limpios, contenedor con fondo degradado."}]},{"version":"2.9.0","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Antigüedad de flota (hoja Flota): alerta informativa de unidades 5-6 años (envejeciendo) y 7+ años (para renovación), usando el año dinámico del último reporte."},{"type":"feat","text":"Muro de vencimientos de leasing (hoja Leasing): gráfico de barras con la cuota mensual que se libera por trimestre. Al vencer, la unidad pasa a propiedad UCM."},{"type":"feat","text":"Nueva pestaña Concentración: distribución de flota por cliente (barras) y concentración temporal de vencimientos por trimestre, con alertas de dependencia ≥20%."},{"type":"feat","text":"Proyección: banda de sensibilidad del pipeline — área sombreada entre escenario pesimista (solo adjudicado) y optimista (todo el pipeline al 100%)."}]},{"version":"2.8.0","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Asignaciones: los arriendos temporales asignados a un cliente se suman a sus unidades asignadas, pero solo si están activos en el mes actual. Badge 🚐 indica cuántas son arrendadas."},{"type":"fix","text":"getAsigReal se mantiene puro (sin arriendos) para no afectar el cálculo de la proyección a 24 meses."}]},{"version":"2.7.1","date":"2026-06-02","latest":false,"entries":[{"type":"fix","text":"Arriendos: cada arriendo es ahora 1 unidad con su propio N° móvil. Se eliminó el campo cantidad — para arrendar varias, se crea un registro por vehículo."}]},{"version":"2.7.0","date":"2026-06-02","latest":false,"entries":[{"type":"fix","text":"Arriendos: fechas normalizadas (2026-6 → 2026-06) — la línea azul de flota efectiva ahora sube correctamente durante el período del arriendo."},{"type":"feat","text":"Arriendos: campo para asignar la unidad a un proyecto/cliente (dropdown con contratos existentes). Se muestra en tabla y tooltip de la curva."}]},{"version":"2.6.0","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Arriendos temporales: nueva sección en Proyección para registrar vehículos que un tercero nos entrega por un período acotado. Suman a la flota efectiva durante los meses activos."},{"type":"feat","text":"Cada arriendo: N° móvil, proveedor, fecha desde/hasta, cantidad y notas. Array propio por flota (ARRIENDOS_AMB/4X4/VAN/AUTOS)."},{"type":"feat","text":"El tooltip de la curva de proyección muestra las unidades arrendadas activas en cada mes."}]},{"version":"2.5.1","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline luego de reunion comercial 02/06"}]},{"version":"2.5.0","date":"2026-06-01","entries":[{"type":"feat","text":"Gráfico de leasing (evolución de cuota mensual) arranca dinámicamente en el mes del último reporte, igual que la proyección. Se mueve solo con el tiempo."}]},{"version":"2.4.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Proyección dinámica: gráfico y tabla arrancan en el mes del último reporte y avanzan 24 meses. Se mueve solo a medida que se cargan reportes."},{"type":"feat","text":"Reserva taller: mes actual usa unidades reales en taller; reserva estructural % aplica desde el mes siguiente en adelante."},{"type":"feat","text":"Pipeline: alerta visual en oportunidades con fecha de inicio vencida — para eliminar o actualizar."}]},{"version":"2.3.3","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Ajustes Asignaciones"}]},{"version":"2.3.2","date":"2026-06-01","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.3.1","date":"2026-06-01","entries":[{"type":"feat","text":"Ajuste de Asignaciones"}]},{"version":"2.3.0","date":"2026-06-01","entries":[{"type":"fix","text":"Carga xlsx: AUTOS ahora usa hoja 'Status Autos 2026' con match por patente — funciona aunque cambien los números de móvil."},{"type":"fix","text":"Carga xlsx: Rangers renumerados 501/503→37/39, Hilux 409→41, Sail 401-408→1-8 con patentes reales."},{"type":"feat","text":"Carga xlsx: updatedAutos incluido en el resumen de la carga."}]},{"version":"2.2.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Proyección: alerta de compra recomendada — indica 1ª o 2ª quincena del mes en que debe iniciarse la adquisición (45 días antes del déficit proyectado)."},{"type":"feat","text":"Alerta se colorea según urgencia: azul (tiempo suficiente), ámbar (menos de 30 días), rojo (plazo vencido)."}]},{"version":"2.1.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Versioning semántico: MAYOR.MENOR.PARCHE — código cambia MENOR, datos cambian PARCHE."},{"type":"fix","text":"Proyección: reserva estructural de taller calculada dinámicamente por mes según flota entregada."},{"type":"fix","text":"Flota tab: KPIs ahora usan isNonOp() correctamente — muestra taller y FS por separado."},{"type":"feat","text":"Taller: historial anual y ranking SHOP_HIST filtrados por flota activa. Todos los vehículos visibles aunque tengan 0 semanas."},{"type":"feat","text":"Panel: botón Ver todas las flotas consolida KPIs de todas las flotas."}]},{"version":"2.0.13","date":"2026-06-01","latest":false,"entries":[{"type":"fix","text":"Proyección: reserva estructural de taller calculada dinámicamente por mes — crece a medida que entran vehículos de producción según su fEntrega."},{"type":"fix","text":"Reserva estructural usa flota entregada en cada mes (total - FS - en producción ese mes), no el total fijo actual."}]},{"version":"2.0.12","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline"}]},{"version":"2.0.11","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de Asignación de Autos Comudef"},{"type":"feat","text":"Ingreso a Producción Hylux URT"}]},{"version":"2.0.10","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.9","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.8","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.7","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.6","date":"2026-05-22","entries":[{"type":"feat","text":"Mejoras en la Hoja Taller"},{"type":"feat","text":"Arreglo en el número de version"}]},{"version":"2.0.5","date":"2026-05-22","entries":[{"type":"feat","text":"Ajuste Pipeline"}]},{"version":"2.0.4","date":"2026-05-19","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.3","date":"2026-05-19","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.2","date":"2026-05-19","entries":[{"type":"feat","text":"Se arreglaron los Pipeline de Ambulancias 4x2 y 4x4"}]},{"version":"2.0.1","date":"2026-05-19","entries":[{"type":"feat","text":"Versionado automático al guardar: la versión se incrementa sola (patch), sin intervención manual."},{"type":"fix","text":"downloadUpdatedHTML: APP_VERSION y CHANGELOG ahora se serializan correctamente usando funciones arrow en replace() para evitar interpretación errónea de $ en JSON."},{"type":"feat","text":"Nombre del archivo incluye fecha y versión: UCM_Fleet_Intelligence_YYYYMMDD_vX-Y-Z.html."}]},{"version":"2.0.0","date":"2026-05-19","entries":[{"type":"feat","text":"Panel: botón 'Ver todas las flotas' consolida KPIs de AMB 4×2, 4×4, VAN y AUTOS en una sola vista."},{"type":"feat","text":"Diagnóstico: rediseñado como modal instantáneo (sin file picker). Muestra estado de librerías, condiciones por flota, estados sin REQS, semana cargada y versión."}]},{"version":"1.9.0","date":"2026-05-19","entries":[{"type":"feat","text":"Requerimientos temporales recurrentes por contrato: campo tempReqs con mesIni/mesFin/qty/motivo. Se aplica todos los años en ese rango de meses."},{"type":"feat","text":"getReqOp(r, ym): función helper que calcula requerimiento base + boosts temporales para un mes dado."},{"type":"feat","text":"Proyección: demandaContratos varía mes a mes según tempReqs activos — la línea azul ya no es plana."},{"type":"feat","text":"Asignaciones: columna Req. Operación muestra badge morado +N cuando hay boost temporal activo."},{"type":"fix","text":"Proyección: data-freed y data-net del gráfico Pipeline usan getReqOp y getAsigReal con variable local flt (no fl del scope externo)."}]},{"version":"1.8.1","date":"2026-05-19","entries":[{"type":"fix","text":"Asignaciones: REQS_AMB reconstruido con nombres exactos que vienen del xlsx (TRASLADO BÁSICO, CORP. LAS CONDES, etc.)."},{"type":"fix","text":"syncReqsFromFleet: purga entradas fantasma (asig=0 sin fFin futura) — resuelve duplicados por cambio de nombre en xlsx."},{"type":"fix","text":"REQS_4X4: TECHINT renombrado a TECHINT TOCOPILLA, BESS LIBRILLO agregado."},{"type":"fix","text":"editContrato: acepta clientes nuevos (string), agrega fIni, elimina campo asig (ahora es solo lectura desde FLEET)."}]},{"version":"1.8.0","date":"2026-05-18","entries":[{"type":"feat","text":"Asignaciones: tabla unificada — asig desde FLEET.estado (automático), metadata desde REQS (manual). Clientes nuevos detectados con badge NUEVO."},{"type":"feat","text":"buildTodasFilas() y getAsigReal(): helpers compartidos entre Asignaciones y Proyección."},{"type":"fix","text":"Proyección: demandaContratos y unidadesLibres usan getAsigReal en lugar de r.asig (que era siempre 0)."},{"type":"fix","text":"Carga de reporte: EN PRODUCCION y FUERA DE SERVICIO protegidos contra sobreescritura."},{"type":"fix","text":"Carga de reporte: normalizarCond() mapea variantes del xlsx (OPERATIVO C/OBS, NO OP, etc.)."},{"type":"feat","text":"Changelog incorporado: badge de versión en topbar abre historial de cambios."}]},{"version":"1.7.0","date":"2026-05-18","entries":[{"type":"feat","text":"Panel: botón 'Ver todas las flotas' en Leasing (ya existía)."},{"type":"feat","text":"4×4: contrato RESCATE RM (rol 4×2) para móvil 365."},{"type":"fix","text":"Capital remanente calculado dinámicamente con amortización lineal según fecha actual."}]},{"version":"1.6.0","date":"2026-05-15","entries":[{"type":"fix","text":"Proyección: pipeDemanda considera duración de cada oportunidad — línea naranja sube y baja correctamente."},{"type":"fix","text":"Ambulancias en pipeline y reserva taller redondeadas al entero más cercano."}]},{"version":"1.5.0","date":"2026-05-15","entries":[{"type":"data","text":"Datos leasing actualizados desde Detalle_Vehiculos_UCM_Emecar_11-May-26.xlsx."},{"type":"feat","text":"Cuotas PMT 1%/mes para móviles 241, 243, 245, 253, 255, 257. Los Cuatro y Rio Branco con datos completos."}]}];
 function initChangelog(){
   const badge=document.getElementById("ver-badge");
   if(badge) badge.textContent="v"+APP_VERSION;
