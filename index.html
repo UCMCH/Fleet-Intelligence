@@ -1,6 +1,6 @@
 <html lang="es"><head>
 <meta charset="UTF-8">
-<meta name="app-version" content="2.16.0">
+<meta name="app-version" content="2.23.0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UCM Fleet Intelligence</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -174,10 +174,10 @@ tfoot td{padding:8px 10px;font-weight:700;border-right:1px solid var(--border)}
   <div id="topbar">
     <h1>🚑 UCM Fleet Intelligence</h1>
     <span class="sep">|</span>
-    <button id="ver-badge" onclick="abrirChangelog()">v2.15.3</button>
+    <button id="ver-badge" onclick="abrirChangelog()">v2.16.2</button>
     <div id="fleet-selector">
-      <button class="fs-btn active" onclick="setFlota('4x2')">🚑 AMB 4×2</button>
-      <button class="fs-btn" onclick="setFlota('4x4')">🚑 AMB 4×4</button>
+      <button class="fs-btn" onclick="setFlota('4x2')">🚑 AMB 4×2</button>
+      <button class="fs-btn active" onclick="setFlota('4x4')">🚑 AMB 4×4</button>
       <button class="fs-btn" onclick="setFlota('van')">🚐 VAN</button>
       <button class="fs-btn" onclick="setFlota('autos')">🚗 AUTOS</button>
     </div>
@@ -192,428 +192,247 @@ tfoot td{padding:8px 10px;font-weight:700;border-right:1px solid var(--border)}
   </div>
   <div id="tabs">
     <button class="tab-btn" onclick="setTab('panel')">📊 Panel</button>
-    <button class="tab-btn" onclick="setTab('flota')">🚑 Flota</button>
+    <button class="tab-btn active" onclick="setTab('flota')">🚑 Flota</button>
     <button class="tab-btn" onclick="setTab('leasing')">🏦 Leasing</button>
-    <button class="tab-btn active" onclick="setTab('asignaciones')">📋 Asignaciones</button>
-    <button class="tab-btn" onclick="setTab('taller')">🔧 Taller <span id="taller-badge" class="tab-badge" style="display: inline;">3</span></button>
+    <button class="tab-btn" onclick="setTab('asignaciones')">📋 Asignaciones</button>
+    <button class="tab-btn" onclick="setTab('taller')">🔧 Taller <span id="taller-badge" class="tab-badge" style="display: none;">0</span></button>
     <button class="tab-btn" onclick="setTab('proyeccion')">📈 Proyección</button>
     <button class="tab-btn" onclick="setTab('pipeline')">🎯 Pipeline</button>
     <button class="tab-btn" onclick="setTab('concentracion')">⚖️ Concentración</button>
   </div>
   <div id="content">
-  <div class="sec-hdr"><h3>Usos y Requerimientos — AMB 4×2</h3><span class="sub">Semana: 08/06/2026</span></div>
-
-  <!-- Distribución de flota -->
-  <div class="sec">
-    <div style="font-size:12px;font-weight:600;color:#0f172a;margin-bottom:10px">Distribución de la flota</div>
-    <div style="display:flex;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#fff;margin-bottom:16px">
-      
-        <div style="flex:1;padding:12px 8px;text-align:center;background:#0f172a;border-right:1px solid rgba(255,255,255,0.15)">
-          <div style="font-size:22px;font-weight:800;color:#fff;line-height:1">79</div>
-          <div style="font-size:9px;font-weight:600;color:#fff;opacity:.8;margin-top:3px;text-transform:uppercase;letter-spacing:.5px">Total flota</div>
-        </div>
-        <div style="flex:1;padding:12px 8px;text-align:center;background:#16a34a;border-right:1px solid rgba(255,255,255,0.15)">
-          <div style="font-size:22px;font-weight:800;color:#fff;line-height:1">71</div>
-          <div style="font-size:9px;font-weight:600;color:#fff;opacity:.8;margin-top:3px;text-transform:uppercase;letter-spacing:.5px">Operativos</div>
-        </div>
-        <div style="flex:1;padding:12px 8px;text-align:center;background:#3b82f6;border-right:1px solid rgba(255,255,255,0.15)">
-          <div style="font-size:22px;font-weight:800;color:#fff;line-height:1">6</div>
-          <div style="font-size:9px;font-weight:600;color:#fff;opacity:.8;margin-top:3px;text-transform:uppercase;letter-spacing:.5px">Back up</div>
-        </div>
-        <div style="flex:1;padding:12px 8px;text-align:center;background:#ef4444;border-right:1px solid rgba(255,255,255,0.15)">
-          <div style="font-size:22px;font-weight:800;color:#fff;line-height:1">3</div>
-          <div style="font-size:9px;font-weight:600;color:#fff;opacity:.8;margin-top:3px;text-transform:uppercase;letter-spacing:.5px">En taller</div>
-        </div>
-        <div style="flex:1;padding:12px 8px;text-align:center;background:#6366f1;border-right:1px solid rgba(255,255,255,0.15)">
-          <div style="font-size:22px;font-weight:800;color:#fff;line-height:1">2</div>
-          <div style="font-size:9px;font-weight:600;color:#fff;opacity:.8;margin-top:3px;text-transform:uppercase;letter-spacing:.5px">En producción</div>
-        </div>
-        <div style="flex:1;padding:12px 8px;text-align:center;background:#374151;border-right:1px solid rgba(255,255,255,0.15)">
-          <div style="font-size:22px;font-weight:800;color:#fff;line-height:1">1</div>
-          <div style="font-size:9px;font-weight:600;color:#fff;opacity:.8;margin-top:3px;text-transform:uppercase;letter-spacing:.5px">Fuera de serv.</div>
-        </div>
-        <div style="flex:1;padding:12px 8px;text-align:center;background:#0ea5e9;border-right:1px solid rgba(255,255,255,0.15)">
-          <div style="font-size:22px;font-weight:800;color:#fff;line-height:1">1</div>
-          <div style="font-size:9px;font-weight:600;color:#fff;opacity:.8;margin-top:3px;text-transform:uppercase;letter-spacing:.5px">Disponibles</div>
-        </div>
-    </div>
+  <div class="toolbar">
+    <input id="srch" type="text" placeholder="Buscar móvil, patente, chasis, estado…" style="width:240px" oninput="filterFlota()">
+    <select id="fCond" onchange="filterFlota()">
+      <option value="">Todas las condiciones</option>
+      <option>OPERATIVO</option><option>OPERATIVO CON OBS.</option>
+      <option>NO OPERATIVO</option><option>FALLA MECANICA ETI</option>
+      <option>FALLA MECANICA ETE</option><option>FUERA DE SERVICIO</option>
+      <option>EN PRODUCCION</option>
+    </select>
+    <select id="fProp" onchange="filterFlota()">
+      <option value="">UCM + EMECAR</option><option>UCM</option><option>EMECAR</option>
+    </select>
+    <select id="fLease" onchange="filterFlota()">
+      <option value="">Leasing: todos</option>
+      <option value="si">Con leasing</option>
+      <option value="no">Sin leasing</option>
+      <option value="urg">Vence ≤6 meses</option>
+    </select>
+    <span id="flota-count" style="font-size:11px;color:#64748b">9 de 9 móviles</span>
+    <div class="spacer"></div>
+    <button class="btn btn-primary" onclick="openNewForm()">+ Agregar vehículo</button>
   </div>
-
-  <!-- Asignaciones — tabla unificada: asig desde FLEET, metadata desde REQS -->
-  <div class="sec">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-      <span style="font-size:12px;font-weight:600;color:#0f172a">Asignaciones</span>
-      <span style="font-size:11px;color:#94a3b8">Nº asignadas proviene del reporte semanal — completa fechas y requerimientos con ✏️</span>
-    </div>
-    <div class="tbl-wrap"><table>
-      <thead><tr>
-        <th class="sortable" data-sort-dir="none">Cliente / Uso</th>
-        <th class="sortable" data-sort-dir="none">Asignadas</th>
-        <th class="sortable" data-sort-dir="none">Req. Operación</th>
-        <th class="sortable" data-sort-dir="none">Req. Back Up</th>
-        <th class="sortable" data-sort-dir="none">Req. Total</th>
-        <th class="sortable" data-sort-dir="none">Faltante / Sobrante</th>
-        <th class="sortable" data-sort-dir="none">Inicio contrato</th>
-        <th class="sortable" data-sort-dir="none">Fin contrato</th>
-        <th></th>
-      </tr></thead>
-      <tbody>
-      <tr style="background:transparent">
-          <td style="font-weight:600">
-            TRASLADO BÁSICO
-            
-          </td>
-          <td style="text-align:center;font-weight:700">10</td>
-          <td style="text-align:center">11 <span style="font-size:9px;background:#7c3aed;color:#fff;border-radius:3px;padding:1px 4px" title="Req. temporal activo +1">+1</span></td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">11</td>
-          <td style="text-align:center;font-weight:700;color:#dc2626">-1</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Abr-2023</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b"><span style="color:#94a3b8">Permanente</span></td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',0)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',0)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:var(--row-alt)">
-          <td style="font-weight:600">
-            COMUDEF
-            
-          </td>
-          <td style="text-align:center;font-weight:700">9</td>
-          <td style="text-align:center">9</td>
-          <td style="text-align:center">1</td>
-          <td style="text-align:center;font-weight:600">10</td>
-          <td style="text-align:center;font-weight:700;color:#dc2626">-1</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Ene-2024</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b">Dic-2027</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',1)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',1)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:transparent">
-          <td style="font-weight:600">
-            HOSPITAL SAN JUAN DE DIOS
-            
-          </td>
-          <td style="text-align:center;font-weight:700">7</td>
-          <td style="text-align:center">7</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">7</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Ene-2026</td>
-          <td style="text-align:center;font-size:11px;font-weight:700;color:#d97706">Jul-2026</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',2)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',2)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:var(--row-alt)">
-          <td style="font-weight:600">
-            RESCATE BASE 1
-            
-          </td>
-          <td style="text-align:center;font-weight:700">6</td>
-          <td style="text-align:center">6</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">6</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">—</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b"><span style="color:#94a3b8">Permanente</span></td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',3)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',3)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:transparent">
-          <td style="font-weight:600">
-            CORP. LAS CONDES
-            
-          </td>
-          <td style="text-align:center;font-weight:700">5</td>
-          <td style="text-align:center">4</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">4</td>
-          <td style="text-align:center;font-weight:700;color:#16a34a">+1</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Ago-2023</td>
-          <td style="text-align:center;font-size:11px;font-weight:700;color:#d97706">Jul-2026</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',5)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',5)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:var(--row-alt)">
-          <td style="font-weight:600">
-            LICITACION HOSP. LUIS TISNE
-            
-          </td>
-          <td style="text-align:center;font-weight:700">5</td>
-          <td style="text-align:center">5</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">5</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">May-2024</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b">Dic-2027</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',4)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',4)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:transparent">
-          <td style="font-weight:600">
-            EMECAR
-            
-          </td>
-          <td style="text-align:center;font-weight:700">4</td>
-          <td style="text-align:center">4</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">4</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">—</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b"><span style="color:#94a3b8">Permanente</span></td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',17)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',17)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:var(--row-alt)">
-          <td style="font-weight:600">
-            HOSPITAL DE RANCAGUA
-            
-          </td>
-          <td style="text-align:center;font-weight:700">4</td>
-          <td style="text-align:center">4</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">4</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Abr-2026</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b">Dic-2026</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',6)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',6)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:transparent">
-          <td style="font-weight:600">
-            RESCATE BASE 2
-            
-          </td>
-          <td style="text-align:center;font-weight:700">3</td>
-          <td style="text-align:center">3</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">3</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">—</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b"><span style="color:#94a3b8">Permanente</span></td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',8)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',8)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:#fffbeb">
-          <td style="font-weight:600">
-            DISPONIBLE
-            <span style="font-size:9px;background:#f59e0b;color:#fff;border-radius:4px;padding:1px 6px;margin-left:6px;font-weight:700">NUEVO</span>
-          </td>
-          <td style="text-align:center;font-weight:700">2</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">—</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">⚠ Completar</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">—</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b"><span style="color:#94a3b8">Permanente</span></td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2','DISPONIBLE')" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            
-          </td>
-        </tr><tr style="background:transparent">
-          <td style="font-weight:600">
-            LICITACION H DE LINARES
-            
-          </td>
-          <td style="text-align:center;font-weight:700">2</td>
-          <td style="text-align:center">2 <span style="font-size:9px;background:#7c3aed;color:#fff;border-radius:3px;padding:1px 4px" title="Req. temporal activo +1">+1</span></td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">2</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Ago-2025</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b">Dic-2027</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',9)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',9)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:var(--row-alt)">
-          <td style="font-weight:600">
-            LICITACION TALAGANTE
-            
-          </td>
-          <td style="text-align:center;font-weight:700">2</td>
-          <td style="text-align:center">3 <span style="font-size:9px;background:#7c3aed;color:#fff;border-radius:3px;padding:1px 4px" title="Req. temporal activo +1">+1</span></td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">3</td>
-          <td style="text-align:center;font-weight:700;color:#dc2626">-1</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Jun-2025</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b">Dic-2027</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',7)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',7)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:transparent">
-          <td style="font-weight:600">
-            AUTOPISTA NORORIENTE
-            
-          </td>
-          <td style="text-align:center;font-weight:700">1</td>
-          <td style="text-align:center">1</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">1</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Mar-2026</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b">Dic-2027</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',11)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',11)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:var(--row-alt)">
-          <td style="font-weight:600">
-            BUPA ANTOFAGASTA
-            
-          </td>
-          <td style="text-align:center;font-weight:700">1</td>
-          <td style="text-align:center">1</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">1</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Jul-2025</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b">Dic-2027</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',12)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',12)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:transparent">
-          <td style="font-weight:600">
-            CLINICA INDISA
-            
-          </td>
-          <td style="text-align:center;font-weight:700">1</td>
-          <td style="text-align:center">1</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">1</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Abr-2023</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b">Dic-2027</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',10)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',10)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:var(--row-alt)">
-          <td style="font-weight:600">
-            ELECCON IQUIQUE
-            
-          </td>
-          <td style="text-align:center;font-weight:700">1</td>
-          <td style="text-align:center">1</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">1</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Abr-2026</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b">Dic-2026</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',16)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',16)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:transparent">
-          <td style="font-weight:600">
-            ENAP HUALPEN
-            
-          </td>
-          <td style="text-align:center;font-weight:700">1</td>
-          <td style="text-align:center">1</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">1</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Sep-2025</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b">Dic-2027</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',13)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',13)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:var(--row-alt)">
-          <td style="font-weight:600">
-            HLF
-            
-          </td>
-          <td style="text-align:center;font-weight:700">1</td>
-          <td style="text-align:center">1</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">1</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Ago-2024</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b">May-2027</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',14)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',14)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:transparent">
-          <td style="font-weight:600">
-            RESCATE BASE 8
-            
-          </td>
-          <td style="text-align:center;font-weight:700">1</td>
-          <td style="text-align:center">1</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">1</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">—</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b"><span style="color:#94a3b8">Permanente</span></td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',15)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',15)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr>
-      </tbody>
-      <tfoot><tr>
-        <td><strong>TOTAL</strong></td>
-        <td style="text-align:center"><strong>66</strong></td>
-        <td style="text-align:center"><strong>65</strong></td>
-        <td style="text-align:center"><strong>1</strong></td>
-        <td style="text-align:center"><strong>66</strong></td>
-        <td style="text-align:center;font-weight:700;color:#d97706">+</td>
-        <td></td><td></td><td></td>
-      </tr></tfoot>
-    </table></div>
+  <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+    <span style="font-size:12px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:20px;padding:4px 12px"><strong>9</strong> total</span>
+    <span style="font-size:12px;background:#dcfce7;border:1px solid #86efac;border-radius:20px;padding:4px 12px;color:#15803d"><strong>5</strong> operativos</span>
+    <span style="font-size:12px;background:#fee2e2;border:1px solid #fca5a5;border-radius:20px;padding:4px 12px;color:#b91c1c"><strong>0</strong> en taller</span>
+    <span style="font-size:12px;background:#dbeafe;border:1px solid #93c5fd;border-radius:20px;padding:4px 12px;color:#1d4ed8"><strong>8</strong> con leasing</span>
+    
+    
   </div>
-
-  <!-- Detalle en taller -->
   
-  <div class="sec">
-    <div style="font-size:12px;font-weight:600;color:#0f172a;margin-bottom:8px">Vehículos en taller esta semana <span style="font-weight:400;color:#94a3b8">(impactan disponibilidad)</span></div>
-    <div class="tbl-wrap"><table>
-      <thead><tr>
-        <th class="sortable" data-sort-dir="none">Móvil</th><th class="sortable" data-sort-dir="none">Marca / Modelo</th><th class="sortable" data-sort-dir="none">Patente</th><th class="sortable" data-sort-dir="none">Sem. consecutivas</th><th class="sortable" data-sort-dir="none">Falla actual</th>
-      </tr></thead>
-      <tbody>
-      <tr style="background:transparent">
-          <td style="text-align:center"><strong>239</strong></td>
-          <td>FORD F-350 TYPE I 6,7</td>
-          <td style="font-family:monospace;font-size:11px;text-align:center">LJWH-90</td>
-          <td style="text-align:center">
-            <span style="font-weight:700;color:#dc2626">8 sem.</span>
-          </td>
-          <td class="wrap">Falla de Motor en revisión</td>
-        </tr><tr style="background:var(--row-alt)">
-          <td style="text-align:center"><strong>245</strong></td>
-          <td>MERCEDES BENZ SPRINTER</td>
-          <td style="font-family:monospace;font-size:11px;text-align:center">RRTF-70</td>
-          <td style="text-align:center">
-            <span style="font-weight:700;color:#eab308">1 sem.</span>
-          </td>
-          <td class="wrap">En espera de asignación de Taller por parte de Aseguradora</td>
-        </tr><tr style="background:transparent">
-          <td style="text-align:center"><strong>301</strong></td>
-          <td>FORD TRANSIT 2.2</td>
-          <td style="font-family:monospace;font-size:11px;text-align:center">TKYL-33</td>
-          <td style="text-align:center">
-            <span style="font-weight:700;color:#eab308">1 sem.</span>
-          </td>
-          <td class="wrap">Falla enfriador de aceite, en espera de respuestos</td>
-        </tr>
-      </tbody>
-    </table></div>
-  </div>
-  </div>
+  <div id="form-container"></div>
+  <div class="tbl-wrap">
+  <table id="flota-table">
+    <thead><tr>
+      <th class="sortable" data-sort-dir="none">Prop.</th><th class="sortable" data-sort-dir="none">Móvil</th><th class="sortable" data-sort-dir="none">Marca</th><th class="sortable" data-sort-dir="none">Modelo</th><th class="sortable" data-sort-dir="none">Patente</th><th class="sortable" data-sort-dir="none">Año</th>
+      <th class="sortable" data-sort-dir="none">Chasis</th><th class="sortable" data-sort-dir="none">R° San.</th><th class="sortable" data-sort-dir="none">Condición</th><th class="sortable" data-sort-dir="none">Estado / Asignación</th>
+      <th class="sortable" data-sort-dir="none">Financiamiento</th><th class="sortable" data-sort-dir="none">F. Inicio</th><th class="sortable" data-sort-dir="none">F. Término</th><th class="sortable" data-sort-dir="none">M. Rest.</th>
+      <th class="sortable" data-sort-dir="none">Monto Financ.</th><th class="sortable" data-sort-dir="none">Remanente K</th>
+      <th class="sortable" data-sort-dir="none">Observaciones</th><th style="text-align:center">Acc.</th>
+    </tr></thead>
+    <tbody id="flota-tbody"><tr id="row-329" class="">
+      <td><span class="badge b-blue">UCM</span></td>
+      <td><strong style="font-size:13px">329</strong></td>
+      <td>TOYOTA</td><td>HILUX 4x4 2.4 MT DX</td>
+      <td style="font-family:monospace;font-size:11px">TZSG42</td>
+      <td>2025</td>
+      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="8AJDB3CD7S1369963">8AJDB3CD7S1369963</td>
+      <td><span class="badge b-green">OK</span></td>
+      <td><span class="badge b-green">OPERATIVO</span></td>
+      <td style="font-size:11px">TECHINT TOCOPILLA</td>
+      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco Internacional</span></td>
+      <td style="font-size:11px">Ene-2025</td>
+      <td style="font-size:11px;color:inherit;font-weight:400">Feb-2029</td>
+      <td style="text-align:center;color:inherit;font-weight:400">33</td>
+      <td style="text-align:right">$54.1M</td>
+      <td style="text-align:right">$35.3M</td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="openEditForm(329)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="askDelete(329)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr id="row-331" class="">
+      <td><span class="badge b-blue">UCM</span></td>
+      <td><strong style="font-size:13px">331</strong></td>
+      <td>TOYOTA</td><td>HILUX 4x4 2.4 MT DX</td>
+      <td style="font-family:monospace;font-size:11px">TZSG43</td>
+      <td>2025</td>
+      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="8AJDB3CD4S1369967">8AJDB3CD4S1369967</td>
+      <td><span class="badge b-green">OK</span></td>
+      <td><span class="badge b-green">OPERATIVO</span></td>
+      <td style="font-size:11px">TECHINT TOCOPILLA</td>
+      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco Internacional</span></td>
+      <td style="font-size:11px">Ene-2025</td>
+      <td style="font-size:11px;color:inherit;font-weight:400">Feb-2029</td>
+      <td style="text-align:center;color:inherit;font-weight:400">33</td>
+      <td style="text-align:right">$54.1M</td>
+      <td style="text-align:right">$35.3M</td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="openEditForm(331)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="askDelete(331)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr id="row-365" class="">
+      <td><span class="badge b-blue">UCM</span></td>
+      <td><strong style="font-size:13px">365</strong></td>
+      <td>FORD</td><td>TRANSIT VAN L3H3 4X4 2.0</td>
+      <td style="font-family:monospace;font-size:11px">VXLP-37</td>
+      <td>2026</td>
+      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTT4STT24275">WF0EXXTT4STT24275</td>
+      <td><span class="badge b-amber">PENDIENTE</span></td>
+      <td><span class="badge b-green">OPERATIVO</span></td>
+      <td style="font-size:11px">BESS LIBRILLO TAL TAL</td>
+      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco Santander</span></td>
+      <td style="font-size:11px">Abr-2026</td>
+      <td style="font-size:11px;color:inherit;font-weight:400">Jun-2028</td>
+      <td style="text-align:center;color:inherit;font-weight:400">25</td>
+      <td style="text-align:right">$65.3M</td>
+      <td style="text-align:right">$60.2M</td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="openEditForm(365)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="askDelete(365)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr id="row-367" class="">
+      <td><span class="badge b-blue">UCM</span></td>
+      <td><strong style="font-size:13px">367</strong></td>
+      <td>FORD</td><td>TRANSIT VAN L3H3 4X4 2.0</td>
+      <td style="font-family:monospace;font-size:11px">VXPT-90</td>
+      <td>2026</td>
+      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTTXTTD81973">WF0EXXTTXTTD81973</td>
+      <td><span class="badge b-amber">PENDIENTE</span></td>
+      <td><span class="badge b-green">OPERATIVO</span></td>
+      <td style="font-size:11px">GRUPO COX MARIA ELENA</td>
+      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco Santander</span></td>
+      <td style="font-size:11px">Abr-2026</td>
+      <td style="font-size:11px;color:inherit;font-weight:400">Jun-2028</td>
+      <td style="text-align:center;color:inherit;font-weight:400">25</td>
+      <td style="text-align:right">$65.3M</td>
+      <td style="text-align:right">$60.2M</td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="openEditForm(367)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="askDelete(367)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr id="row-377" class="">
+      <td><span class="badge b-blue">UCM</span></td>
+      <td><strong style="font-size:13px">377</strong></td>
+      <td>FORD</td><td>TRANSIT VAN L3H3 4X4 2.0</td>
+      <td style="font-family:monospace;font-size:11px">VYHC-78</td>
+      <td>2026</td>
+      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTT9TTD82001">WF0EXXTT9TTD82001</td>
+      <td><span class="badge b-amber">PENDIENTE</span></td>
+      <td><span class="badge b-blue">EN PRODUCCION</span></td>
+      <td style="font-size:11px">—</td>
+      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco Santander</span></td>
+      <td style="font-size:11px">—</td>
+      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
+      <td style="text-align:center;color:inherit;font-weight:400">—</td>
+      <td style="text-align:right">—</td>
+      <td style="text-align:right">—</td>
+      <td class="wrap">Fecha de entrega 15/06/2026</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="openEditForm(377)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="askDelete(377)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr id="row-369" class="">
+      <td><span class="badge b-blue">UCM</span></td>
+      <td><strong style="font-size:13px">369</strong></td>
+      <td>MAXUS</td><td>T60 4X4 MT E6</td>
+      <td style="font-family:monospace;font-size:11px">VJPP-80</td>
+      <td>2024</td>
+      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="LSFAM11A2RA041610">LSFAM11A2RA041610</td>
+      <td><span class="badge b-amber">PENDIENTE</span></td>
+      <td><span class="badge b-green">OPERATIVO</span></td>
+      <td style="font-size:11px">MINERA AURYN LAMPA</td>
+      <td><span style="color:#94a3b8">Propio</span></td>
+      <td style="font-size:11px">—</td>
+      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
+      <td style="text-align:center;color:inherit;font-weight:400">—</td>
+      <td style="text-align:right">—</td>
+      <td style="text-align:right">—</td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="openEditForm(369)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="askDelete(369)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr id="row-375" class="">
+      <td><span class="badge b-blue">UCM</span></td>
+      <td><strong style="font-size:13px">375</strong></td>
+      <td>FORD</td><td>TRANSIT VAN L3H3 4X4 2.0</td>
+      <td style="font-family:monospace;font-size:11px">VYGX-15</td>
+      <td>2026</td>
+      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="WF0EXXTT8TTD81955">WF0EXXTT8TTD81955</td>
+      <td><span class="badge b-amber">PENDIENTE</span></td>
+      <td><span class="badge b-blue">EN PRODUCCION</span></td>
+      <td style="font-size:11px">—</td>
+      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco Santander</span></td>
+      <td style="font-size:11px">—</td>
+      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
+      <td style="text-align:center;color:inherit;font-weight:400">—</td>
+      <td style="text-align:right">—</td>
+      <td style="text-align:right">—</td>
+      <td class="wrap">Fecha de entrega 08/06/2026</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="openEditForm(375)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="askDelete(375)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr id="row-383" class="">
+      <td><span class="badge b-blue">UCM</span></td>
+      <td><strong style="font-size:13px">383</strong></td>
+      <td>FORD</td><td>TRANSIT VAN L3H3 4X4 2.0</td>
+      <td style="font-family:monospace;font-size:11px">—</td>
+      <td>2026</td>
+      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="">—</td>
+      <td><span class="badge b-amber">PENDIENTE</span></td>
+      <td><span class="badge b-blue">EN PRODUCCION</span></td>
+      <td style="font-size:11px">EN PRODUCCION</td>
+      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco Santander</span></td>
+      <td style="font-size:11px">—</td>
+      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
+      <td style="text-align:center;color:inherit;font-weight:400">—</td>
+      <td style="text-align:right">—</td>
+      <td style="text-align:right">—</td>
+      <td class="wrap">Fecha de entrega 30/06/2026</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="openEditForm(383)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="askDelete(383)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr id="row-385" class="">
+      <td><span class="badge b-blue">UCM</span></td>
+      <td><strong style="font-size:13px">385</strong></td>
+      <td>FORD</td><td>TRANSIT VAN L3H3 4X4 2.0</td>
+      <td style="font-family:monospace;font-size:11px">—</td>
+      <td>2026</td>
+      <td style="font-family:monospace;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="">—</td>
+      <td><span class="badge b-amber">PENDIENTE</span></td>
+      <td><span class="badge b-blue">EN PRODUCCION</span></td>
+      <td style="font-size:11px">EN PRODUCCION</td>
+      <td><span style="color:#1d4ed8;font-weight:600;font-size:11px">Banco Santander</span></td>
+      <td style="font-size:11px">—</td>
+      <td style="font-size:11px;color:inherit;font-weight:400">—</td>
+      <td style="text-align:center;color:inherit;font-weight:400">—</td>
+      <td style="text-align:right">—</td>
+      <td style="text-align:right">—</td>
+      <td class="wrap">Fecha de entrega 30/06/2026</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="openEditForm(385)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="askDelete(385)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr></tbody>
+  </table></div></div>
 </div>
 <script>
 /* ═══════════════════════════════════════════
@@ -621,9 +440,9 @@ tfoot td{padding:8px 10px;font-weight:700;border-right:1px solid var(--border)}
    Fuente: Status_de_Ambulancias_Mayo_2026_V2.xlsx
    Leasing actualizado con Detalle_Vehiculos_UCM_Emecar_11-May-26.xlsx
 ═══════════════════════════════════════════ */
-const FLEET_AMB = [{"prop":"UCM","movil":219,"marca":"FORD","modelo":"E-350 6,8 BENCINERO","patente":"BVZS-29","anio":2010,"chasis":"1FDWE3FSXADA92181","rs":"OK","cond":"OPERATIVO CON OBS.","estado":"BACK UP EVENTOS RM","obs":"Inutilizable por A/C con falla sin reparación , Reclamo sindical DT","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":221,"marca":"FORD","modelo":"E-350 6,8 BENCINERO","patente":"BVZS-30","anio":2010,"chasis":"1FDWE3FS1ADA92182","rs":"OK","cond":"OPERATIVO CON OBS.","estado":"BACK UP EVENTOS RM","obs":"Inutilizable por A/C con falla sin reparación , Reclamo sindical DT","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":225,"marca":"FORD","modelo":"F - 350 6,7","patente":"GSWH-43","anio":2014,"chasis":"1FDRF3GT8EEB82737","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":229,"marca":"FORD","modelo":"F - 350 6,7","patente":"GXCD-48","anio":2014,"chasis":"1FDRF3GTXEEB82738","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":231,"marca":"FORD","modelo":"F - 350 6,7","patente":"GXCD-51","anio":2014,"chasis":"1FDRF3GT1EEB82739","rs":"OK","cond":"OPERATIVO","estado":"RESCATE BASE 1","obs":"Panne de Caja de Transmisión","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":233,"marca":"FORD","modelo":"F-350 TYPE I 6,7","patente":"LGCL-18","anio":2018,"chasis":"1FDRF3GT2JEC36477","rs":"OK","cond":"NO OPERATIVO","estado":"FUERA DE SERVICIO","obs":"Inutilizable por falla total de motor (el importado refaccionado falló y caja de cambio con problemas)","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":235,"marca":"FORD","modelo":"F-350 TYPE I 6,7","patente":"LJWH-87","anio":2018,"chasis":"1FDRF3GT6JEC36478","rs":"OK","cond":"OPERATIVO","estado":"RESCATE BASE 1","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":237,"marca":"FORD","modelo":"F-350 TYPE I 6,7","patente":"LJWH-89","anio":2018,"chasis":"1FDRF3GT6JEC36479","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":239,"marca":"FORD","modelo":"F-350 TYPE I 6,7","patente":"LJWH-90","anio":2018,"chasis":"1FDRF3GT6JEC36482","rs":"OK","cond":"FALLA MECANICA ETI","estado":"EN TALLER","obs":"Falla de Motor en revisión","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":241,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"RHRC-51","anio":2022,"chasis":"WF0XXXTTGMTM43747","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":"Banco de Chile","fIni":"2021-10","fFin":"2026-10","monto":50979167,"cuota":1134003,"remanente":5503806},{"prop":"UCM","movil":243,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"RHTK-96","anio":2022,"chasis":"WF0XXXTTGMTM43743","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":"Banco de Chile","fIni":"2021-10","fFin":"2026-10","monto":50979167,"cuota":1134003,"remanente":5503806},{"prop":"UCM","movil":245,"marca":"MERCEDES BENZ","modelo":"SPRINTER","patente":"RRTF-70","anio":2022,"chasis":"WIV907633NP293313","rs":"OK","cond":"SINIESTRADA","estado":"CORP. LAS CONDES","obs":"En espera de asignación de Taller por parte de Aseguradora","banco":"Banco de Chile","fIni":"2021-12","fFin":"2027-01","monto":61786568,"cuota":1711800,"remanente":13098142},{"prop":"UCM","movil":249,"marca":"MERCEDES BENZ","modelo":"SPRINTER","patente":"RSVL-33","anio":2022,"chasis":"WIV907633NP293314","rs":"OK","cond":"OPERATIVO","estado":"CLINICA INDISA","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":251,"marca":"MERCEDES BENZ","modelo":"SPRINTER","patente":"RSVL-38","anio":2022,"chasis":"8AC907643PE210146","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":253,"marca":"MERCEDES BENZ","modelo":"SPRINTER","patente":"SKRG-89","anio":2023,"chasis":"8AC907643PE214718","rs":"OK","cond":"OPERATIVO","estado":"CORP. LAS CONDES","obs":"","banco":"Banco Internacional","fIni":"2022-11","fFin":"2026-12","monto":75641187,"cuota":1960222,"remanente":13188755},{"prop":"UCM","movil":255,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SSHC-51","anio":2023,"chasis":"WF0XXXTTGNTJ42171","rs":"OK","cond":"OPERATIVO","estado":"CORP. LAS CONDES","obs":"","banco":"Banco Internacional","fIni":"2023-03","fFin":"2027-03","monto":65806287,"cuota":1732932,"remanente":16413127},{"prop":"UCM","movil":257,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SSGZ-39","anio":2023,"chasis":"WF0XXXTTGNTJ38746","rs":"OK","cond":"OPERATIVO","estado":"CORP. LAS CONDES","obs":"","banco":"Banco Internacional","fIni":"2023-03","fFin":"2027-03","monto":65806287,"cuota":1732932,"remanente":16413127},{"prop":"UCM","movil":279,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TFJT-44","anio":2024,"chasis":"WF0EXXTTRPTL49628","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","banco":"Los Cuatro","fIni":"2024-01","fFin":"2027-01","monto":62500000,"cuota":2075894,"remanente":15884072},{"prop":"UCM","movil":281,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TFJT-45","anio":2024,"chasis":"WF0EXXTTRPTL49625","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","banco":"Los Cuatro","fIni":"2024-01","fFin":"2027-01","monto":62500000,"cuota":2075894,"remanente":15884072},{"prop":"UCM","movil":283,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TFJT-46","anio":2024,"chasis":"WF0EXXTTRPTY77802","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","banco":"Los Cuatro","fIni":"2024-01","fFin":"2027-01","monto":62500000,"cuota":2075894,"remanente":15884072},{"prop":"UCM","movil":285,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TFJT-47","anio":2024,"chasis":"WF0EXXTTRPTL49619","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","banco":"Los Cuatro","fIni":"2024-01","fFin":"2027-01","monto":62500000,"cuota":2075894,"remanente":15884072},{"prop":"UCM","movil":287,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TGFC-87","anio":2024,"chasis":"WF0EXXTTRPTY76178","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","banco":"Banco BCI","fIni":"2024-01","fFin":"2026-06","monto":52016806,"cuota":2283548,"remanente":1793683},{"prop":"UCM","movil":309,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TSHL-29","anio":2024,"chasis":"WF0EXXTTRPTT32856","rs":"OK","cond":"OPERATIVO","estado":"CORP. LAS CONDES","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":311,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TSHL-46","anio":2024,"chasis":"WF0EXXTTRPTT32860","rs":"OK","cond":"OPERATIVO","estado":"EMECAR","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":313,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TSHL-56","anio":2024,"chasis":"WF0EXXTTRPTT32857","rs":"OK","cond":"OPERATIVO","estado":"RESCATE BASE 1","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":315,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TFTT-58","anio":2025,"chasis":"WF0DTGVGXSU015802","rs":"PENDIENTE","cond":"OPERATIVO","estado":"RESCATE BASE 2","obs":"","banco":"Banco BICE","fIni":"2024-11","fFin":"2026-12","monto":50375594,"cuota":4488704,"remanente":14105166},{"prop":"UCM","movil":317,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TFTT-59","anio":2025,"chasis":"WF0DTGVG7SU015806","rs":"PENDIENTE","cond":"OPERATIVO","estado":"RESCATE BASE 1","obs":"","banco":"Banco BICE","fIni":"2024-11","fFin":"2026-12","monto":50375594,"cuota":4488704,"remanente":14105166},{"prop":"UCM","movil":319,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TYLF-60","anio":2025,"chasis":"WF0EXXTT7STK37552","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL SAN JUAN DE DIOS","obs":"","banco":"Banco BICE","fIni":"2024-12","fFin":"2027-01","monto":46400000,"cuota":4488704,"remanente":14848000},{"prop":"UCM","movil":321,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TYLF-83","anio":2025,"chasis":"WF0EXXTT6STK41110","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL SAN JUAN DE DIOS","obs":"","banco":"Banco BICE","fIni":"2024-12","fFin":"2027-01","monto":46400000,"cuota":4488704,"remanente":14848000},{"prop":"UCM","movil":323,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TYSZ-69","anio":2025,"chasis":"WF0EXXTT1STC30647","rs":"OK","cond":"OPERATIVO","estado":"LICITACION HOSP. LUIS TISNE","obs":"","banco":"Banco de Chile","fIni":"2024-12","fFin":"2026-12","monto":46400000,"cuota":2805554,"remanente":13533333},{"prop":"UCM","movil":325,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TZHF-19","anio":2025,"chasis":"WF0EXXTT0STK43922","rs":"OK","cond":"OPERATIVO","estado":"AUTOPISTA NORORIENTE","obs":"","banco":"Banco BCI","fIni":"2025-01","fFin":"2027-02","monto":46400000,"cuota":2525915,"remanente":16704000},{"prop":"UCM","movil":327,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TZVJ-71","anio":2025,"chasis":"WF0EXXTT0STC30705","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL SAN JUAN DE DIOS","obs":"","banco":"Banco BCI","fIni":"2025-01","fFin":"2027-03","monto":46400000,"cuota":2559831,"remanente":16704000},{"prop":"UCM","movil":333,"marca":"FORD","modelo":"TRANSIT 2.0 AT","patente":"RKXL74","anio":2025,"chasis":"WF0DTGVG0SU017560","rs":"OK","cond":"OPERATIVO","estado":"LICITACION H DE LINARES","obs":"","banco":"Banco BCI","fIni":"2025-02","fFin":"2028-03","monto":44455594,"cuota":1942965,"remanente":26433056},{"prop":"UCM","movil":335,"marca":"FORD","modelo":"TRANSIT 2.0 AT","patente":"RKXL75","anio":2025,"chasis":"WF0DTGVG4SU0175562","rs":"OK","cond":"OPERATIVO","estado":"LICITACION HOSP. LUIS TISNE","obs":"","banco":"Banco BCI","fIni":"2025-02","fFin":"2028-03","monto":44455594,"cuota":1560620,"remanente":26433056},{"prop":"UCM","movil":337,"marca":"FORD","modelo":"TRANSIT 2.0 AT","patente":"TZBW10","anio":2025,"chasis":"WF0DTGVGBSU016415","rs":"OK","cond":"OPERATIVO","estado":"LICITACION TALAGANTE","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":339,"marca":"FORD","modelo":"TRANSIT 2.0 AT","patente":"TZBW11","anio":2025,"chasis":"WF0DTGVGBSU016423","rs":"OK","cond":"OPERATIVO","estado":"LICITACION HOSP. LUIS TISNE","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":341,"marca":"FORD","modelo":"TRANSIT 2.0 AT","patente":"TZBW13","anio":2025,"chasis":"WF0DTGVG3SU017262","rs":"OK","cond":"OPERATIVO","estado":"LICITACION HOSP. LUIS TISNE","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":343,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TVKC17","anio":2025,"chasis":"WF0EXXTT7STY01149","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL SAN JUAN DE DIOS","obs":"Falla de Embragüe, perteneciente a Hospital San Juan, en CURIFOR","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":345,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TVKC18","anio":2025,"chasis":"WF0EXXTT8STY01144","rs":"OK","cond":"OPERATIVO","estado":"ENAP HUALPEN","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":347,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TVKC19","anio":2025,"chasis":"WF0EXXTT6STY03636","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL SAN JUAN DE DIOS","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":349,"marca":"FORD","modelo":"TRANSIT 2.0 AT","patente":"TZBW12","anio":2025,"chasis":"WF0DTGVG1SU017258","rs":"PENDIENTE","cond":"OPERATIVO","estado":"LICITACION HOSP. LUIS TISNE","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":351,"marca":"FORD","modelo":"TRANSIT 2.0 AT","patente":"TZBW14","anio":2025,"chasis":"WF0DTGVG9SU016424","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL SAN JUAN DE DIOS","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":353,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"VKKJ92","anio":2026,"chasis":"WF0EXXTT7STJ41162","rs":"PENDIENTE","cond":"OPERATIVO","estado":"DISPONIBLE","obs":"","banco":"Rio Branco","fIni":"2025-09","fFin":"2027-09","monto":56250000,"cuota":2647883,"remanente":38971208},{"prop":"UCM","movil":355,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"VKKJ96","anio":2026,"chasis":"WF0EXXTT7STJ41159","rs":"PENDIENTE","cond":"OPERATIVO","estado":"DISPONIBLE","obs":"","banco":"Rio Branco","fIni":"2025-09","fFin":"2027-09","monto":56250000,"cuota":2647883,"remanente":38971208},{"prop":"UCM","movil":357,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"VKZC-10","anio":2026,"chasis":"WF0EXXTT9STT27446","rs":"PENDIENTE","cond":"OPERATIVO","estado":"HOSPITAL DE RANCAGUA","obs":"","banco":"Banco BICE","fIni":"2025-09","fFin":"2028-09","monto":50100000,"cuota":1561375,"remanente":39267568},{"prop":"UCM","movil":359,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"VLPF-65","anio":2026,"chasis":"WF0EXXTT9STT27454","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL DE RANCAGUA","obs":"","banco":"Banco BCI","fIni":"2025-09","fFin":"2028-04","monto":51018798,"cuota":2276894,"remanente":37852657},{"prop":"UCM","movil":361,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"VDSD-36","anio":2026,"chasis":"WF0EXXTT0STM65263","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL DE RANCAGUA","obs":"","banco":"Rio Branco","fIni":"2025-09","fFin":"2027-09","monto":56250000,"cuota":2647883,"remanente":38971208},{"prop":"UCM","movil":363,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"VDSD-37","anio":2026,"chasis":"WF0EXXTT0STM65277","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL DE RANCAGUA","obs":"","banco":"Rio Branco","fIni":"2025-09","fFin":"2027-09","monto":56250000,"cuota":2647883,"remanente":38971208},{"prop":"EMECAR","movil":80,"marca":"MERCEDES BENZ","modelo":"SPRINTER","patente":"DBLS-58","anio":2011,"chasis":"8AC90366BE039400","rs":"OK","cond":"OPERATIVO CON OBS.","estado":"BACK UP EVENTOS RM","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"EMECAR","movil":82,"marca":"MERCEDES BENZ","modelo":"SPRINTER","patente":"FCCV-39","anio":2012,"chasis":"WD3YE7A99CS684012","rs":"OK","cond":"OPERATIVO CON OBS.","estado":"BACK UP EMECAR","obs":"$17M","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"EMECAR","movil":83,"marca":"MERCEDES BENZ","modelo":"SPRINTER","patente":"GSWJ-43","anio":2014,"chasis":"WBD906613ES845128","rs":"OK","cond":"OPERATIVO CON OBS.","estado":"BACK UP EVENTOS RM","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"EMECAR","movil":84,"marca":"MERCEDES BENZ","modelo":"SPRINTER","patente":"JZDX-19","anio":2017,"chasis":"8AC906633HE123855","rs":"OK","cond":"OPERATIVO CON OBS.","estado":"BACK UP EMECAR","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"EMECAR","movil":85,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"RGCW-93","anio":2022,"chasis":"WF0XXXTTGMTJ74615","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"Falta Caja Eléctrica Consola de Sirena y Baliza","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"EMECAR","movil":86,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"RGCW-99","anio":2022,"chasis":"WF0XXXTTGMTJ74614","rs":"OK","cond":"OPERATIVO","estado":"EMECAR","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"EMECAR","movil":87,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"RWTR-74","anio":2022,"chasis":"WF0XXXTTGNTL02510","rs":"OK","cond":"OPERATIVO","estado":"EMECAR","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"EMECAR","movil":259,"marca":"MAXUS","modelo":"DELIVER 9 L3H3","patente":"SFPS-34","anio":2023,"chasis":"LSH14J7CXNA050811","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","banco":"Banco BCI","fIni":"2023-07","fFin":"2026-09","monto":56210084,"cuota":2190891,"remanente":4437638},{"prop":"EMECAR","movil":261,"marca":"MAXUS","modelo":"DELIVER 9 L3H3","patente":"SXSV-36","anio":2023,"chasis":"LSH14J7C7NA050796","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","banco":"Banco Santander","fIni":"2023-08","fFin":"2026-09","monto":54400000,"cuota":1959952,"remanente":5881081},{"prop":"EMECAR","movil":263,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SHXL-79","anio":2023,"chasis":"WF0XXXTTGPTB37770","rs":"OK","cond":"OPERATIVO","estado":"RESCATE BASE 1","obs":"","banco":"Banco BCI","fIni":"2023-07","fFin":"2027-09","monto":50655198,"cuota":1567490,"remanente":16209663},{"prop":"EMECAR","movil":265,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SHXL-94","anio":2023,"chasis":"WF0XXXTTGPTB37773","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL SAN JUAN DE DIOS","obs":"","banco":"Banco BCI","fIni":"2023-07","fFin":"2027-09","monto":50655198,"cuota":1567490,"remanente":16209663},{"prop":"EMECAR","movil":267,"marca":"MAXUS","modelo":"DELIVER 9 L3H3","patente":"TBYY-96","anio":2023,"chasis":"LSH14J7C0NA050803","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"Continua en Kaufmann a la espera de importación de repuestos, sin fecha probable de entrega","banco":"Banco Santander","fIni":"2023-10","fFin":"2026-11","monto":50000000,"cuota":1791145,"remanente":8108108},{"prop":"EMECAR","movil":269,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SHXL-67","anio":2023,"chasis":"WF0XXXTTGPTB35369","rs":"OK","cond":"OPERATIVO","estado":"HLF","obs":"","banco":"Banco Internacional","fIni":"2023-12","fFin":"2026-12","monto":43187531,"cuota":1639248,"remanente":8397575},{"prop":"EMECAR","movil":271,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SHXL-68","anio":2023,"chasis":"WF0XXXTTGPTM09116","rs":"OK","cond":"OPERATIVO","estado":"RESCATE BASE 2","obs":"","banco":"Banco Internacional","fIni":"2023-12","fFin":"2026-12","monto":43187531,"cuota":1639248,"remanente":8397575},{"prop":"EMECAR","movil":273,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SHXL-69","anio":2023,"chasis":"WF0XXXTTGPTB38395","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":"Banco Internacional","fIni":"2023-12","fFin":"2026-12","monto":43187531,"cuota":1639248,"remanente":8397575},{"prop":"EMECAR","movil":275,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SHXL-93","anio":2023,"chasis":"WF0XXXTTGPTB38398","rs":"OK","cond":"OPERATIVO","estado":"BUPA ANTOFAGASTA","obs":"","banco":"Banco Internacional","fIni":"2023-12","fFin":"2026-12","monto":43187531,"cuota":1639248,"remanente":8397575},{"prop":"EMECAR","movil":277,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SHXL-95","anio":2023,"chasis":"WF0XXXTTGPTB35366","rs":"OK","cond":"OPERATIVO","estado":"EMECAR","obs":"","banco":"Banco Internacional","fIni":"2023-12","fFin":"2026-12","monto":43187531,"cuota":1639248,"remanente":8397575},{"prop":"EMECAR","movil":289,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TJTL-96","anio":2024,"chasis":"WF0EXXTTRPTY77810","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"Falla de conversor, a la espera de repuesto","banco":"Banco BCI","fIni":"2024-03","fFin":"2028-04","monto":52481311,"cuota":1598296,"remanente":24634085},{"prop":"EMECAR","movil":291,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TJTL-98","anio":2024,"chasis":"WF0EXXTTRPTT32868","rs":"OK","cond":"OPERATIVO","estado":"RESCATE BASE 2","obs":"","banco":"Banco BCI","fIni":"2024-03","fFin":"2028-04","monto":52481311,"cuota":1598296,"remanente":24634085},{"prop":"EMECAR","movil":293,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TKJH-97","anio":2024,"chasis":"WF0EXXTTRPTT32858","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":"Banco Internacional","fIni":"2024-04","fFin":"2028-05","monto":52026807,"cuota":1598296,"remanente":25482518},{"prop":"EMECAR","movil":295,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TKJH-99","anio":2024,"chasis":"WF0EXXTTRPTT32859","rs":"OK","cond":"OPERATIVO","estado":"LICITACION H DE LINARES","obs":"","banco":"Banco Internacional","fIni":"2024-04","fFin":"2028-05","monto":52026807,"cuota":1598296,"remanente":25482518},{"prop":"EMECAR","movil":297,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TKXZ-70","anio":2024,"chasis":"WF0EXXTTRPTT32862","rs":"OK","cond":"OPERATIVO","estado":"RESCATE BASE 8","obs":"","banco":"Banco Internacional","fIni":"2024-04","fFin":"2028-05","monto":49800000,"cuota":1598296,"remanente":24391837},{"prop":"EMECAR","movil":299,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TKXZ-71","anio":2024,"chasis":"WF0EXXTTRPTT32807","rs":"OK","cond":"OPERATIVO","estado":"LICITACION TALAGANTE","obs":"","banco":"Banco Internacional","fIni":"2024-04","fFin":"2028-05","monto":49800000,"cuota":1598296,"remanente":24391837},{"prop":"EMECAR","movil":301,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TKYL-33","anio":2024,"chasis":"WF0EXXTTRPTL32866","rs":"OK","cond":"FALLA MECANICA ETI","estado":"EN TALLER","obs":"Falla enfriador de aceite, en espera de respuestos","banco":"Banco Internacional","fIni":"2024-04","fFin":"2028-05","monto":49800000,"cuota":1506312,"remanente":24391837},{"prop":"EMECAR","movil":303,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TKYL-34","anio":2024,"chasis":"WF0EXXTTRPTL69849","rs":"OK","cond":"OPERATIVO","estado":"ELECCON IQUIQUE","obs":"","banco":"Banco Internacional","fIni":"2024-04","fFin":"2028-05","monto":49800000,"cuota":1506312,"remanente":24391837},{"prop":"EMECAR","movil":305,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TKYL-35","anio":2024,"chasis":"WF0EXXTTRPTL32861","rs":"OK","cond":"OPERATIVO","estado":"COMUDEF","obs":"","banco":"Banco Internacional","fIni":"2024-04","fFin":"2028-05","monto":49800000,"cuota":1564211,"remanente":24391837},{"prop":"EMECAR","movil":307,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TKYP-59","anio":2024,"chasis":"WF0EXXTTRPTL32804","rs":"OK","cond":"OPERATIVO","estado":"RESCATE BASE 1","obs":"Falla en enfriador de aceite, repuesto llegó el viernes 29 y durante estos días será reparada","banco":"Banco Internacional","fIni":"2024-04","fFin":"2028-05","monto":49800000,"cuota":1564211,"remanente":24391837},{"prop":"UCM","movil":371,"marca":"FORD","modelo":"TRANSIT VAN L3H3 2.0","patente":"VYFL-63","anio":2026,"chasis":"WF0EXXTT8TTL12163","rs":"PENDIENTE","cond":"NO OPERATIVO","estado":"","obs":"En espera de Branding, equipamiento y GPS","fEntrega":"2026-06","banco":"Banco Santander","fIni":"","fFin":"","monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":373,"marca":"FORD","modelo":"TRANSIT VAN L3H3 2.0","patente":"VYFL-36","anio":2026,"chasis":"WF0EXXTT9TTL12155","rs":"PENDIENTE","cond":"NO OPERATIVO","estado":"","obs":"En espera de Branding, equipamiento y GPS","fEntrega":"2026-06","banco":"Banco Santander","fIni":"","fFin":"","monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":379,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"","anio":2026,"chasis":"","rs":"PENDIENTE","cond":"EN PRODUCCION","estado":"EN PRODUCCION","obs":"Fecha de entrega 10/6/2026","fEntrega":"2026-06","banco":"Banco Santander","fIni":"","fFin":"","monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":381,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"","anio":2026,"chasis":"","rs":"PENDIENTE","cond":"EN PRODUCCION","estado":"EN PRODUCCION","obs":"Fecha de Entrega 10/6/2026","fEntrega":"2026-06","banco":"Banco Santander","fIni":"","fFin":"","monto":0,"cuota":0,"remanente":0}];
+const FLEET_AMB = [{"prop":"UCM","movil":219,"marca":"FORD","modelo":"E-350 6,8 BENCINERO","patente":"BVZS-29","anio":2010,"chasis":"1FDWE3FSXADA92181","rs":"OK","cond":"OPERATIVO CON OBS.","estado":"BACK UP EVENTOS RM","obs":"Inutilizable por A/C con falla sin reparación , Reclamo sindical DT","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":221,"marca":"FORD","modelo":"E-350 6,8 BENCINERO","patente":"BVZS-30","anio":2010,"chasis":"1FDWE3FS1ADA92182","rs":"OK","cond":"OPERATIVO CON OBS.","estado":"BACK UP EVENTOS RM","obs":"Inutilizable por A/C con falla sin reparación , Reclamo sindical DT","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":225,"marca":"FORD","modelo":"F - 350 6,7","patente":"GSWH-43","anio":2014,"chasis":"1FDRF3GT8EEB82737","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":229,"marca":"FORD","modelo":"F - 350 6,7","patente":"GXCD-48","anio":2014,"chasis":"1FDRF3GTXEEB82738","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":231,"marca":"FORD","modelo":"F - 350 6,7","patente":"GXCD-51","anio":2014,"chasis":"1FDRF3GT1EEB82739","rs":"OK","cond":"OPERATIVO","estado":"RESCATE BASE 1","obs":"Panne de Caja de Transmisión","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":233,"marca":"FORD","modelo":"F-350 TYPE I 6,7","patente":"LGCL-18","anio":2018,"chasis":"1FDRF3GT2JEC36477","rs":"OK","cond":"NO OPERATIVO","estado":"FUERA DE SERVICIO","obs":"Inutilizable por falla total de motor (el importado refaccionado falló y caja de cambio con problemas)","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":235,"marca":"FORD","modelo":"F-350 TYPE I 6,7","patente":"LJWH-87","anio":2018,"chasis":"1FDRF3GT6JEC36478","rs":"OK","cond":"OPERATIVO","estado":"RESCATE BASE 1","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":237,"marca":"FORD","modelo":"F-350 TYPE I 6,7","patente":"LJWH-89","anio":2018,"chasis":"1FDRF3GT6JEC36479","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":239,"marca":"FORD","modelo":"F-350 TYPE I 6,7","patente":"LJWH-90","anio":2018,"chasis":"1FDRF3GT6JEC36482","rs":"OK","cond":"FALLA MECANICA ETI","estado":"EN TALLER","obs":"Falla de Motor en revisión","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":241,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"RHRC-51","anio":2022,"chasis":"WF0XXXTTGMTM43747","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":"Banco de Chile","fIni":"2021-10","fFin":"2026-10","monto":50979167,"cuota":1134003,"remanente":5503806},{"prop":"UCM","movil":243,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"RHTK-96","anio":2022,"chasis":"WF0XXXTTGMTM43743","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":"Banco de Chile","fIni":"2021-10","fFin":"2026-10","monto":50979167,"cuota":1134003,"remanente":5503806},{"prop":"UCM","movil":245,"marca":"MERCEDES BENZ","modelo":"SPRINTER","patente":"RRTF-70","anio":2022,"chasis":"WIV907633NP293313","rs":"OK","cond":"SINIESTRADA","estado":"CORP. LAS CONDES","obs":"En espera de asignación de Taller por parte de Aseguradora","banco":"Banco de Chile","fIni":"2023-04","fFin":"2027-01","monto":61786568,"cuota":1711800,"remanente":13098142},{"prop":"UCM","movil":249,"marca":"MERCEDES BENZ","modelo":"SPRINTER","patente":"RSVL-33","anio":2022,"chasis":"WIV907633NP293314","rs":"OK","cond":"OPERATIVO","estado":"CLINICA INDISA","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":251,"marca":"MERCEDES BENZ","modelo":"SPRINTER","patente":"RSVL-38","anio":2022,"chasis":"8AC907643PE210146","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":253,"marca":"MERCEDES BENZ","modelo":"SPRINTER","patente":"SKRG-89","anio":2023,"chasis":"8AC907643PE214718","rs":"OK","cond":"OPERATIVO","estado":"CORP. LAS CONDES","obs":"","banco":"Banco Internacional","fIni":"2022-11","fFin":"2026-12","monto":75641187,"cuota":1960222,"remanente":13188755},{"prop":"UCM","movil":255,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SSHC-51","anio":2023,"chasis":"WF0XXXTTGNTJ42171","rs":"OK","cond":"OPERATIVO","estado":"CORP. LAS CONDES","obs":"","banco":"Banco Internacional","fIni":"2023-03","fFin":"2027-03","monto":65806287,"cuota":1732932,"remanente":16413127},{"prop":"UCM","movil":257,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SSGZ-39","anio":2023,"chasis":"WF0XXXTTGNTJ38746","rs":"OK","cond":"OPERATIVO","estado":"CORP. LAS CONDES","obs":"","banco":"Banco Internacional","fIni":"2023-03","fFin":"2027-03","monto":65806287,"cuota":1732932,"remanente":16413127},{"prop":"UCM","movil":279,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TFJT-44","anio":2024,"chasis":"WF0EXXTTRPTL49628","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","banco":"Los Cuatro","fIni":"2024-01","fFin":"2027-01","monto":62500000,"cuota":2075894,"remanente":15884072},{"prop":"UCM","movil":281,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TFJT-45","anio":2024,"chasis":"WF0EXXTTRPTL49625","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","banco":"Los Cuatro","fIni":"2024-01","fFin":"2027-01","monto":62500000,"cuota":2075894,"remanente":15884072},{"prop":"UCM","movil":283,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TFJT-46","anio":2024,"chasis":"WF0EXXTTRPTY77802","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","banco":"Los Cuatro","fIni":"2024-01","fFin":"2027-01","monto":62500000,"cuota":2075894,"remanente":15884072},{"prop":"UCM","movil":285,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TFJT-47","anio":2024,"chasis":"WF0EXXTTRPTL49619","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","banco":"Los Cuatro","fIni":"2024-01","fFin":"2027-01","monto":62500000,"cuota":2075894,"remanente":15884072},{"prop":"UCM","movil":287,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TGFC-87","anio":2024,"chasis":"WF0EXXTTRPTY76178","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","banco":"Banco BCI","fIni":"2024-01","fFin":"2026-06","monto":52016806,"cuota":2283548,"remanente":1793683},{"prop":"UCM","movil":309,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TSHL-29","anio":2024,"chasis":"WF0EXXTTRPTT32856","rs":"OK","cond":"OPERATIVO","estado":"CORP. LAS CONDES","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":311,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TSHL-46","anio":2024,"chasis":"WF0EXXTTRPTT32860","rs":"OK","cond":"OPERATIVO","estado":"EMECAR","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":313,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TSHL-56","anio":2024,"chasis":"WF0EXXTTRPTT32857","rs":"OK","cond":"OPERATIVO","estado":"RESCATE BASE 1","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":315,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TFTT-58","anio":2025,"chasis":"WF0DTGVGXSU015802","rs":"PENDIENTE","cond":"OPERATIVO","estado":"RESCATE BASE 2","obs":"","banco":"Banco BICE","fIni":"2024-11","fFin":"2026-12","monto":50375594,"cuota":2244352,"remanente":14105166},{"prop":"UCM","movil":317,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TFTT-59","anio":2025,"chasis":"WF0DTGVG7SU015806","rs":"PENDIENTE","cond":"OPERATIVO","estado":"RESCATE BASE 1","obs":"","banco":"Banco BICE","fIni":"2024-11","fFin":"2026-12","monto":50375594,"cuota":2244352,"remanente":14105166},{"prop":"UCM","movil":319,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TYLF-60","anio":2025,"chasis":"WF0EXXTT7STK37552","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL SAN JUAN DE DIOS","obs":"","banco":"Banco BICE","fIni":"2024-12","fFin":"2027-01","monto":46400000,"cuota":2244352,"remanente":14848000},{"prop":"UCM","movil":321,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TYLF-83","anio":2025,"chasis":"WF0EXXTT6STK41110","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL SAN JUAN DE DIOS","obs":"","banco":"Banco BICE","fIni":"2024-12","fFin":"2027-01","monto":46400000,"cuota":2244352,"remanente":14848000},{"prop":"UCM","movil":323,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TYSZ-69","anio":2025,"chasis":"WF0EXXTT1STC30647","rs":"OK","cond":"OPERATIVO","estado":"LICITACION HOSP. LUIS TISNE","obs":"","banco":"Banco de Chile","fIni":"2024-12","fFin":"2026-12","monto":46400000,"cuota":2805554,"remanente":13533333},{"prop":"UCM","movil":325,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TZHF-19","anio":2025,"chasis":"WF0EXXTT0STK43922","rs":"OK","cond":"OPERATIVO","estado":"AUTOPISTA NORORIENTE","obs":"","banco":"Banco BCI","fIni":"2025-01","fFin":"2027-02","monto":46400000,"cuota":2525915,"remanente":16704000},{"prop":"UCM","movil":327,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TZVJ-71","anio":2025,"chasis":"WF0EXXTT0STC30705","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL SAN JUAN DE DIOS","obs":"","banco":"Banco BCI","fIni":"2025-01","fFin":"2027-03","monto":46400000,"cuota":2559831,"remanente":16704000},{"prop":"UCM","movil":333,"marca":"FORD","modelo":"TRANSIT 2.0 AT","patente":"RKXL74","anio":2025,"chasis":"WF0DTGVG0SU017560","rs":"OK","cond":"OPERATIVO","estado":"LICITACION H DE LINARES","obs":"","banco":"Banco BCI","fIni":"2025-02","fFin":"2028-03","monto":50375594,"cuota":1942965,"remanente":26433056},{"prop":"UCM","movil":335,"marca":"FORD","modelo":"TRANSIT 2.0 AT","patente":"RKXL75","anio":2025,"chasis":"WF0DTGVG4SU0175562","rs":"OK","cond":"OPERATIVO","estado":"LICITACION HOSP. LUIS TISNE","obs":"","banco":"Banco BCI","fIni":"2025-02","fFin":"2028-03","monto":50375594,"cuota":1560620,"remanente":26433056},{"prop":"UCM","movil":337,"marca":"FORD","modelo":"TRANSIT 2.0 AT","patente":"TZBW10","anio":2025,"chasis":"WF0DTGVGBSU016415","rs":"OK","cond":"OPERATIVO","estado":"LICITACION TALAGANTE","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":339,"marca":"FORD","modelo":"TRANSIT 2.0 AT","patente":"TZBW11","anio":2025,"chasis":"WF0DTGVGBSU016423","rs":"OK","cond":"OPERATIVO","estado":"LICITACION HOSP. LUIS TISNE","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":341,"marca":"FORD","modelo":"TRANSIT 2.0 AT","patente":"TZBW13","anio":2025,"chasis":"WF0DTGVG3SU017262","rs":"OK","cond":"OPERATIVO","estado":"LICITACION HOSP. LUIS TISNE","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":343,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TVKC17","anio":2025,"chasis":"WF0EXXTT7STY01149","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL SAN JUAN DE DIOS","obs":"Falla de Embragüe, perteneciente a Hospital San Juan, en CURIFOR","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":345,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TVKC18","anio":2025,"chasis":"WF0EXXTT8STY01144","rs":"OK","cond":"OPERATIVO","estado":"ENAP HUALPEN","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":347,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TVKC19","anio":2025,"chasis":"WF0EXXTT6STY03636","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL SAN JUAN DE DIOS","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":349,"marca":"FORD","modelo":"TRANSIT 2.0 AT","patente":"TZBW12","anio":2025,"chasis":"WF0DTGVG1SU017258","rs":"PENDIENTE","cond":"OPERATIVO","estado":"LICITACION HOSP. LUIS TISNE","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":351,"marca":"FORD","modelo":"TRANSIT 2.0 AT","patente":"TZBW14","anio":2025,"chasis":"WF0DTGVG9SU016424","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL SAN JUAN DE DIOS","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":353,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"VKKJ92","anio":2026,"chasis":"WF0EXXTT7STJ41162","rs":"PENDIENTE","cond":"OPERATIVO","estado":"DISPONIBLE","obs":"","banco":"Rio Branco","fIni":"2025-09","fFin":"2027-09","monto":56250000,"cuota":2647883,"remanente":38971208},{"prop":"UCM","movil":355,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"VKKJ96","anio":2026,"chasis":"WF0EXXTT7STJ41159","rs":"PENDIENTE","cond":"OPERATIVO","estado":"DISPONIBLE","obs":"","banco":"Rio Branco","fIni":"2025-09","fFin":"2027-09","monto":56250000,"cuota":2647883,"remanente":38971208},{"prop":"UCM","movil":357,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"VKZC-10","anio":2026,"chasis":"WF0EXXTT9STT27446","rs":"PENDIENTE","cond":"OPERATIVO","estado":"HOSPITAL DE RANCAGUA","obs":"","banco":"Banco BICE","fIni":"2025-09","fFin":"2028-09","monto":50100000,"cuota":1561375,"remanente":39267568},{"prop":"UCM","movil":359,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"VLPF-65","anio":2026,"chasis":"WF0EXXTT9STT27454","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL DE RANCAGUA","obs":"","banco":"Banco BCI","fIni":"2025-09","fFin":"2028-04","monto":51018798,"cuota":2276894,"remanente":37852657},{"prop":"UCM","movil":361,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"VDSD-36","anio":2026,"chasis":"WF0EXXTT0STM65263","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL DE RANCAGUA","obs":"","banco":"Rio Branco","fIni":"2025-09","fFin":"2027-09","monto":56250000,"cuota":2647883,"remanente":38971208},{"prop":"UCM","movil":363,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"VDSD-37","anio":2026,"chasis":"WF0EXXTT0STM65277","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL DE RANCAGUA","obs":"","banco":"Rio Branco","fIni":"2025-09","fFin":"2027-09","monto":56250000,"cuota":2647883,"remanente":38971208},{"prop":"EMECAR","movil":80,"marca":"MERCEDES BENZ","modelo":"SPRINTER","patente":"DBLS-58","anio":2011,"chasis":"8AC90366BE039400","rs":"OK","cond":"OPERATIVO CON OBS.","estado":"BACK UP EVENTOS RM","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"EMECAR","movil":82,"marca":"MERCEDES BENZ","modelo":"SPRINTER","patente":"FCCV-39","anio":2012,"chasis":"WD3YE7A99CS684012","rs":"OK","cond":"OPERATIVO CON OBS.","estado":"BACK UP EMECAR","obs":"$17M","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"EMECAR","movil":83,"marca":"MERCEDES BENZ","modelo":"SPRINTER","patente":"GSWJ-43","anio":2014,"chasis":"WBD906613ES845128","rs":"OK","cond":"OPERATIVO CON OBS.","estado":"BACK UP EVENTOS RM","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"EMECAR","movil":84,"marca":"MERCEDES BENZ","modelo":"SPRINTER","patente":"JZDX-19","anio":2017,"chasis":"8AC906633HE123855","rs":"OK","cond":"OPERATIVO CON OBS.","estado":"BACK UP EMECAR","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"EMECAR","movil":85,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"RGCW-93","anio":2022,"chasis":"WF0XXXTTGMTJ74615","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"Falta Caja Eléctrica Consola de Sirena y Baliza","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"EMECAR","movil":86,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"RGCW-99","anio":2022,"chasis":"WF0XXXTTGMTJ74614","rs":"OK","cond":"OPERATIVO","estado":"EMECAR","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"EMECAR","movil":87,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"RWTR-74","anio":2022,"chasis":"WF0XXXTTGNTL02510","rs":"OK","cond":"OPERATIVO","estado":"EMECAR","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"EMECAR","movil":259,"marca":"MAXUS","modelo":"DELIVER 9 L3H3","patente":"SFPS-34","anio":2023,"chasis":"LSH14J7CXNA050811","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","banco":"Banco BCI","fIni":"2023-07","fFin":"2026-09","monto":56210084,"cuota":2190891,"remanente":4437638},{"prop":"EMECAR","movil":261,"marca":"MAXUS","modelo":"DELIVER 9 L3H3","patente":"SXSV-36","anio":2023,"chasis":"LSH14J7C7NA050796","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","banco":"Banco Santander","fIni":"2023-08","fFin":"2026-09","monto":54400000,"cuota":1959952,"remanente":5881081},{"prop":"EMECAR","movil":263,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SHXL-79","anio":2023,"chasis":"WF0XXXTTGPTB37770","rs":"OK","cond":"OPERATIVO","estado":"RESCATE BASE 1","obs":"","banco":"Banco BCI","fIni":"2023-07","fFin":"2027-09","monto":50655198,"cuota":1567490,"remanente":16209663},{"prop":"EMECAR","movil":265,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SHXL-94","anio":2023,"chasis":"WF0XXXTTGPTB37773","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL SAN JUAN DE DIOS","obs":"","banco":"Banco BCI","fIni":"2023-07","fFin":"2027-09","monto":50655198,"cuota":1567490,"remanente":16209663},{"prop":"EMECAR","movil":267,"marca":"MAXUS","modelo":"DELIVER 9 L3H3","patente":"TBYY-96","anio":2023,"chasis":"LSH14J7C0NA050803","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"Continua en Kaufmann a la espera de importación de repuestos, sin fecha probable de entrega","banco":"Banco Santander","fIni":"2023-10","fFin":"2026-11","monto":50000000,"cuota":1791145,"remanente":8108108},{"prop":"EMECAR","movil":269,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SHXL-67","anio":2023,"chasis":"WF0XXXTTGPTB35369","rs":"OK","cond":"OPERATIVO","estado":"HLF","obs":"","banco":"Banco Internacional","fIni":"2023-12","fFin":"2026-12","monto":43187531,"cuota":1639248,"remanente":8397575},{"prop":"EMECAR","movil":271,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SHXL-68","anio":2023,"chasis":"WF0XXXTTGPTM09116","rs":"OK","cond":"OPERATIVO","estado":"RESCATE BASE 2","obs":"","banco":"Banco Internacional","fIni":"2023-12","fFin":"2026-12","monto":43187531,"cuota":1639248,"remanente":8397575},{"prop":"EMECAR","movil":273,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SHXL-69","anio":2023,"chasis":"WF0XXXTTGPTB38395","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":"Banco Internacional","fIni":"2023-12","fFin":"2026-12","monto":43187531,"cuota":1639248,"remanente":8397575},{"prop":"EMECAR","movil":275,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SHXL-93","anio":2023,"chasis":"WF0XXXTTGPTB38398","rs":"OK","cond":"OPERATIVO","estado":"BUPA ANTOFAGASTA","obs":"","banco":"Banco Internacional","fIni":"2023-12","fFin":"2026-12","monto":43187531,"cuota":1639248,"remanente":8397575},{"prop":"EMECAR","movil":277,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SHXL-95","anio":2023,"chasis":"WF0XXXTTGPTB35366","rs":"OK","cond":"OPERATIVO","estado":"EMECAR","obs":"","banco":"Banco Internacional","fIni":"2023-12","fFin":"2026-12","monto":43187531,"cuota":1639248,"remanente":8397575},{"prop":"EMECAR","movil":289,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TJTL-96","anio":2024,"chasis":"WF0EXXTTRPTY77810","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"Falla de conversor, a la espera de repuesto","banco":"Banco BCI","fIni":"2024-03","fFin":"2028-04","monto":52481311,"cuota":1598296,"remanente":24634085},{"prop":"EMECAR","movil":291,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TJTL-98","anio":2024,"chasis":"WF0EXXTTRPTT32868","rs":"OK","cond":"OPERATIVO","estado":"RESCATE BASE 2","obs":"","banco":"Banco BCI","fIni":"2024-03","fFin":"2028-04","monto":52481311,"cuota":1598296,"remanente":24634085},{"prop":"EMECAR","movil":293,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TKJH-97","anio":2024,"chasis":"WF0EXXTTRPTT32858","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":"Banco Internacional","fIni":"2024-04","fFin":"2028-04","monto":52481311,"cuota":1491976,"remanente":25482518},{"prop":"EMECAR","movil":295,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TKJH-99","anio":2024,"chasis":"WF0EXXTTRPTT32859","rs":"OK","cond":"OPERATIVO","estado":"LICITACION H DE LINARES","obs":"","banco":"Banco Internacional","fIni":"2024-04","fFin":"2028-04","monto":52481311,"cuota":1491976,"remanente":25482518},{"prop":"EMECAR","movil":297,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TKXZ-70","anio":2024,"chasis":"WF0EXXTTRPTT32862","rs":"OK","cond":"OPERATIVO","estado":"RESCATE BASE 8","obs":"","banco":"Banco Internacional","fIni":"2024-04","fFin":"2028-04","monto":52481311,"cuota":1491976,"remanente":24391837},{"prop":"EMECAR","movil":299,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TKXZ-71","anio":2024,"chasis":"WF0EXXTTRPTT32807","rs":"OK","cond":"OPERATIVO","estado":"LICITACION TALAGANTE","obs":"","banco":"Banco Internacional","fIni":"2024-04","fFin":"2028-04","monto":52481311,"cuota":1491976,"remanente":24391837},{"prop":"EMECAR","movil":301,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TKYL-33","anio":2024,"chasis":"WF0EXXTTRPTL32866","rs":"OK","cond":"FALLA MECANICA ETI","estado":"EN TALLER","obs":"Falla enfriador de aceite, en espera de respuestos","banco":"Banco Internacional","fIni":"2024-04","fFin":"2028-04","monto":52481311,"cuota":1506312,"remanente":24391837},{"prop":"EMECAR","movil":303,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TKYL-34","anio":2024,"chasis":"WF0EXXTTRPTL69849","rs":"OK","cond":"OPERATIVO","estado":"ELECCON IQUIQUE","obs":"","banco":"Banco Internacional","fIni":"2024-04","fFin":"2028-04","monto":52481311,"cuota":1506312,"remanente":24391837},{"prop":"EMECAR","movil":305,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TKYL-35","anio":2024,"chasis":"WF0EXXTTRPTL32861","rs":"OK","cond":"OPERATIVO","estado":"COMUDEF","obs":"","banco":"Banco Internacional","fIni":"2024-04","fFin":"2028-04","monto":52026807,"cuota":1564211,"remanente":24391837},{"prop":"EMECAR","movil":307,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TKYP-59","anio":2024,"chasis":"WF0EXXTTRPTL32804","rs":"OK","cond":"OPERATIVO","estado":"RESCATE BASE 1","obs":"Falla en enfriador de aceite, repuesto llegó el viernes 29 y durante estos días será reparada","banco":"Banco Internacional","fIni":"2024-04","fFin":"2028-04","monto":52026807,"cuota":1564211,"remanente":24391837},{"prop":"UCM","movil":371,"marca":"FORD","modelo":"TRANSIT VAN L3H3 2.0","patente":"VYFL-63","anio":2026,"chasis":"WF0EXXTT8TTL12163","rs":"PENDIENTE","cond":"NO OPERATIVO","estado":"","obs":"En espera de Branding, equipamiento y GPS","fEntrega":"2026-06","banco":"Banco Santander","fIni":"2026-05","fFin":"2028-07","monto":49706592,"cuota":2589074,"remanente":0},{"prop":"UCM","movil":373,"marca":"FORD","modelo":"TRANSIT VAN L3H3 2.0","patente":"VYFL-36","anio":2026,"chasis":"WF0EXXTT9TTL12155","rs":"PENDIENTE","cond":"NO OPERATIVO","estado":"","obs":"En espera de Branding, equipamiento y GPS","fEntrega":"2026-06","banco":"Banco Santander","fIni":"2026-05","fFin":"2028-07","monto":49706592,"cuota":2589074,"remanente":0},{"prop":"UCM","movil":379,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"","anio":2026,"chasis":"","rs":"PENDIENTE","cond":"EN PRODUCCION","estado":"EN PRODUCCION","obs":"Fecha de entrega 10/6/2026","fEntrega":"2026-06","banco":"Banco Santander","fIni":"","fFin":"","monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":381,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"","anio":2026,"chasis":"","rs":"PENDIENTE","cond":"EN PRODUCCION","estado":"EN PRODUCCION","obs":"Fecha de Entrega 10/6/2026","fEntrega":"2026-06","banco":"Banco Santander","fIni":"","fFin":"","monto":0,"cuota":0,"remanente":0}];
 
-const FLEET_4X4 = [{"prop":"UCM","movil":329,"marca":"TOYOTA","modelo":"HILUX 4x4 2.4 MT DX","patente":"TZSG42","anio":2025,"chasis":"8AJDB3CD7S1369963","rs":"OK","cond":"OPERATIVO","estado":"TECHINT TOCOPILLA","obs":"","banco":"Banco Internacional","fIni":"2025-01","fFin":"2029-02","monto":54093123,"cuota":1561430,"remanente":36430062},{"prop":"UCM","movil":331,"marca":"TOYOTA","modelo":"HILUX 4x4 2.4 MT DX","patente":"TZSG43","anio":2025,"chasis":"8AJDB3CD4S1369967","rs":"OK","cond":"OPERATIVO","estado":"TECHINT TOCOPILLA","obs":"","banco":"Banco Internacional","fIni":"2025-01","fFin":"2029-02","monto":54093123,"cuota":1561430,"remanente":36430062},{"prop":"UCM","movil":365,"marca":"FORD","modelo":"TRANSIT VAN L3H3 4X4 2.0","patente":"VXLP-37","anio":2026,"chasis":"WF0EXXTT4STT24275","rs":"PENDIENTE","cond":"OPERATIVO","estado":"BESS LIBRILLO TAL TAL","obs":"","fEntrega":null,"banco":"Banco Santander","fIni":"2026-04","fFin":"2028-06","monto":65263680,"cuota":3394463,"remanente":65263680},{"prop":"UCM","movil":367,"marca":"FORD","modelo":"TRANSIT VAN L3H3 4X4 2.0","patente":"VXPT-90","anio":2026,"chasis":"WF0EXXTTXTTD81973","rs":"PENDIENTE","cond":"OPERATIVO","estado":"GRUPO COX MARIA ELENA","obs":"","fEntrega":"2026-05","banco":"Banco Santander","fIni":"2026-04","fFin":"2028-06","monto":65264246,"cuota":3396137,"remanente":0},{"prop":"UCM","movil":377,"marca":"FORD","modelo":"TRANSIT VAN L3H3 4X4 2.0","patente":"VYHC-78","anio":2026,"chasis":"WF0EXXTT9TTD82001","rs":"PENDIENTE","cond":"EN PRODUCCION","estado":"","obs":"Fecha de entrega 15/06/2026","fEntrega":"2026-06","banco":"Banco Santander","fIni":"","fFin":"","monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":369,"marca":"MAXUS","modelo":"T60 4X4 MT E6","patente":"VJPP-80","anio":2024,"chasis":"LSFAM11A2RA041610","rs":"PENDIENTE","cond":"OPERATIVO","estado":"MINERA AURYN LAMPA","obs":"En espera de Branding y GPS","fEntrega":"2026-06","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":375,"marca":"FORD","modelo":"TRANSIT VAN L3H3 4X4 2.0","patente":"VYGX-15","anio":2026,"chasis":"WF0EXXTT8TTD81955","rs":"PENDIENTE","cond":"EN PRODUCCION","estado":"","obs":"Fecha de entrega 08/06/2026","fEntrega":"2026-06","banco":"Banco Santander","fIni":"","fFin":"","monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":383,"marca":"FORD","modelo":"TRANSIT VAN L3H3 4X4 2.0","patente":"","anio":2026,"chasis":"","rs":"PENDIENTE","cond":"EN PRODUCCION","estado":"EN PRODUCCION","obs":"Fecha de entrega 30/06/2026","fEntrega":"2026-06","banco":"Banco Santander","fIni":"","fFin":"","monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":385,"marca":"FORD","modelo":"TRANSIT VAN L3H3 4X4 2.0","patente":"","anio":2026,"chasis":"","rs":"PENDIENTE","cond":"EN PRODUCCION","estado":"EN PRODUCCION","obs":"Fecha de entrega 30/06/2026","fEntrega":"2026-06","banco":"Banco Santander","fIni":"","fFin":"","monto":0,"cuota":0,"remanente":0}];
+const FLEET_4X4 = [{"prop":"UCM","movil":329,"marca":"TOYOTA","modelo":"HILUX 4x4 2.4 MT DX","patente":"TZSG42","anio":2025,"chasis":"8AJDB3CD7S1369963","rs":"OK","cond":"OPERATIVO","estado":"TECHINT TOCOPILLA","obs":"","banco":"Banco Internacional","fIni":"2025-01","fFin":"2029-02","monto":54093123,"cuota":1561430,"remanente":36430062},{"prop":"UCM","movil":331,"marca":"TOYOTA","modelo":"HILUX 4x4 2.4 MT DX","patente":"TZSG43","anio":2025,"chasis":"8AJDB3CD4S1369967","rs":"OK","cond":"OPERATIVO","estado":"TECHINT TOCOPILLA","obs":"","banco":"Banco Internacional","fIni":"2025-01","fFin":"2029-02","monto":54093123,"cuota":1561430,"remanente":36430062},{"prop":"UCM","movil":365,"marca":"FORD","modelo":"TRANSIT VAN L3H3 4X4 2.0","patente":"VXLP-37","anio":2026,"chasis":"WF0EXXTT4STT24275","rs":"PENDIENTE","cond":"OPERATIVO","estado":"BESS LIBRILLO TAL TAL","obs":"","fEntrega":null,"banco":"Banco Santander","fIni":"2026-04","fFin":"2028-06","monto":65263680,"cuota":3394463,"remanente":65263680},{"prop":"UCM","movil":367,"marca":"FORD","modelo":"TRANSIT VAN L3H3 4X4 2.0","patente":"VXPT-90","anio":2026,"chasis":"WF0EXXTTXTTD81973","rs":"PENDIENTE","cond":"OPERATIVO","estado":"GRUPO COX MARIA ELENA","obs":"","fEntrega":"2026-05","banco":"Banco Santander","fIni":"2026-04","fFin":"2028-06","monto":65264246,"cuota":3396137,"remanente":0},{"prop":"UCM","movil":377,"marca":"FORD","modelo":"TRANSIT VAN L3H3 4X4 2.0","patente":"VYHC-78","anio":2026,"chasis":"WF0EXXTT9TTD82001","rs":"PENDIENTE","cond":"EN PRODUCCION","estado":"","obs":"Fecha de entrega 15/06/2026","fEntrega":"2026-06","banco":"Banco Santander","fIni":"","fFin":"","monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":369,"marca":"MAXUS","modelo":"T60 4X4 MT E6","patente":"VJPP-80","anio":2024,"chasis":"LSFAM11A2RA041610","rs":"PENDIENTE","cond":"OPERATIVO","estado":"MINERA AURYN LAMPA","obs":"","fEntrega":"2026-06","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":375,"marca":"FORD","modelo":"TRANSIT VAN L3H3 4X4 2.0","patente":"VYGX-15","anio":2026,"chasis":"WF0EXXTT8TTD81955","rs":"PENDIENTE","cond":"EN PRODUCCION","estado":"","obs":"Fecha de entrega 08/06/2026","fEntrega":"2026-06","banco":"Banco Santander","fIni":"","fFin":"","monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":383,"marca":"FORD","modelo":"TRANSIT VAN L3H3 4X4 2.0","patente":"","anio":2026,"chasis":"","rs":"PENDIENTE","cond":"EN PRODUCCION","estado":"EN PRODUCCION","obs":"Fecha de entrega 30/06/2026","fEntrega":"2026-06","banco":"Banco Santander","fIni":"","fFin":"","monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":385,"marca":"FORD","modelo":"TRANSIT VAN L3H3 4X4 2.0","patente":"","anio":2026,"chasis":"","rs":"PENDIENTE","cond":"EN PRODUCCION","estado":"EN PRODUCCION","obs":"Fecha de entrega 30/06/2026","fEntrega":"2026-06","banco":"Banco Santander","fIni":"","fFin":"","monto":0,"cuota":0,"remanente":0}];
 
 const FLEET_VAN = [{"prop":"UCM","movil":3,"marca":"MAXUS","modelo":"DELIVER 9 L3H3","patente":"SXWT-11","anio":2023,"chasis":"LSKG5GC18NA823719","rs":"PENDIENTE","cond":"OPERATIVO","estado":"CORP. LAS CONDES","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":5,"marca":"MAXUS","modelo":"DELIVER 9 L3H3","patente":"SXWT-12","anio":2023,"chasis":"LSKG5GC18NA823994","rs":"PENDIENTE","cond":"OPERATIVO","estado":"CORP. LAS CONDES","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0}];
 
@@ -632,7 +451,7 @@ const REQS_AMB = [{"uso":"TRASLADO BÁSICO","asig":0,"reqOp":10,"reqBU":0,"fIni"
 const REQS_4X4 = [{"uso":"TECHINT TOCOPILLA","asig":0,"reqOp":2,"reqBU":0,"fIni":null,"fFin":"2027-01"},{"uso":"GRUPO COX MARIA ELENA","asig":0,"reqOp":1,"reqBU":0,"fIni":"2026-05","fFin":"2026-12","tempReqs":[]},{"uso":"BESS LIBRILLO TAL TAL","asig":0,"reqOp":1,"reqBU":0,"fIni":"2026-05","fFin":"2026-12","tempReqs":[]},{"uso":"MINERA AURYN LAMPA","asig":0,"reqOp":1,"reqBU":0,"fIni":"2026-05","fFin":"2026-12","tempReqs":[]}];
 const REQS_VAN = [{"uso":"CORP. LAS CONDES","asig":0,"reqOp":2,"reqBU":0,"fIni":null,"fFin":"2026-07","tempReqs":[]}];
 
-const FLEET_AUTOS = [{"prop":"UCM","movil":1,"marca":"CHEVROLET","modelo":"SAIL NB 1.5","patente":"VXWW-94","anio":2026,"chasis":"LZWAEAGA8TF106978","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","fEntrega":"2026-05","banco":"Banco BCI","fIni":"2026-05","fFin":"2028-06","monto":10453085,"cuota":472435,"remanente":0},{"prop":"UCM","movil":2,"marca":"CHEVROLET","modelo":"SAIL NB 1.5","patente":"VXWL-65","anio":2026,"chasis":"LZWAEAGA6TF106977","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","fEntrega":"2026-05","banco":"Banco BCI","fIni":"2026-05","fFin":"2028-06","monto":10453085,"cuota":472435,"remanente":0},{"prop":"UCM","movil":3,"marca":"CHEVROLET","modelo":"SAIL NB 1.5","patente":"VXWT-79","anio":2026,"chasis":"LZWAEAGA1TF103968","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","fEntrega":"2026-05","banco":"Banco BCI","fIni":"2026-05","fFin":"2028-06","monto":10453085,"cuota":472435,"remanente":0},{"prop":"UCM","movil":4,"marca":"CHEVROLET","modelo":"SAIL NB 1.5","patente":"VXWR-58","anio":2026,"chasis":"LZWAEAGA1TF103954","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","fEntrega":"2026-05","banco":"Banco BCI","fIni":"2026-05","fFin":"2028-06","monto":10453085,"cuota":472435,"remanente":0},{"prop":"UCM","movil":5,"marca":"CHEVROLET","modelo":"SAIL NB 1.5","patente":"VXWY-67","anio":2026,"chasis":"LZWAEAGA6TF111340","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","fEntrega":"2026-05","banco":"Banco BCI","fIni":"2026-05","fFin":"2028-06","monto":10453085,"cuota":472435,"remanente":0},{"prop":"UCM","movil":6,"marca":"CHEVROLET","modelo":"SAIL NB 1.5","patente":"VXWY-77","anio":2026,"chasis":"LZWAEAGA4TF111336","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","fEntrega":"2026-05","banco":"Banco BCI","fIni":"2026-05","fFin":"2028-06","monto":10453085,"cuota":472435,"remanente":0},{"prop":"UCM","movil":7,"marca":"CHEVROLET","modelo":"SAIL NB 1.5","patente":"VXWT-69","anio":2026,"chasis":"LZWAEAGA4TF106976","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","fEntrega":"2026-05","banco":"Banco BCI","fIni":"2026-05","fFin":"2028-06","monto":10453085,"cuota":472435,"remanente":0},{"prop":"UCM","movil":8,"marca":"CHEVROLET","modelo":"SAIL NB 1.5","patente":"VXWT-59","anio":2026,"chasis":"LZWAEAGA2TF111335","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","fEntrega":"2026-05","banco":"Banco BCI","fIni":"2026-05","fFin":"2028-06","monto":10453085,"cuota":472435,"remanente":0},{"prop":"UCM","movil":151,"marca":"TOYOTA","modelo":"COROLLA CROSS CVT HEV","patente":"SKHP41","anio":2023,"chasis":"9BRKZAAG6P0642855","rs":"N/A","cond":"OPERATIVO","estado":"URT LA PINTANA","obs":"","fEntrega":null,"banco":"Banco Internacional","fIni":"2022-11","fFin":"2026-12","monto":24889999,"cuota":677244,"remanente":4556629},{"prop":"UCM","movil":37,"marca":"FORD","modelo":"RANGER DSL XL 4X2 2.0L MT","patente":"VTVZ-19","anio":2026,"chasis":"8AFBR00E7SJ010203","rs":"N/A","cond":"OPERATIVO","estado":"OPERACIONES RM","obs":"","fEntrega":null,"banco":"Banco BICE","fIni":"2026-01","fFin":"2028-02","monto":22507851,"cuota":980004,"remanente":0},{"prop":"UCM","movil":39,"marca":"FORD","modelo":"RANGER DSL XL 4X2 2.0L MT","patente":"VTVZ-39","anio":2026,"chasis":"8AFBR00E9SJ010204","rs":"N/A","cond":"OPERATIVO","estado":"OPERACIONES RM","obs":"","fEntrega":null,"banco":"Banco BICE","fIni":"2026-01","fFin":"2028-02","monto":22507851,"cuota":980004,"remanente":0},{"prop":"UCM","movil":41,"marca":"TOYOTA","modelo":"HYLUX","patente":"VXZV-61","anio":2026,"chasis":"8AJDB3CD1T6603034","rs":"N/A","cond":"OPERATIVO","estado":"URT AES ALTO MAIPO","obs":"","fEntrega":"2026-06","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0}];
+const FLEET_AUTOS = [{"prop":"UCM","movil":1,"marca":"CHEVROLET","modelo":"SAIL NB 1.5","patente":"VXWW-94","anio":2026,"chasis":"LZWAEAGA8TF106978","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","fEntrega":"2026-05","banco":"Banco BCI","fIni":"2026-05","fFin":"2028-06","monto":10453085,"cuota":472434,"remanente":0},{"prop":"UCM","movil":2,"marca":"CHEVROLET","modelo":"SAIL NB 1.5","patente":"VXWL-65","anio":2026,"chasis":"LZWAEAGA6TF106977","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","fEntrega":"2026-05","banco":"Banco BCI","fIni":"2026-05","fFin":"2028-06","monto":10453085,"cuota":472434,"remanente":0},{"prop":"UCM","movil":3,"marca":"CHEVROLET","modelo":"SAIL NB 1.5","patente":"VXWT-79","anio":2026,"chasis":"LZWAEAGA1TF103968","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","fEntrega":"2026-05","banco":"Banco BCI","fIni":"2026-05","fFin":"2028-06","monto":10453085,"cuota":472434,"remanente":0},{"prop":"UCM","movil":4,"marca":"CHEVROLET","modelo":"SAIL NB 1.5","patente":"VXWR-58","anio":2026,"chasis":"LZWAEAGA1TF103954","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","fEntrega":"2026-05","banco":"Banco BCI","fIni":"2026-05","fFin":"2028-06","monto":10453085,"cuota":472434,"remanente":0},{"prop":"UCM","movil":5,"marca":"CHEVROLET","modelo":"SAIL NB 1.5","patente":"VXWY-67","anio":2026,"chasis":"LZWAEAGA6TF111340","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","fEntrega":"2026-05","banco":"Banco BCI","fIni":"2026-05","fFin":"2028-06","monto":10453085,"cuota":472434,"remanente":0},{"prop":"UCM","movil":6,"marca":"CHEVROLET","modelo":"SAIL NB 1.5","patente":"VXWY-77","anio":2026,"chasis":"LZWAEAGA4TF111336","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","fEntrega":"2026-05","banco":"Banco BCI","fIni":"2026-05","fFin":"2028-06","monto":10453085,"cuota":472434,"remanente":0},{"prop":"UCM","movil":7,"marca":"CHEVROLET","modelo":"SAIL NB 1.5","patente":"VXWT-69","anio":2026,"chasis":"LZWAEAGA4TF106976","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","fEntrega":"2026-05","banco":"Banco BCI","fIni":"2026-05","fFin":"2028-06","monto":10453085,"cuota":472434,"remanente":0},{"prop":"UCM","movil":8,"marca":"CHEVROLET","modelo":"SAIL NB 1.5","patente":"VXWT-59","anio":2026,"chasis":"LZWAEAGA2TF111335","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","fEntrega":"2026-05","banco":"Banco BCI","fIni":"2026-05","fFin":"2028-06","monto":10453085,"cuota":472434,"remanente":0},{"prop":"UCM","movil":151,"marca":"TOYOTA","modelo":"COROLLA CROSS CVT HEV","patente":"SKHP41","anio":2023,"chasis":"9BRKZAAG6P0642855","rs":"N/A","cond":"OPERATIVO","estado":"URT LA PINTANA","obs":"","fEntrega":null,"banco":"Banco Internacional","fIni":"2022-11","fFin":"2026-12","monto":24889999,"cuota":677244,"remanente":4556629},{"prop":"UCM","movil":37,"marca":"FORD","modelo":"RANGER DSL XL 4X2 2.0L MT","patente":"VTVZ-19","anio":2026,"chasis":"8AFBR00E7SJ010203","rs":"N/A","cond":"OPERATIVO","estado":"OPERACIONES RM","obs":"","fEntrega":null,"banco":"Banco BICE","fIni":"2026-01","fFin":"2028-02","monto":22507851,"cuota":980004,"remanente":0},{"prop":"UCM","movil":39,"marca":"FORD","modelo":"RANGER DSL XL 4X2 2.0L MT","patente":"VTVZ-39","anio":2026,"chasis":"8AFBR00E9SJ010204","rs":"N/A","cond":"OPERATIVO","estado":"OPERACIONES RM","obs":"","fEntrega":null,"banco":"Banco BICE","fIni":"2026-01","fFin":"2028-02","monto":22507851,"cuota":980004,"remanente":0},{"prop":"UCM","movil":41,"marca":"TOYOTA","modelo":"HYLUX","patente":"VXZV-61","anio":2026,"chasis":"8AJDB3CD1T6603034","rs":"N/A","cond":"OPERATIVO","estado":"URT AES ALTO MAIPO","obs":"","fEntrega":"2026-06","banco":null,"fIni":"2026-05","fFin":"2026-07","monto":27852176,"cuota":1450178,"remanente":0}];
 
 const REQS_AUTOS = [{"uso":"COMUDEF","asig":0,"reqOp":8,"reqBU":0,"fIni":"2026-05","fFin":"2029-05","tempReqs":[{"qty":2,"mesIni":"06","mesFin":"09","motivo":"Alta Temporada"}]},{"uso":"OPERACIONES RM","asig":0,"reqOp":2,"reqBU":0,"fIni":"2026-02","fFin":null,"tempReqs":[]},{"uso":"URT LA PINTANA","asig":0,"reqOp":1,"reqBU":0,"fIni":"2022-11","fFin":"2027-12","tempReqs":[]},{"uso":"URT AES ALTO MAIPO","asig":0,"reqOp":1,"reqBU":0,"fIni":"2026-06","fFin":"2028-06","tempReqs":[]}];
 
@@ -649,8 +468,8 @@ const SHOP_HIST = {
 };
 
 /* ── PIPELINE ── */
-const PIPELINE_AMB = [{"id":1779221533119,"cliente":"VERONA","qty":1,"prob":80,"fReq":"2026-06","duracion":24,"estado":"Negociación avanzada","notas":"Empresa RM"},{"id":1778860204201,"cliente":"FUSAT RANCAGUA","qty":3,"prob":10,"fReq":"2026-07","duracion":36,"estado":"Prospecto","notas":"Licitación hospital público"},{"id":1779221586045,"cliente":"GRUPO COSTANERA-LITORAL","qty":1,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Negociación","notas":""},{"id":1778860117802,"cliente":"MUNICIPALIDAD LAS CONDES","qty":4,"prob":50,"fReq":"2026-08","duracion":24,"estado":"Propuesta","notas":""},{"id":1779221610895,"cliente":"COSAYACH","qty":3,"prob":10,"fReq":"2026-08","duracion":24,"estado":"Negociación","notas":"Compañía de Salitre y Yodo"},{"id":1779221740465,"cliente":"SACYR RUTA 68","qty":3,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Propuesta","notas":""},{"id":1779221698227,"cliente":"SACYR COPIAPO","qty":2,"prob":10,"fReq":"2026-08","duracion":36,"estado":"Prospecto","notas":""},{"id":1779221756425,"cliente":"SACYR RUTA DEL ALGARROBO","qty":2,"prob":10,"fReq":"2026-07","duracion":36,"estado":"Prospecto","notas":""},{"id":1778853574689,"cliente":"HOSPITAL SAN JUAN DE DIOS","qty":7,"prob":25,"fReq":"2026-08","duracion":12,"estado":"Prospecto","notas":""},{"id":1779221825771,"cliente":"RUTA MINERA","qty":1,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Propuesta","notas":""},{"id":1779221892251,"cliente":"AES LOS CURUROS","qty":1,"prob":20,"fReq":"2026-07","duracion":12,"estado":"Prospecto","notas":""},{"id":1779221926783,"cliente":"PAMPA CAMARONES","qty":1,"prob":30,"fReq":"2026-08","duracion":24,"estado":"Prospecto","notas":""},{"id":1779810489850,"cliente":"HOSPITAL LUIS TISNE","qty":1,"prob":50,"fReq":"2026-06","duracion":3,"estado":"Prospecto","notas":""},{"id":1780579452866,"cliente":"POWER CHINA","qty":1,"prob":20,"fReq":"2026-07","duracion":12,"estado":"Prospecto","notas":""},{"id":1780579421526,"cliente":"TANGHUA - CHILLAN VIEJO","qty":1,"prob":30,"fReq":"2026-08","duracion":12,"estado":"Propuesta","notas":""}];
-const PIPELINE_4X4 = [{"id":1780579304620,"cliente":"ACCIONA","qty":1,"prob":90,"fReq":"2026-06","duracion":24,"estado":"Negociación avanzada","notas":""},{"id":1780579109042,"cliente":"ANDEX MINERALS","qty":1,"prob":20,"fReq":"2026-08","duracion":12,"estado":"Negociación","notas":"Solo Arriendo Fierro"},{"id":1780430730098,"cliente":"OBSERVATORIO AURA","qty":2,"prob":20,"fReq":"2026-08","duracion":36,"estado":"Propuesta","notas":""},{"id":1779222087238,"cliente":"COLLAHUASI","qty":1,"prob":5,"fReq":"2026-08","duracion":12,"estado":"Prospecto","notas":""},{"id":1780579223439,"cliente":"GRUPO COX - ANTOFAGASTA","qty":1,"prob":95,"fReq":"2026-06","duracion":12,"estado":"Negociación avanzada","notas":""},{"id":1780579241919,"cliente":"GRUPO COX - EL SALVADOR","qty":1,"prob":95,"fReq":"2026-08","duracion":12,"estado":"Negociación avanzada","notas":""},{"id":1780579272114,"cliente":"GRUPO COX - VICTORIA","qty":1,"prob":20,"fReq":"2026-08","duracion":12,"estado":"Propuesta","notas":""},{"id":1780323078531,"cliente":"METLEN","qty":1,"prob":10,"fReq":"2026-06","duracion":12,"estado":"Propuesta","notas":""},{"id":1780430752282,"cliente":"BESALCO - ZALDIVAR","qty":3,"prob":10,"fReq":"2026-08","duracion":12,"estado":"Propuesta","notas":"Puede ser que sean 4x2 y no 4x4"}];
+const PIPELINE_AMB = [{"id":1781019323614,"cliente":"VERONA","qty":1,"prob":80,"fReq":"2026-09","duracion":24,"estado":"Negociación avanzada","notas":"Empresa RM"},{"id":1778860204201,"cliente":"FUSAT RANCAGUA","qty":3,"prob":10,"fReq":"2026-07","duracion":36,"estado":"Prospecto","notas":"Licitación hospital público"},{"id":1779221586045,"cliente":"GRUPO COSTANERA-LITORAL","qty":1,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Negociación","notas":""},{"id":1778860117802,"cliente":"MUNICIPALIDAD LAS CONDES","qty":4,"prob":50,"fReq":"2026-08","duracion":24,"estado":"Propuesta","notas":""},{"id":1779221610895,"cliente":"COSAYACH","qty":3,"prob":10,"fReq":"2026-08","duracion":24,"estado":"Negociación","notas":"Compañía de Salitre y Yodo"},{"id":1779221740465,"cliente":"SACYR RUTA 68","qty":3,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Propuesta","notas":""},{"id":1779221698227,"cliente":"SACYR COPIAPO","qty":2,"prob":10,"fReq":"2026-08","duracion":36,"estado":"Prospecto","notas":""},{"id":1779221756425,"cliente":"SACYR RUTA DEL ALGARROBO","qty":2,"prob":10,"fReq":"2026-07","duracion":36,"estado":"Prospecto","notas":""},{"id":1778853574689,"cliente":"HOSPITAL SAN JUAN DE DIOS","qty":7,"prob":25,"fReq":"2026-08","duracion":12,"estado":"Prospecto","notas":""},{"id":1779221825771,"cliente":"RUTA MINERA","qty":1,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Propuesta","notas":""},{"id":1779221892251,"cliente":"AES LOS CURUROS","qty":1,"prob":20,"fReq":"2026-07","duracion":12,"estado":"Prospecto","notas":""},{"id":1779221926783,"cliente":"PAMPA CAMARONES","qty":1,"prob":30,"fReq":"2026-08","duracion":24,"estado":"Prospecto","notas":""},{"id":1779810489850,"cliente":"HOSPITAL LUIS TISNE","qty":1,"prob":50,"fReq":"2026-06","duracion":3,"estado":"Prospecto","notas":""},{"id":1781019472922,"cliente":"POWER CHINA - VALLENAR","qty":1,"prob":20,"fReq":"2026-07","duracion":12,"estado":"Prospecto","notas":""},{"id":1780579421526,"cliente":"TANGHUA - CHILLAN VIEJO","qty":1,"prob":30,"fReq":"2026-08","duracion":12,"estado":"Propuesta","notas":""}];
+const PIPELINE_4X4 = [{"id":1781019337154,"cliente":"ACCIONA","qty":1,"prob":90,"fReq":"2026-08","duracion":24,"estado":"Negociación avanzada","notas":""},{"id":1780579109042,"cliente":"ANDEX MINERALS","qty":1,"prob":20,"fReq":"2026-08","duracion":12,"estado":"Negociación","notas":"Solo Arriendo Fierro"},{"id":1779222087238,"cliente":"COLLAHUASI","qty":1,"prob":5,"fReq":"2026-08","duracion":12,"estado":"Prospecto","notas":""},{"id":1780579223439,"cliente":"GRUPO COX - ANTOFAGASTA","qty":1,"prob":95,"fReq":"2026-06","duracion":12,"estado":"Negociación avanzada","notas":""},{"id":1780579241919,"cliente":"GRUPO COX - EL SALVADOR","qty":1,"prob":95,"fReq":"2026-08","duracion":12,"estado":"Negociación avanzada","notas":""},{"id":1780579272114,"cliente":"GRUPO COX - VICTORIA","qty":1,"prob":20,"fReq":"2026-08","duracion":12,"estado":"Propuesta","notas":""},{"id":1780323078531,"cliente":"METLEN","qty":1,"prob":10,"fReq":"2026-06","duracion":12,"estado":"Propuesta","notas":""},{"id":1781019594150,"cliente":"BESALCO - ZALDIVAR","qty":1,"prob":50,"fReq":"2026-07","duracion":12,"estado":"Negociación avanzada","notas":"Inicio 1 de Julio"},{"id":1781019578418,"cliente":"BESALCO - ZALDIVAR","qty":1,"prob":50,"fReq":"2026-07","duracion":12,"estado":"Negociación avanzada","notas":"Inicio 20 de Julio"},{"id":1781019621184,"cliente":"BESALCO - ZALDIVAR","qty":1,"prob":50,"fReq":"2026-08","duracion":12,"estado":"Negociación avanzada","notas":"Inicio 1 de Agosto"},{"id":1781019808999,"cliente":"GRUPO COX - (SIN NOMBRE PROYECTO AUN)","qty":1,"prob":15,"fReq":"2026-08","duracion":12,"estado":"Propuesta","notas":""},{"id":1781019890573,"cliente":"GRENERGY - COPIAPO","qty":1,"prob":20,"fReq":"2026-09","duracion":12,"estado":"Propuesta","notas":""},{"id":1781019923977,"cliente":"GLOBALTEC","qty":1,"prob":10,"fReq":"2026-09","duracion":12,"estado":"Prospecto","notas":""}];
 const PIPELINE_VAN = [];
 
 /* ══════════════════════════════════════
@@ -746,6 +565,7 @@ const COND_COLORS={
   "OP. CON OBS.":"#d97706",
   "EN TALLER":"#ef4444",
   "NO OPERATIVO":"#a16207",
+  "DISPONIBLE":"#0ea5e9",
   "FUERA SERVICIO":"#374151",
   "EN PRODUCCIÓN":"#3b82f6",
 };
@@ -772,6 +592,14 @@ function isTaller(cond){
 }
 function isEnTaller(cond){
   return isTaller(cond);
+}
+// Una unidad cuenta como "disponible" si: su estado es DISPONIBLE,
+// o es NO OPERATIVO recién recibida (sin asignar y fuera de taller/FS) — pronto operará.
+function esDisponible(v){
+  const est=(v.estado||"").trim().toUpperCase();
+  if(est==="DISPONIBLE") return true;
+  if(v.cond==="NO OPERATIVO" && est!=="FUERA DE SERVICIO") return true;
+  return false;
 }
 function propBadge(p){return p==="UCM"?'<span class="badge b-blue">UCM</span>':'<span class="badge b-purple">EMECAR</span>';}
 function rsBadge(r){
@@ -837,13 +665,13 @@ function renderPanel(){
   const flName=panelViewAll?"Todas las flotas":(currentFlota==="4x2"?"AMB 4×2":currentFlota==="4x4"?"AMB 4×4":currentFlota==="van"?"VAN":"AUTOS");
 
   const total=fl.length;
-  const op=fl.filter(v=>v.cond==="OPERATIVO").length;
-  const opObs=fl.filter(v=>v.cond==="OPERATIVO CON OBS.").length;
+  const op=fl.filter(v=>v.cond==="OPERATIVO"&&!esDisponible(v)).length;
+  const opObs=fl.filter(v=>v.cond==="OPERATIVO CON OBS."&&!esDisponible(v)).length;
   const taller=fl.filter(v=>isEnTaller(v.cond)&&v.estado!=="FUERA DE SERVICIO").length;
   const noOp=fl.filter(v=>v.cond==="NO OPERATIVO"&&v.estado!=="FUERA DE SERVICIO").length;
   const fs=fl.filter(v=>isNonOp(v.cond)&&v.estado==="FUERA DE SERVICIO").length;
   const prod=fl.filter(v=>v.cond==="EN PRODUCCION").length;
-  const disp=fl.filter(v=>(v.estado||"").trim().toUpperCase()==="DISPONIBLE").length;
+  const disp=fl.filter(esDisponible).length;
   const wLease=fl.filter(v=>v.banco);
   const cuotaTotal=wLease.reduce((s,v)=>s+getCuota(v),0);
   const deudaTotal=wLease.reduce((s,v)=>s+getRemanente(v),0);
@@ -853,7 +681,7 @@ function renderPanel(){
   if(op>0)condData["OPERATIVO"]=op;
   if(opObs>0)condData["OP. CON OBS."]=opObs;
   if(taller>0)condData["EN TALLER"]=taller;
-  if(noOp>0)condData["NO OPERATIVO"]=noOp;
+  if(disp>0)condData["DISPONIBLE"]=disp;
   if(fs>0)condData["FUERA SERVICIO"]=fs;
   if(prod>0)condData["EN PRODUCCIÓN"]=prod;
   const condColors=Object.keys(condData).map(k=>COND_COLORS[k]||"#94a3b8");
@@ -875,7 +703,8 @@ function renderPanel(){
     </div>
     <div class="kpi-row">
       <div class="kpi" style="border-left-color:#1d4ed8"><div class="lbl">Total Flota</div><div class="val">${total}</div><div class="sub">vehículos registrados</div></div>
-      <div class="kpi" style="border-left-color:#16a34a"><div class="lbl">Operativos</div><div class="val">${op+opObs}</div><div class="sub">${op} OK · ${opObs} con obs.</div></div>
+      <div class="kpi" style="border-left-color:#16a34a"><div class="lbl">Asignados</div><div class="val">${op}</div><div class="sub">operando con cliente</div></div>
+      <div class="kpi" style="border-left-color:#d97706"><div class="lbl">Op. con observaciones</div><div class="val" style="color:#d97706">${opObs}</div><div class="sub">uso limitado</div></div>
       <div class="kpi" style="border-left-color:#ef4444"><div class="lbl">En taller activo</div><div class="val">${taller}</div><div class="sub">${fs>0?fs+" fuera de servicio":""}</div></div>
       <div class="kpi" style="border-left-color:#0ea5e9"><div class="lbl">Disponibles</div><div class="val" style="color:#0ea5e9">${disp}</div><div class="sub">sin asignación</div></div>
       ${prod>0?`<div class="kpi" style="border-left-color:#1d4ed8"><div class="lbl">En producción</div><div class="val" style="color:#1d4ed8">${prod}</div><div class="sub">ingresando a flota</div></div>`:""}
@@ -1225,7 +1054,9 @@ function saveForm(isNew){
    LEASING
 ══════════════════════════════════════ */
 let leasingViewAll=false;
-let proyReservaTaller=6;
+// Reserva estructural de taller independiente por tipo de flota (cada una tiene su perfil de falla)
+let proyReservaTallerPorFlota={"4x2":6,"4x4":6,"van":6,"autos":6};
+function getReservaTaller(){return proyReservaTallerPorFlota[currentFlota]??6;}
 function toggleLeasingView(){
   leasingViewAll=!leasingViewAll;
   destroyCharts();render();
@@ -1397,6 +1228,8 @@ function getAsigReal(r, fl){
   const special=new Set(["EN TALLER","FUERA DE SERVICIO","EN PRODUCCION",""]);
   return fl.filter(v=>{
     const e=(v.estado||"").trim();
+    // Visión B: solo cuenta si está operando — excluye taller (falla/siniestro), FS y producción
+    if(isTaller(v.cond)||v.cond==="FUERA DE SERVICIO"||v.cond==="EN PRODUCCION") return false;
     return !special.has(e) && !e.toUpperCase().includes("BACK UP") && e===r.uso;
   }).length;
 }
@@ -1415,6 +1248,13 @@ function buildTodasFilas(reqs, fl){
   // Contar estados en FLEET
   const estadoCount={};
   fl.forEach(v=>{
+    // NO OPERATIVO recién recibido (sin asignar) cuenta como DISPONIBLE
+    if(v.cond==="NO OPERATIVO" && (v.estado||"").trim().toUpperCase()!=="FUERA DE SERVICIO"){
+      estadoCount["DISPONIBLE"]=(estadoCount["DISPONIBLE"]||0)+1;
+      return;
+    }
+    // Visión B: las unidades en taller (falla/siniestro), FS o producción NO cuentan como asignadas
+    if(isTaller(v.cond)||v.cond==="FUERA DE SERVICIO"||v.cond==="EN PRODUCCION") return;
     const e=(v.estado||"").trim();
     if(!e||special.has(e)||e.toUpperCase().includes("BACK UP")) return;
     estadoCount[e]=(estadoCount[e]||0)+1;
@@ -1434,10 +1274,10 @@ function renderAsignaciones(){
   const fl=getFleet();
   const flName=currentFlota==="4x2"?"AMB 4×2":currentFlota==="4x4"?"AMB 4×4":currentFlota==="van"?"VAN":"AUTOS";
 
-  // ── Distribución de flota ──
+  // ── Distribución de flota (coherente con Panel: categorías mutuamente excluyentes) ──
   const total=fl.length;
-  const operativos=fl.filter(v=>v.cond==="OPERATIVO").length;
-  const opObs=fl.filter(v=>v.cond==="OPERATIVO CON OBS.").length;
+  const asignados=fl.filter(v=>v.cond==="OPERATIVO"&&!esDisponible(v)).length;
+  const opObs=fl.filter(v=>v.cond==="OPERATIVO CON OBS."&&!esDisponible(v)).length;
   const enTaller=fl.filter(v=>isTaller(v.cond)&&v.estado!=="FUERA DE SERVICIO").length;
   const fueraServ=fl.filter(v=>v.estado==="FUERA DE SERVICIO").length;
   const enProd=fl.filter(v=>v.cond==="EN PRODUCCION").length;
@@ -1451,8 +1291,8 @@ function renderAsignaciones(){
   const totReqBU=todasFilas.reduce((s,r)=>s+r.reqBU,0);
   const totReq=totReqOp+totReqBU;
   const gap=totAsig-totReq;
-  // Disponibles = vehículos operativos con estado "DISPONIBLE" (no asignados a un cliente real)
-  const disponibles=fl.filter(v=>(v.estado||"").trim().toUpperCase()==="DISPONIBLE").length;
+  // Disponibles = estado DISPONIBLE + NO OPERATIVO recién recibidos (pronto operarán)
+  const disponibles=fl.filter(esDisponible).length;
 
   // ── Taller detail ──
   const enTallerVeh=fl.filter(v=>isTaller(v.cond)&&v.estado!=="FUERA DE SERVICIO");
@@ -1466,8 +1306,8 @@ function renderAsignaciones(){
     <div style="display:flex;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#fff;margin-bottom:16px">
       ${[
         {lbl:"Total flota",    val:total,      bg:"#0f172a",  txt:"#fff"},
-        {lbl:"Operativos",     val:operativos+opObs, bg:"#16a34a", txt:"#fff"},
-        {lbl:"Back up",        val:backUp,     bg:"#3b82f6",  txt:"#fff"},
+        {lbl:"Asignados",      val:asignados,  bg:"#16a34a", txt:"#fff"},
+        {lbl:"Op. con obs",    val:opObs,      bg:"#d97706",  txt:"#fff"},
         {lbl:"En taller",      val:enTaller,   bg:"#ef4444",  txt:"#fff"},
         {lbl:"En producción",  val:enProd,     bg:"#6366f1",  txt:"#fff"},
         {lbl:"Fuera de serv.", val:fueraServ,  bg:"#374151",  txt:"#fff"},
@@ -1812,7 +1652,7 @@ function renderProyeccion(){
   const enTaller=fl.filter(v=>isTaller(v.cond)&&v.estado!=="FUERA DE SERVICIO").length;
   const enProd=fl.filter(v=>v.cond==="EN PRODUCCION").length;
   const opObsCount=fl.filter(v=>v.cond==="OPERATIVO CON OBS.").length;
-  const reservaPct=proyReservaTaller; // porcentaje
+  const reservaPct=getReservaTaller(); // porcentaje (independiente por flota)
   // Mes 0 = actualidad (enTaller real); meses futuros = reserva dinámica calculada dentro del loop
   const tallerMesActual=enTaller; // real esta semana
 
@@ -1824,10 +1664,9 @@ function renderProyeccion(){
     const ym=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
     const lbl=d.toLocaleDateString("es-CL",{month:"short",year:"2-digit"});
 
-    // Reserva dinámica: flota entregada en este mes = total - FS - los que siguen en producción
+    // Reserva estructural: % sobre la flota total entregable (total − FS), consistente todos los meses
     const enProdEsteMes=fl.filter(v=>v.cond==="EN PRODUCCION"&&(!v.fEntrega||v.fEntrega>ym)).length;
-    const flotaEntregadaEsteMes=total-fueraServ-enProdEsteMes;
-    const reservaUnidades=Math.round(flotaEntregadaEsteMes*reservaPct/100);
+    const reservaUnidades=Math.round((total-fueraServ)*reservaPct/100);
     const tallerEsteMes=i===0?tallerMesActual:reservaUnidades;
     // Entregados acumulados hasta este mes
     const prodAcumulado=fl.filter(v=>v.cond==="EN PRODUCCION"&&v.fEntrega&&v.fEntrega<=ym).length;
@@ -1948,11 +1787,11 @@ function renderProyeccion(){
       <span style="font-size:11px;color:var(--text-s);margin-left:10px">24 meses · contratos activos + pipeline · flota descontada la reserva en taller</span>
     </div>
     <div style="display:flex;align-items:center;gap:8px;font-size:12px">
-      <span style="color:#64748b">Reserva estructural taller:</span>
+      <span style="color:#64748b">Reserva estructural taller (${currentFlota==="4x2"?"AMB 4×2":currentFlota==="4x4"?"AMB 4×4":currentFlota==="van"?"VAN":"AUTOS"}):</span>
       <button onclick="ajustarReserva(-1)" style="width:26px;height:26px;border:1px solid var(--border);border-radius:5px;background:#fff;cursor:pointer;font-size:15px;line-height:1">−</button>
-      <span style="font-weight:700;font-size:15px;min-width:36px;text-align:center">${proyReservaTaller}%</span>
+      <span style="font-weight:700;font-size:15px;min-width:36px;text-align:center">${getReservaTaller()}%</span>
       <button onclick="ajustarReserva(1)" style="width:26px;height:26px;border:1px solid var(--border);border-radius:5px;background:#fff;cursor:pointer;font-size:15px;line-height:1">+</button>
-      <span style="color:#64748b">(= ${Math.round((total-fueraServ-enProd)*proyReservaTaller/100)} und. hoy)</span>
+      <span style="color:#64748b">(= ${Math.round((total-fueraServ)*getReservaTaller()/100)} und.)</span>
     </div>
   </div>
 
@@ -2809,6 +2648,12 @@ function downloadUpdatedHTML(versionOverride){
     );
   });
 
+  // Persistir reserva estructural de taller por flota
+  src=src.replace(
+    /let proyReservaTallerPorFlota=\{[^}]*\};/,
+    ()=>"let proyReservaTallerPorFlota="+JSON.stringify(proyReservaTallerPorFlota)+";"
+  );
+
   const blob=new Blob([src],{type:"text/html"});
   const a=document.createElement("a");
   a.href=URL.createObjectURL(blob);
@@ -2976,7 +2821,7 @@ function showTip(e,txt){
 }
 function hideTip(){const t=document.getElementById("gtip");if(t)t.style.display="none";}
 function ajustarReserva(delta){
-  proyReservaTaller=Math.max(0,Math.min(30,proyReservaTaller+delta));
+  proyReservaTallerPorFlota[currentFlota]=Math.max(0,Math.min(30,getReservaTaller()+delta));
   destroyCharts();render();
 }
 function initSortableTables(){
@@ -3064,14 +2909,14 @@ function afterRender(){
     const panelData=document.getElementById("panel-chart-data");
     if(panelData&&typeof Chart!=="undefined"){
       // Orden y colores fijos de estados para consistencia entre los 4 pies
-      const ESTADOS=["OPERATIVO","OP. CON OBS.","EN TALLER","NO OPERATIVO","FUERA SERVICIO","EN PRODUCCIÓN"];
+      const ESTADOS=["OPERATIVO","OP. CON OBS.","EN TALLER","DISPONIBLE","FUERA SERVICIO","EN PRODUCCIÓN"];
       const condCount=(arr)=>{
-        const d={OPERATIVO:0,"OP. CON OBS.":0,"EN TALLER":0,"NO OPERATIVO":0,"FUERA SERVICIO":0,"EN PRODUCCIÓN":0};
+        const d={OPERATIVO:0,"OP. CON OBS.":0,"EN TALLER":0,"DISPONIBLE":0,"FUERA SERVICIO":0,"EN PRODUCCIÓN":0};
         arr.forEach(v=>{
           if(v.cond==="EN PRODUCCION"){d["EN PRODUCCIÓN"]++;return;}
           if(v.cond==="FUERA DE SERVICIO"||v.estado==="FUERA DE SERVICIO"){d["FUERA SERVICIO"]++;return;}
           if(isTaller(v.cond)){d["EN TALLER"]++;return;}
-          if(v.cond==="NO OPERATIVO"){d["NO OPERATIVO"]++;return;}
+          if(esDisponible(v)){d["DISPONIBLE"]++;return;}
           if(v.cond==="OPERATIVO CON OBS."){d["OP. CON OBS."]++;return;}
           d.OPERATIVO++;
         });
@@ -3363,7 +3208,7 @@ function syncReqsFromFleet(){
 render();
 </script>
 
-<div id="gtip" style="position: fixed; background: rgb(15, 23, 42); color: rgb(255, 255, 255); padding: 7px 12px; border-radius: 7px; font-size: 11px; pointer-events: none; z-index: 9999; max-width: 260px; line-height: 1.5; box-shadow: rgba(0, 0, 0, 0.3) 0px 4px 16px; display: none; left: 654px; top: 232px;">Cantidad de contratos cuya fecha de término es exactamente este mes.</div>
+<div id="gtip" style="position: fixed; background: rgb(15, 23, 42); color: rgb(255, 255, 255); padding: 7px 12px; border-radius: 7px; font-size: 11px; pointer-events: none; z-index: 9999; max-width: 260px; line-height: 1.5; box-shadow: rgba(0, 0, 0, 0.3) 0px 4px 16px; display: none; left: 376px; top: 583px;">Total − FS − Reserva estructural % − Op. con Obs. − Prod. sin fecha. Formato: base(+entregas ese mes). Ej: 62(+2) = 62 disponibles + 2 que ingresan.</div>
 
 <!-- ── CHANGELOG MODAL ── -->
 <div id="cl-overlay" onclick="if(event.target===this)cerrarChangelog()" class="">
@@ -3375,9 +3220,52 @@ render();
     <div id="cl-body">
     <div class="cl-version">
       <div class="cl-ver-hdr">
+        <span class="cl-ver-num">v2.16.2</span>
+        <span class="cl-ver-date">2026-06-09</span>
+        <span class="cl-ver-badge latest">✓ Versión actual</span>
+      </div>
+      
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Ajuste de Pipeline</span>
+        </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 16px">
+    <div class="cl-version">
+      <div class="cl-ver-hdr">
+        <span class="cl-ver-num">v2.16.1</span>
+        <span class="cl-ver-date">2026-06-08</span>
+        
+      </div>
+      
+        <div class="cl-entry">
+          <span class="cl-dot data"></span>
+          <span>Actualización de leasing (fuente: Detalle Vehiculos 08-Jun, cols AG-AM). Cuotas de operaciones compartidas prorrateadas entre sus vehículos: 293/295/297/299 (÷4 = 1.491.976), 315/317 y 319/321 (÷2 = 2.244.352), Sail 1-8 (÷8 = 472.434). Montos y fechas actualizados. Nuevos leasings: 371/373 (2.589.074), Hilux 41 (1.450.178). El monto financiado es por vehículo; solo la cuota se prorratea.</span>
+        </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 16px">
+    <div class="cl-version">
+      <div class="cl-ver-hdr">
+        <span class="cl-ver-num">v2.16.0</span>
+        <span class="cl-ver-date">2026-06-08</span>
+        
+      </div>
+      
+        <div class="cl-entry">
+          <span class="cl-dot fix"></span>
+          <span>Asignaciones: la fila DISPONIBLE muestra +N (unidades disponibles) en vez de Completar, solo para ese uso. El recuadro celeste ahora cuenta directamente los vehículos con estado DISPONIBLE (corrige descuadre).</span>
+        </div>
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Panel: nuevo recuadro Disponibles (celeste) entre En Taller Activo y En Producción, con la cantidad de unidades sin asignación.</span>
+        </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 16px">
+    <div class="cl-version">
+      <div class="cl-ver-hdr">
         <span class="cl-ver-num">v2.15.3</span>
         <span class="cl-ver-date">2026-06-08</span>
-        <span class="cl-ver-badge latest">✓ Versión actual</span>
+        
       </div>
       
         <div class="cl-entry">
@@ -4144,7 +4032,7 @@ render();
    y actualizar APP_VERSION.
 ──────────────────────────────────────────────────────────────── */
 let APP_VERSION = document.querySelector('meta[name="app-version"]')?.content || "2.0.5";
-const CHANGELOG = [{"version":"2.16.0","date":"2026-06-08","latest":true,"entries":[{"type":"fix","text":"Asignaciones: la fila DISPONIBLE muestra +N (unidades disponibles) en vez de Completar, solo para ese uso. El recuadro celeste ahora cuenta directamente los vehículos con estado DISPONIBLE (corrige descuadre)."},{"type":"feat","text":"Panel: nuevo recuadro Disponibles (celeste) entre En Taller Activo y En Producción, con la cantidad de unidades sin asignación."}]},{"version":"2.15.3","date":"2026-06-08","latest":false,"entries":[{"type":"feat","text":"Actualización de ambulancias EN PRODUCCIÓN"}]},{"version":"2.15.2","date":"2026-06-08","entries":[{"type":"data","text":"Corrección de numeración Transit: el móvil 381 (AMB) era en realidad el 375 (4x4) según chasis del xlsx — reubicado a la flota 4x4. Patentes agregadas a 371 (VYFL-63), 373 (VYFL-36), 375 (VYGX-15), 377 (VYHC-78). Fusionado placeholder duplicado de producción del 375."}]},{"version":"2.15.1","date":"2026-06-08","latest":false,"entries":[{"type":"feat","text":"Cambio en Asignaciones"}]},{"version":"2.15.0","date":"2026-06-08","entries":[{"type":"fix","text":"Taller: ahora SOLO incluye vehículos con FALLA MECANICA (ETI/ETE) o SINIESTRADA. NO OPERATIVO ya no cuenta como taller (puede ser una unidad recién recibida pendiente de branding/equipamiento). Nueva función isTaller() separada de isNonOp()."},{"type":"feat","text":"Panel y mini-pies: nueva categoría NO OPERATIVO (color ámbar oscuro) distinta de EN TALLER, para no contar las unidades pendientes de recepción como operativas ni como taller."}]},{"version":"2.14.2","date":"2026-06-08","latest":false,"entries":[{"type":"data","text":"Carga reporte semanal 08/06: 267/289/307 salen del taller a clientes, 301 entra a falla (enfriador de aceite), 321/341/353/355 cambian asignación (353/355 quedan DISPONIBLE), 371/373/375/377 pasan de EN PRODUCCION a NO OPERATIVO (pendientes de recepción/branding). 233 se mantiene FUERA DE SERVICIO."}]},{"version":"2.14.1","date":"2026-06-04","latest":false,"entries":[{"type":"feat","text":"Ajuste Pipeline"}]},{"version":"2.14.0","date":"2026-06-03","entries":[{"type":"feat","text":"Panel \"Ver todas las flotas\": el gráfico Estado de flota ahora muestra 4 mini-doughnuts (uno por tipo de vehículo) con una leyenda de colores compartida, para comparar el estado de las flotas de un vistazo. En vista de flota individual se mantiene el pie único."}]},{"version":"2.13.0","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Muro de vencimientos de leasing ahora es mensual (antes trimestral): eje temporal continuo desde el mes del reporte hasta el último vencimiento, con barras delgadas. Etiquetas en ene/jul, mes completo en el tooltip. Muestra mejor la concentración real de vencimientos."}]},{"version":"2.12.0","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Muro de vencimientos de leasing rediseñado: barras más compactas (150px de alto) con relleno degradado sólido, esquinas redondeadas, ejes limpios y tooltip oscuro. Contenedor alineado al gráfico de evolución."},{"type":"feat","text":"Bloque de plan de renovación (hoja Flota) rediseñado como card al estilo de los KPIs, con pills sobrias y edad coloreada por severidad."}]},{"version":"2.11.1","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline"}]},{"version":"2.11.0","date":"2026-06-03","entries":[{"type":"feat","text":"Concentración: las bases de rescate (RESCATE BASE 1/2/8) se agrupan bajo RESCATE UCM solo en esta vista. En Asignaciones siguen separadas por base."}]},{"version":"2.10.0","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Mejora estética del gráfico de evolución de cuota de leasing: rellenos con degradado por banco, áreas ordenadas por monto, línea TOTAL más refinada con punto destacado en el mes actual, ejes y grid más limpios, contenedor con fondo degradado."}]},{"version":"2.9.0","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Antigüedad de flota (hoja Flota): alerta informativa de unidades 5-6 años (envejeciendo) y 7+ años (para renovación), usando el año dinámico del último reporte."},{"type":"feat","text":"Muro de vencimientos de leasing (hoja Leasing): gráfico de barras con la cuota mensual que se libera por trimestre. Al vencer, la unidad pasa a propiedad UCM."},{"type":"feat","text":"Nueva pestaña Concentración: distribución de flota por cliente (barras) y concentración temporal de vencimientos por trimestre, con alertas de dependencia ≥20%."},{"type":"feat","text":"Proyección: banda de sensibilidad del pipeline — área sombreada entre escenario pesimista (solo adjudicado) y optimista (todo el pipeline al 100%)."}]},{"version":"2.8.0","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Asignaciones: los arriendos temporales asignados a un cliente se suman a sus unidades asignadas, pero solo si están activos en el mes actual. Badge 🚐 indica cuántas son arrendadas."},{"type":"fix","text":"getAsigReal se mantiene puro (sin arriendos) para no afectar el cálculo de la proyección a 24 meses."}]},{"version":"2.7.1","date":"2026-06-02","latest":false,"entries":[{"type":"fix","text":"Arriendos: cada arriendo es ahora 1 unidad con su propio N° móvil. Se eliminó el campo cantidad — para arrendar varias, se crea un registro por vehículo."}]},{"version":"2.7.0","date":"2026-06-02","latest":false,"entries":[{"type":"fix","text":"Arriendos: fechas normalizadas (2026-6 → 2026-06) — la línea azul de flota efectiva ahora sube correctamente durante el período del arriendo."},{"type":"feat","text":"Arriendos: campo para asignar la unidad a un proyecto/cliente (dropdown con contratos existentes). Se muestra en tabla y tooltip de la curva."}]},{"version":"2.6.0","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Arriendos temporales: nueva sección en Proyección para registrar vehículos que un tercero nos entrega por un período acotado. Suman a la flota efectiva durante los meses activos."},{"type":"feat","text":"Cada arriendo: N° móvil, proveedor, fecha desde/hasta, cantidad y notas. Array propio por flota (ARRIENDOS_AMB/4X4/VAN/AUTOS)."},{"type":"feat","text":"El tooltip de la curva de proyección muestra las unidades arrendadas activas en cada mes."}]},{"version":"2.5.1","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline luego de reunion comercial 02/06"}]},{"version":"2.5.0","date":"2026-06-01","entries":[{"type":"feat","text":"Gráfico de leasing (evolución de cuota mensual) arranca dinámicamente en el mes del último reporte, igual que la proyección. Se mueve solo con el tiempo."}]},{"version":"2.4.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Proyección dinámica: gráfico y tabla arrancan en el mes del último reporte y avanzan 24 meses. Se mueve solo a medida que se cargan reportes."},{"type":"feat","text":"Reserva taller: mes actual usa unidades reales en taller; reserva estructural % aplica desde el mes siguiente en adelante."},{"type":"feat","text":"Pipeline: alerta visual en oportunidades con fecha de inicio vencida — para eliminar o actualizar."}]},{"version":"2.3.3","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Ajustes Asignaciones"}]},{"version":"2.3.2","date":"2026-06-01","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.3.1","date":"2026-06-01","entries":[{"type":"feat","text":"Ajuste de Asignaciones"}]},{"version":"2.3.0","date":"2026-06-01","entries":[{"type":"fix","text":"Carga xlsx: AUTOS ahora usa hoja 'Status Autos 2026' con match por patente — funciona aunque cambien los números de móvil."},{"type":"fix","text":"Carga xlsx: Rangers renumerados 501/503→37/39, Hilux 409→41, Sail 401-408→1-8 con patentes reales."},{"type":"feat","text":"Carga xlsx: updatedAutos incluido en el resumen de la carga."}]},{"version":"2.2.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Proyección: alerta de compra recomendada — indica 1ª o 2ª quincena del mes en que debe iniciarse la adquisición (45 días antes del déficit proyectado)."},{"type":"feat","text":"Alerta se colorea según urgencia: azul (tiempo suficiente), ámbar (menos de 30 días), rojo (plazo vencido)."}]},{"version":"2.1.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Versioning semántico: MAYOR.MENOR.PARCHE — código cambia MENOR, datos cambian PARCHE."},{"type":"fix","text":"Proyección: reserva estructural de taller calculada dinámicamente por mes según flota entregada."},{"type":"fix","text":"Flota tab: KPIs ahora usan isNonOp() correctamente — muestra taller y FS por separado."},{"type":"feat","text":"Taller: historial anual y ranking SHOP_HIST filtrados por flota activa. Todos los vehículos visibles aunque tengan 0 semanas."},{"type":"feat","text":"Panel: botón Ver todas las flotas consolida KPIs de todas las flotas."}]},{"version":"2.0.13","date":"2026-06-01","latest":false,"entries":[{"type":"fix","text":"Proyección: reserva estructural de taller calculada dinámicamente por mes — crece a medida que entran vehículos de producción según su fEntrega."},{"type":"fix","text":"Reserva estructural usa flota entregada en cada mes (total - FS - en producción ese mes), no el total fijo actual."}]},{"version":"2.0.12","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline"}]},{"version":"2.0.11","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de Asignación de Autos Comudef"},{"type":"feat","text":"Ingreso a Producción Hylux URT"}]},{"version":"2.0.10","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.9","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.8","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.7","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.6","date":"2026-05-22","entries":[{"type":"feat","text":"Mejoras en la Hoja Taller"},{"type":"feat","text":"Arreglo en el número de version"}]},{"version":"2.0.5","date":"2026-05-22","entries":[{"type":"feat","text":"Ajuste Pipeline"}]},{"version":"2.0.4","date":"2026-05-19","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.3","date":"2026-05-19","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.2","date":"2026-05-19","entries":[{"type":"feat","text":"Se arreglaron los Pipeline de Ambulancias 4x2 y 4x4"}]},{"version":"2.0.1","date":"2026-05-19","entries":[{"type":"feat","text":"Versionado automático al guardar: la versión se incrementa sola (patch), sin intervención manual."},{"type":"fix","text":"downloadUpdatedHTML: APP_VERSION y CHANGELOG ahora se serializan correctamente usando funciones arrow en replace() para evitar interpretación errónea de $ en JSON."},{"type":"feat","text":"Nombre del archivo incluye fecha y versión: UCM_Fleet_Intelligence_YYYYMMDD_vX-Y-Z.html."}]},{"version":"2.0.0","date":"2026-05-19","entries":[{"type":"feat","text":"Panel: botón 'Ver todas las flotas' consolida KPIs de AMB 4×2, 4×4, VAN y AUTOS en una sola vista."},{"type":"feat","text":"Diagnóstico: rediseñado como modal instantáneo (sin file picker). Muestra estado de librerías, condiciones por flota, estados sin REQS, semana cargada y versión."}]},{"version":"1.9.0","date":"2026-05-19","entries":[{"type":"feat","text":"Requerimientos temporales recurrentes por contrato: campo tempReqs con mesIni/mesFin/qty/motivo. Se aplica todos los años en ese rango de meses."},{"type":"feat","text":"getReqOp(r, ym): función helper que calcula requerimiento base + boosts temporales para un mes dado."},{"type":"feat","text":"Proyección: demandaContratos varía mes a mes según tempReqs activos — la línea azul ya no es plana."},{"type":"feat","text":"Asignaciones: columna Req. Operación muestra badge morado +N cuando hay boost temporal activo."},{"type":"fix","text":"Proyección: data-freed y data-net del gráfico Pipeline usan getReqOp y getAsigReal con variable local flt (no fl del scope externo)."}]},{"version":"1.8.1","date":"2026-05-19","entries":[{"type":"fix","text":"Asignaciones: REQS_AMB reconstruido con nombres exactos que vienen del xlsx (TRASLADO BÁSICO, CORP. LAS CONDES, etc.)."},{"type":"fix","text":"syncReqsFromFleet: purga entradas fantasma (asig=0 sin fFin futura) — resuelve duplicados por cambio de nombre en xlsx."},{"type":"fix","text":"REQS_4X4: TECHINT renombrado a TECHINT TOCOPILLA, BESS LIBRILLO agregado."},{"type":"fix","text":"editContrato: acepta clientes nuevos (string), agrega fIni, elimina campo asig (ahora es solo lectura desde FLEET)."}]},{"version":"1.8.0","date":"2026-05-18","entries":[{"type":"feat","text":"Asignaciones: tabla unificada — asig desde FLEET.estado (automático), metadata desde REQS (manual). Clientes nuevos detectados con badge NUEVO."},{"type":"feat","text":"buildTodasFilas() y getAsigReal(): helpers compartidos entre Asignaciones y Proyección."},{"type":"fix","text":"Proyección: demandaContratos y unidadesLibres usan getAsigReal en lugar de r.asig (que era siempre 0)."},{"type":"fix","text":"Carga de reporte: EN PRODUCCION y FUERA DE SERVICIO protegidos contra sobreescritura."},{"type":"fix","text":"Carga de reporte: normalizarCond() mapea variantes del xlsx (OPERATIVO C/OBS, NO OP, etc.)."},{"type":"feat","text":"Changelog incorporado: badge de versión en topbar abre historial de cambios."}]},{"version":"1.7.0","date":"2026-05-18","entries":[{"type":"feat","text":"Panel: botón 'Ver todas las flotas' en Leasing (ya existía)."},{"type":"feat","text":"4×4: contrato RESCATE RM (rol 4×2) para móvil 365."},{"type":"fix","text":"Capital remanente calculado dinámicamente con amortización lineal según fecha actual."}]},{"version":"1.6.0","date":"2026-05-15","entries":[{"type":"fix","text":"Proyección: pipeDemanda considera duración de cada oportunidad — línea naranja sube y baja correctamente."},{"type":"fix","text":"Ambulancias en pipeline y reserva taller redondeadas al entero más cercano."}]},{"version":"1.5.0","date":"2026-05-15","entries":[{"type":"data","text":"Datos leasing actualizados desde Detalle_Vehiculos_UCM_Emecar_11-May-26.xlsx."},{"type":"feat","text":"Cuotas PMT 1%/mes para móviles 241, 243, 245, 253, 255, 257. Los Cuatro y Rio Branco con datos completos."}]}];
+const CHANGELOG = [{"version":"2.23.0","date":"2026-06-09","latest":true,"entries":[{"type":"feat","text":"Asignaciones: se eliminó el segmento Back up de la barra de distribución. Esas 6 unidades (que son OPERATIVO CON OBS.) ahora cuentan en Op. con obs, igual que en el Panel. Las dos vistas quedan totalmente coherentes."}]},{"version":"2.22.0","date":"2026-06-09","latest":false,"entries":[{"type":"fix","text":"Asignaciones: la barra de distribución de flota ahora es coherente con el Panel. El segmento Operativos se renombró a Asignados (63, solo OPERATIVO operando con cliente, sin disponibles/obs/backup) y se agregó segmento Op. con obs separado. Antes mezclaba operativos con observaciones y contaba disponibles como operativos. Ahora los segmentos son mutuamente excluyentes y suman el total exacto."}]},{"version":"2.21.0","date":"2026-06-09","latest":false,"entries":[{"type":"fix","text":"Asignaciones (Visión B): una unidad en taller (falla mecánica/siniestrada), fuera de servicio o en producción ya NO cuenta como asignada a su cliente, aunque su estado tenga el nombre del cliente. Solo cuentan las unidades efectivamente operando. Ej: el móvil 245 (siniestrado, Las Condes) deja de sumar a los asignados. Ahora el recuadro verde Asignados del Panel (63) coincide con los asignados a cliente de la tabla."}]},{"version":"2.20.0","date":"2026-06-09","latest":false,"entries":[{"type":"feat","text":"Panel: el recuadro Operativos se separó en dos: Asignados (verde, operando con cliente) y Op. con observaciones (ámbar, uso limitado), ya que estos últimos se usan poco. Aplica a todas las flotas. Los recuadros siguen sumando exactamente el total."}]},{"version":"2.19.1","date":"2026-06-09","latest":false,"entries":[{"type":"fix","text":"Panel: corregido doble conteo. Los vehículos OPERATIVO con estado DISPONIBLE (353/355) se contaban en Operativos Y en Disponibles, haciendo que los recuadros sumaran más que el total. Ahora Operativos excluye los disponibles, y el pie de estado incluye la categoría DISPONIBLE (celeste). Los recuadros suman exactamente el total de la flota."}]},{"version":"2.19.0","date":"2026-06-09","latest":false,"entries":[{"type":"feat","text":"Las unidades NO OPERATIVO recién recibidas de producción (sin asignar, fuera de taller/FS) ahora se cuentan como Disponibles en el Panel, el recuadro celeste y la fila DISPONIBLE de Asignaciones. Nuevo helper esDisponible() unifica el criterio. Ej: 371/373 ahora suman a disponibles."}]},{"version":"2.18.0","date":"2026-06-09","latest":false,"entries":[{"type":"feat","text":"Reserva estructural de taller ahora es independiente por tipo de flota (4x2, 4x4, VAN, AUTOS), ya que cada una tiene su propia tasa de falla. El control +/− ajusta solo la flota activa y el valor persiste al guardar el HTML."}]},{"version":"2.17.0","date":"2026-06-09","latest":false,"entries":[{"type":"fix","text":"Proyección: corregida la inconsistencia de la reserva estructural de taller. El texto (= N und.) y las unidades que se restan a la flota efectiva ahora usan la misma base (total − fuera de servicio), así el número mostrado siempre coincide con lo que se descuenta. Antes el texto usaba una base distinta (excluía producción) y mostraba 0 mientras restaba 1."}]},{"version":"2.16.2","date":"2026-06-09","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline"}]},{"version":"2.16.1","date":"2026-06-08","entries":[{"type":"data","text":"Actualización de leasing (fuente: Detalle Vehiculos 08-Jun, cols AG-AM). Cuotas de operaciones compartidas prorrateadas entre sus vehículos: 293/295/297/299 (÷4 = 1.491.976), 315/317 y 319/321 (÷2 = 2.244.352), Sail 1-8 (÷8 = 472.434). Montos y fechas actualizados. Nuevos leasings: 371/373 (2.589.074), Hilux 41 (1.450.178). El monto financiado es por vehículo; solo la cuota se prorratea."}]},{"version":"2.16.0","date":"2026-06-08","latest":false,"entries":[{"type":"fix","text":"Asignaciones: la fila DISPONIBLE muestra +N (unidades disponibles) en vez de Completar, solo para ese uso. El recuadro celeste ahora cuenta directamente los vehículos con estado DISPONIBLE (corrige descuadre)."},{"type":"feat","text":"Panel: nuevo recuadro Disponibles (celeste) entre En Taller Activo y En Producción, con la cantidad de unidades sin asignación."}]},{"version":"2.15.3","date":"2026-06-08","latest":false,"entries":[{"type":"feat","text":"Actualización de ambulancias EN PRODUCCIÓN"}]},{"version":"2.15.2","date":"2026-06-08","entries":[{"type":"data","text":"Corrección de numeración Transit: el móvil 381 (AMB) era en realidad el 375 (4x4) según chasis del xlsx — reubicado a la flota 4x4. Patentes agregadas a 371 (VYFL-63), 373 (VYFL-36), 375 (VYGX-15), 377 (VYHC-78). Fusionado placeholder duplicado de producción del 375."}]},{"version":"2.15.1","date":"2026-06-08","latest":false,"entries":[{"type":"feat","text":"Cambio en Asignaciones"}]},{"version":"2.15.0","date":"2026-06-08","entries":[{"type":"fix","text":"Taller: ahora SOLO incluye vehículos con FALLA MECANICA (ETI/ETE) o SINIESTRADA. NO OPERATIVO ya no cuenta como taller (puede ser una unidad recién recibida pendiente de branding/equipamiento). Nueva función isTaller() separada de isNonOp()."},{"type":"feat","text":"Panel y mini-pies: nueva categoría NO OPERATIVO (color ámbar oscuro) distinta de EN TALLER, para no contar las unidades pendientes de recepción como operativas ni como taller."}]},{"version":"2.14.2","date":"2026-06-08","latest":false,"entries":[{"type":"data","text":"Carga reporte semanal 08/06: 267/289/307 salen del taller a clientes, 301 entra a falla (enfriador de aceite), 321/341/353/355 cambian asignación (353/355 quedan DISPONIBLE), 371/373/375/377 pasan de EN PRODUCCION a NO OPERATIVO (pendientes de recepción/branding). 233 se mantiene FUERA DE SERVICIO."}]},{"version":"2.14.1","date":"2026-06-04","latest":false,"entries":[{"type":"feat","text":"Ajuste Pipeline"}]},{"version":"2.14.0","date":"2026-06-03","entries":[{"type":"feat","text":"Panel \"Ver todas las flotas\": el gráfico Estado de flota ahora muestra 4 mini-doughnuts (uno por tipo de vehículo) con una leyenda de colores compartida, para comparar el estado de las flotas de un vistazo. En vista de flota individual se mantiene el pie único."}]},{"version":"2.13.0","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Muro de vencimientos de leasing ahora es mensual (antes trimestral): eje temporal continuo desde el mes del reporte hasta el último vencimiento, con barras delgadas. Etiquetas en ene/jul, mes completo en el tooltip. Muestra mejor la concentración real de vencimientos."}]},{"version":"2.12.0","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Muro de vencimientos de leasing rediseñado: barras más compactas (150px de alto) con relleno degradado sólido, esquinas redondeadas, ejes limpios y tooltip oscuro. Contenedor alineado al gráfico de evolución."},{"type":"feat","text":"Bloque de plan de renovación (hoja Flota) rediseñado como card al estilo de los KPIs, con pills sobrias y edad coloreada por severidad."}]},{"version":"2.11.1","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline"}]},{"version":"2.11.0","date":"2026-06-03","entries":[{"type":"feat","text":"Concentración: las bases de rescate (RESCATE BASE 1/2/8) se agrupan bajo RESCATE UCM solo en esta vista. En Asignaciones siguen separadas por base."}]},{"version":"2.10.0","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Mejora estética del gráfico de evolución de cuota de leasing: rellenos con degradado por banco, áreas ordenadas por monto, línea TOTAL más refinada con punto destacado en el mes actual, ejes y grid más limpios, contenedor con fondo degradado."}]},{"version":"2.9.0","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Antigüedad de flota (hoja Flota): alerta informativa de unidades 5-6 años (envejeciendo) y 7+ años (para renovación), usando el año dinámico del último reporte."},{"type":"feat","text":"Muro de vencimientos de leasing (hoja Leasing): gráfico de barras con la cuota mensual que se libera por trimestre. Al vencer, la unidad pasa a propiedad UCM."},{"type":"feat","text":"Nueva pestaña Concentración: distribución de flota por cliente (barras) y concentración temporal de vencimientos por trimestre, con alertas de dependencia ≥20%."},{"type":"feat","text":"Proyección: banda de sensibilidad del pipeline — área sombreada entre escenario pesimista (solo adjudicado) y optimista (todo el pipeline al 100%)."}]},{"version":"2.8.0","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Asignaciones: los arriendos temporales asignados a un cliente se suman a sus unidades asignadas, pero solo si están activos en el mes actual. Badge 🚐 indica cuántas son arrendadas."},{"type":"fix","text":"getAsigReal se mantiene puro (sin arriendos) para no afectar el cálculo de la proyección a 24 meses."}]},{"version":"2.7.1","date":"2026-06-02","latest":false,"entries":[{"type":"fix","text":"Arriendos: cada arriendo es ahora 1 unidad con su propio N° móvil. Se eliminó el campo cantidad — para arrendar varias, se crea un registro por vehículo."}]},{"version":"2.7.0","date":"2026-06-02","latest":false,"entries":[{"type":"fix","text":"Arriendos: fechas normalizadas (2026-6 → 2026-06) — la línea azul de flota efectiva ahora sube correctamente durante el período del arriendo."},{"type":"feat","text":"Arriendos: campo para asignar la unidad a un proyecto/cliente (dropdown con contratos existentes). Se muestra en tabla y tooltip de la curva."}]},{"version":"2.6.0","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Arriendos temporales: nueva sección en Proyección para registrar vehículos que un tercero nos entrega por un período acotado. Suman a la flota efectiva durante los meses activos."},{"type":"feat","text":"Cada arriendo: N° móvil, proveedor, fecha desde/hasta, cantidad y notas. Array propio por flota (ARRIENDOS_AMB/4X4/VAN/AUTOS)."},{"type":"feat","text":"El tooltip de la curva de proyección muestra las unidades arrendadas activas en cada mes."}]},{"version":"2.5.1","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline luego de reunion comercial 02/06"}]},{"version":"2.5.0","date":"2026-06-01","entries":[{"type":"feat","text":"Gráfico de leasing (evolución de cuota mensual) arranca dinámicamente en el mes del último reporte, igual que la proyección. Se mueve solo con el tiempo."}]},{"version":"2.4.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Proyección dinámica: gráfico y tabla arrancan en el mes del último reporte y avanzan 24 meses. Se mueve solo a medida que se cargan reportes."},{"type":"feat","text":"Reserva taller: mes actual usa unidades reales en taller; reserva estructural % aplica desde el mes siguiente en adelante."},{"type":"feat","text":"Pipeline: alerta visual en oportunidades con fecha de inicio vencida — para eliminar o actualizar."}]},{"version":"2.3.3","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Ajustes Asignaciones"}]},{"version":"2.3.2","date":"2026-06-01","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.3.1","date":"2026-06-01","entries":[{"type":"feat","text":"Ajuste de Asignaciones"}]},{"version":"2.3.0","date":"2026-06-01","entries":[{"type":"fix","text":"Carga xlsx: AUTOS ahora usa hoja 'Status Autos 2026' con match por patente — funciona aunque cambien los números de móvil."},{"type":"fix","text":"Carga xlsx: Rangers renumerados 501/503→37/39, Hilux 409→41, Sail 401-408→1-8 con patentes reales."},{"type":"feat","text":"Carga xlsx: updatedAutos incluido en el resumen de la carga."}]},{"version":"2.2.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Proyección: alerta de compra recomendada — indica 1ª o 2ª quincena del mes en que debe iniciarse la adquisición (45 días antes del déficit proyectado)."},{"type":"feat","text":"Alerta se colorea según urgencia: azul (tiempo suficiente), ámbar (menos de 30 días), rojo (plazo vencido)."}]},{"version":"2.1.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Versioning semántico: MAYOR.MENOR.PARCHE — código cambia MENOR, datos cambian PARCHE."},{"type":"fix","text":"Proyección: reserva estructural de taller calculada dinámicamente por mes según flota entregada."},{"type":"fix","text":"Flota tab: KPIs ahora usan isNonOp() correctamente — muestra taller y FS por separado."},{"type":"feat","text":"Taller: historial anual y ranking SHOP_HIST filtrados por flota activa. Todos los vehículos visibles aunque tengan 0 semanas."},{"type":"feat","text":"Panel: botón Ver todas las flotas consolida KPIs de todas las flotas."}]},{"version":"2.0.13","date":"2026-06-01","latest":false,"entries":[{"type":"fix","text":"Proyección: reserva estructural de taller calculada dinámicamente por mes — crece a medida que entran vehículos de producción según su fEntrega."},{"type":"fix","text":"Reserva estructural usa flota entregada en cada mes (total - FS - en producción ese mes), no el total fijo actual."}]},{"version":"2.0.12","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline"}]},{"version":"2.0.11","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de Asignación de Autos Comudef"},{"type":"feat","text":"Ingreso a Producción Hylux URT"}]},{"version":"2.0.10","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.9","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.8","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.7","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.6","date":"2026-05-22","entries":[{"type":"feat","text":"Mejoras en la Hoja Taller"},{"type":"feat","text":"Arreglo en el número de version"}]},{"version":"2.0.5","date":"2026-05-22","entries":[{"type":"feat","text":"Ajuste Pipeline"}]},{"version":"2.0.4","date":"2026-05-19","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.3","date":"2026-05-19","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.2","date":"2026-05-19","entries":[{"type":"feat","text":"Se arreglaron los Pipeline de Ambulancias 4x2 y 4x4"}]},{"version":"2.0.1","date":"2026-05-19","entries":[{"type":"feat","text":"Versionado automático al guardar: la versión se incrementa sola (patch), sin intervención manual."},{"type":"fix","text":"downloadUpdatedHTML: APP_VERSION y CHANGELOG ahora se serializan correctamente usando funciones arrow en replace() para evitar interpretación errónea de $ en JSON."},{"type":"feat","text":"Nombre del archivo incluye fecha y versión: UCM_Fleet_Intelligence_YYYYMMDD_vX-Y-Z.html."}]},{"version":"2.0.0","date":"2026-05-19","entries":[{"type":"feat","text":"Panel: botón 'Ver todas las flotas' consolida KPIs de AMB 4×2, 4×4, VAN y AUTOS en una sola vista."},{"type":"feat","text":"Diagnóstico: rediseñado como modal instantáneo (sin file picker). Muestra estado de librerías, condiciones por flota, estados sin REQS, semana cargada y versión."}]},{"version":"1.9.0","date":"2026-05-19","entries":[{"type":"feat","text":"Requerimientos temporales recurrentes por contrato: campo tempReqs con mesIni/mesFin/qty/motivo. Se aplica todos los años en ese rango de meses."},{"type":"feat","text":"getReqOp(r, ym): función helper que calcula requerimiento base + boosts temporales para un mes dado."},{"type":"feat","text":"Proyección: demandaContratos varía mes a mes según tempReqs activos — la línea azul ya no es plana."},{"type":"feat","text":"Asignaciones: columna Req. Operación muestra badge morado +N cuando hay boost temporal activo."},{"type":"fix","text":"Proyección: data-freed y data-net del gráfico Pipeline usan getReqOp y getAsigReal con variable local flt (no fl del scope externo)."}]},{"version":"1.8.1","date":"2026-05-19","entries":[{"type":"fix","text":"Asignaciones: REQS_AMB reconstruido con nombres exactos que vienen del xlsx (TRASLADO BÁSICO, CORP. LAS CONDES, etc.)."},{"type":"fix","text":"syncReqsFromFleet: purga entradas fantasma (asig=0 sin fFin futura) — resuelve duplicados por cambio de nombre en xlsx."},{"type":"fix","text":"REQS_4X4: TECHINT renombrado a TECHINT TOCOPILLA, BESS LIBRILLO agregado."},{"type":"fix","text":"editContrato: acepta clientes nuevos (string), agrega fIni, elimina campo asig (ahora es solo lectura desde FLEET)."}]},{"version":"1.8.0","date":"2026-05-18","entries":[{"type":"feat","text":"Asignaciones: tabla unificada — asig desde FLEET.estado (automático), metadata desde REQS (manual). Clientes nuevos detectados con badge NUEVO."},{"type":"feat","text":"buildTodasFilas() y getAsigReal(): helpers compartidos entre Asignaciones y Proyección."},{"type":"fix","text":"Proyección: demandaContratos y unidadesLibres usan getAsigReal en lugar de r.asig (que era siempre 0)."},{"type":"fix","text":"Carga de reporte: EN PRODUCCION y FUERA DE SERVICIO protegidos contra sobreescritura."},{"type":"fix","text":"Carga de reporte: normalizarCond() mapea variantes del xlsx (OPERATIVO C/OBS, NO OP, etc.)."},{"type":"feat","text":"Changelog incorporado: badge de versión en topbar abre historial de cambios."}]},{"version":"1.7.0","date":"2026-05-18","entries":[{"type":"feat","text":"Panel: botón 'Ver todas las flotas' en Leasing (ya existía)."},{"type":"feat","text":"4×4: contrato RESCATE RM (rol 4×2) para móvil 365."},{"type":"fix","text":"Capital remanente calculado dinámicamente con amortización lineal según fecha actual."}]},{"version":"1.6.0","date":"2026-05-15","entries":[{"type":"fix","text":"Proyección: pipeDemanda considera duración de cada oportunidad — línea naranja sube y baja correctamente."},{"type":"fix","text":"Ambulancias en pipeline y reserva taller redondeadas al entero más cercano."}]},{"version":"1.5.0","date":"2026-05-15","entries":[{"type":"data","text":"Datos leasing actualizados desde Detalle_Vehiculos_UCM_Emecar_11-May-26.xlsx."},{"type":"feat","text":"Cuotas PMT 1%/mes para móviles 241, 243, 245, 253, 255, 257. Los Cuatro y Rio Branco con datos completos."}]}];
 function initChangelog(){
   const badge=document.getElementById("ver-badge");
   if(badge) badge.textContent="v"+APP_VERSION;
