@@ -1,6 +1,6 @@
 <html lang="es"><head>
 <meta charset="UTF-8">
-<meta name="app-version" content="2.42.2">
+<meta name="app-version" content="2.44.0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UCM Fleet Intelligence</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -180,7 +180,7 @@ tfoot td{padding:8px 10px;font-weight:700;border-right:1px solid var(--border)}
   <div id="topbar">
     <h1>🚑 UCM Fleet Intelligence</h1>
     <span class="sep">|</span>
-    <button id="ver-badge" onclick="abrirChangelog()">v2.42.2</button>
+    <button id="ver-badge" onclick="abrirChangelog()">v2.42.4</button>
     <div id="fleet-selector">
       <button class="fs-btn active" onclick="setFlota('4x2')">🚑 AMB 4×2</button>
       <button class="fs-btn" onclick="setFlota('4x4')">🚑 AMB 4×4</button>
@@ -200,418 +200,363 @@ tfoot td{padding:8px 10px;font-weight:700;border-right:1px solid var(--border)}
     <button class="tab-btn" onclick="setTab('panel')">📊 Panel</button>
     <button class="tab-btn" onclick="setTab('flota')">🚑 Flota</button>
     <button class="tab-btn" onclick="setTab('leasing')">🏦 Leasing</button>
-    <button class="tab-btn active" onclick="setTab('asignaciones')">📋 Asignaciones</button>
+    <button class="tab-btn" onclick="setTab('asignaciones')">📋 Asignaciones</button>
     <button class="tab-btn" onclick="setTab('concentracion')">⚖️ Concentración</button>
     <button class="tab-btn" onclick="setTab('taller')">🔧 Taller <span id="taller-badge" class="tab-badge" style="display: inline;">2</span></button>
     <button class="tab-btn" onclick="setTab('fallas')">📉 Análisis de Fallas</button>
     <button class="tab-btn" onclick="setTab('proyeccion')">📈 Proyección</button>
-    <button class="tab-btn" onclick="setTab('pipeline')">🎯 Pipeline</button>
+    <button class="tab-btn active" onclick="setTab('pipeline')">🎯 Pipeline</button>
     <button class="tab-btn tab-radar" onclick="setTab('radar')" style="margin-left:auto">🛰️ Radar</button>
   </div>
   <div id="content">
-  <div class="sec-hdr"><h3>Usos y Requerimientos — AMB 4×2</h3><span class="sub">Semana: 15/06/2026</span></div>
-
-  <!-- Distribución de flota -->
-  <div class="sec">
-    <div style="font-size:12px;font-weight:600;color:#0f172a;margin-bottom:10px">Distribución de la flota</div>
-    <div style="display:flex;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#fff;margin-bottom:16px">
-      
-        <div style="flex:1;padding:12px 8px;text-align:center;background:#0f172a;border-right:1px solid rgba(255,255,255,0.15)">
-          <div style="font-size:22px;font-weight:800;color:#fff;line-height:1">79</div>
-          <div style="font-size:9px;font-weight:600;color:#fff;opacity:.8;margin-top:3px;text-transform:uppercase;letter-spacing:.5px">Total flota</div>
-        </div>
-        <div style="flex:1;padding:12px 8px;text-align:center;background:#16a34a;border-right:1px solid rgba(255,255,255,0.15)">
-          <div style="font-size:22px;font-weight:800;color:#fff;line-height:1">63</div>
-          <div style="font-size:9px;font-weight:600;color:#fff;opacity:.8;margin-top:3px;text-transform:uppercase;letter-spacing:.5px">Asignados</div>
-        </div>
-        <div style="flex:1;padding:12px 8px;text-align:center;background:#d97706;border-right:1px solid rgba(255,255,255,0.15)">
-          <div style="font-size:22px;font-weight:800;color:#fff;line-height:1">6</div>
-          <div style="font-size:9px;font-weight:600;color:#fff;opacity:.8;margin-top:3px;text-transform:uppercase;letter-spacing:.5px">Op. con obs</div>
-        </div>
-        <div style="flex:1;padding:12px 8px;text-align:center;background:#ef4444;border-right:1px solid rgba(255,255,255,0.15)">
-          <div style="font-size:22px;font-weight:800;color:#fff;line-height:1">2</div>
-          <div style="font-size:9px;font-weight:600;color:#fff;opacity:.8;margin-top:3px;text-transform:uppercase;letter-spacing:.5px">En taller</div>
-        </div>
-        <div style="flex:1;padding:12px 8px;text-align:center;background:#6366f1;border-right:1px solid rgba(255,255,255,0.15)">
-          <div style="font-size:22px;font-weight:800;color:#fff;line-height:1">1</div>
-          <div style="font-size:9px;font-weight:600;color:#fff;opacity:.8;margin-top:3px;text-transform:uppercase;letter-spacing:.5px">En producción</div>
-        </div>
-        <div style="flex:1;padding:12px 8px;text-align:center;background:#374151;border-right:1px solid rgba(255,255,255,0.15)">
-          <div style="font-size:22px;font-weight:800;color:#fff;line-height:1">1</div>
-          <div style="font-size:9px;font-weight:600;color:#fff;opacity:.8;margin-top:3px;text-transform:uppercase;letter-spacing:.5px">Fuera de serv.</div>
-        </div>
-        <div style="flex:1;padding:12px 8px;text-align:center;background:#0ea5e9;border-right:1px solid rgba(255,255,255,0.15)">
-          <div style="font-size:22px;font-weight:800;color:#fff;line-height:1">6</div>
-          <div style="font-size:9px;font-weight:600;color:#fff;opacity:.8;margin-top:3px;text-transform:uppercase;letter-spacing:.5px">Disponibles</div>
-        </div>
+  <div class="sec-hdr"><h3>Pipeline de Negocios — AMB 4×2</h3><span class="sub">Oportunidades activas</span></div>
+  <div class="kpi-row">
+    <div class="kpi" style="border-left-color:#7c3aed"><div class="lbl">Oportunidades</div><div class="val">17</div></div>
+    <div class="kpi" style="border-left-color:#1d4ed8"><div class="lbl">Demanda potencial</div><div class="val">32 und.</div></div>
+    <div class="kpi" style="border-left-color:#16a34a">
+      <div class="lbl">Demanda ponderada</div>
+      <div class="val">10 und.</div>
+      <div class="sub">9.7 → redondeado al entero</div>
     </div>
   </div>
 
-  <!-- Asignaciones — tabla unificada: asig desde FLEET, metadata desde REQS -->
-  <div class="sec">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-      <span style="font-size:12px;font-weight:600;color:#0f172a">Asignaciones</span>
-      <span style="font-size:11px;color:#94a3b8">Nº asignadas proviene del reporte semanal — completa fechas y requerimientos con ✏️</span>
-    </div>
-    <div class="tbl-wrap"><table>
-      <thead><tr>
-        <th class="sortable" data-sort-dir="none">Cliente / Uso</th>
-        <th class="sortable" data-sort-dir="none">Asignadas</th>
-        <th class="sortable" data-sort-dir="none">Req. Operación</th>
-        <th class="sortable" data-sort-dir="none">Req. Back Up</th>
-        <th class="sortable" data-sort-dir="none">Req. Total</th>
-        <th class="sortable" data-sort-dir="none">Faltante / Sobrante</th>
-        <th class="sortable" data-sort-dir="none">Inicio contrato</th>
-        <th class="sortable" data-sort-dir="none">Fin contrato</th>
-        <th></th>
-      </tr></thead>
-      <tbody>
-      <tr style="background:transparent">
-          <td style="font-weight:600">
-            TRASLADO BÁSICO
-            
-          </td>
-          <td style="text-align:center;font-weight:700">10</td>
-          <td style="text-align:center">11 <span style="font-size:9px;background:#7c3aed;color:#fff;border-radius:3px;padding:1px 4px" title="Req. temporal activo +1">+1</span></td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">11</td>
-          <td style="text-align:center;font-weight:700;color:#dc2626">-1</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Abr-2023</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b"><span style="color:#94a3b8">Permanente</span></td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',0)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',0)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:var(--row-alt)">
-          <td style="font-weight:600">
-            COMUDEF
-            
-          </td>
-          <td style="text-align:center;font-weight:700">9</td>
-          <td style="text-align:center">9</td>
-          <td style="text-align:center">1</td>
-          <td style="text-align:center;font-weight:600">10</td>
-          <td style="text-align:center;font-weight:700;color:#dc2626">-1</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Ene-2024</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b">Dic-2027</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',1)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',1)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:transparent">
-          <td style="font-weight:600">
-            HOSPITAL SAN JUAN DE DIOS
-            
-          </td>
-          <td style="text-align:center;font-weight:700">7</td>
-          <td style="text-align:center">7</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">7</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Ene-2026</td>
-          <td style="text-align:center;font-size:11px;font-weight:700;color:#d97706">Jul-2026</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',2)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',2)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:#fffbeb">
-          <td style="font-weight:600">
-            DISPONIBLE
-            <span style="font-size:9px;background:#f59e0b;color:#fff;border-radius:4px;padding:1px 6px;margin-left:6px;font-weight:700">NUEVO</span>
-          </td>
-          <td style="text-align:center;font-weight:700">6</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">—</td>
-          <td style="text-align:center;font-weight:700;color:#0891b2">+6</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">—</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b"><span style="color:#94a3b8">Permanente</span></td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2','DISPONIBLE')" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            
-          </td>
-        </tr><tr style="background:transparent">
-          <td style="font-weight:600">
-            LICITACION HOSP. LUIS TISNE
-            
-          </td>
-          <td style="text-align:center;font-weight:700">5</td>
-          <td style="text-align:center">5</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">5</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">May-2024</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b">Dic-2027</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',4)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',4)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:var(--row-alt)">
-          <td style="font-weight:600">
-            RESCATE BASE 1
-            
-          </td>
-          <td style="text-align:center;font-weight:700">5</td>
-          <td style="text-align:center">6</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">6</td>
-          <td style="text-align:center;font-weight:700;color:#dc2626">-1</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">—</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b"><span style="color:#94a3b8">Permanente</span></td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',3)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',3)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:transparent">
-          <td style="font-weight:600">
-            CORP. LAS CONDES
-            
-          </td>
-          <td style="text-align:center;font-weight:700">4</td>
-          <td style="text-align:center">4</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">4</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Ago-2023</td>
-          <td style="text-align:center;font-size:11px;font-weight:700;color:#d97706">Jul-2026</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',5)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',5)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:var(--row-alt)">
-          <td style="font-weight:600">
-            EMECAR
-            
-          </td>
-          <td style="text-align:center;font-weight:700">4</td>
-          <td style="text-align:center">4</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">4</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">—</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b"><span style="color:#94a3b8">Permanente</span></td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',17)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',17)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:transparent">
-          <td style="font-weight:600">
-            HOSPITAL DE RANCAGUA
-            
-          </td>
-          <td style="text-align:center;font-weight:700">4</td>
-          <td style="text-align:center">4</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">4</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Abr-2026</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b">Dic-2026</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',6)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',6)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:var(--row-alt)">
-          <td style="font-weight:600">
-            RESCATE BASE 2
-            
-          </td>
-          <td style="text-align:center;font-weight:700">4</td>
-          <td style="text-align:center">3</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">3</td>
-          <td style="text-align:center;font-weight:700;color:#16a34a">+1</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">—</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b"><span style="color:#94a3b8">Permanente</span></td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',8)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',8)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:transparent">
-          <td style="font-weight:600">
-            LICITACION H DE LINARES
-            
-          </td>
-          <td style="text-align:center;font-weight:700">2</td>
-          <td style="text-align:center">2 <span style="font-size:9px;background:#7c3aed;color:#fff;border-radius:3px;padding:1px 4px" title="Req. temporal activo +1">+1</span></td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">2</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Ago-2025</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b">Dic-2027</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',9)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',9)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:var(--row-alt)">
-          <td style="font-weight:600">
-            LICITACION TALAGANTE
-            
-          </td>
-          <td style="text-align:center;font-weight:700">2</td>
-          <td style="text-align:center">3 <span style="font-size:9px;background:#7c3aed;color:#fff;border-radius:3px;padding:1px 4px" title="Req. temporal activo +1">+1</span></td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">3</td>
-          <td style="text-align:center;font-weight:700;color:#dc2626">-1</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Jun-2025</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b">Dic-2027</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',7)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',7)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:transparent">
-          <td style="font-weight:600">
-            AUTOPISTA NORORIENTE
-            
-          </td>
-          <td style="text-align:center;font-weight:700">1</td>
-          <td style="text-align:center">1</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">1</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Mar-2026</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b">Dic-2027</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',11)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',11)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:var(--row-alt)">
-          <td style="font-weight:600">
-            BUPA ANTOFAGASTA
-            
-          </td>
-          <td style="text-align:center;font-weight:700">1</td>
-          <td style="text-align:center">1</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">1</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Jul-2025</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b">Dic-2027</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',12)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',12)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:transparent">
-          <td style="font-weight:600">
-            CLINICA INDISA
-            
-          </td>
-          <td style="text-align:center;font-weight:700">1</td>
-          <td style="text-align:center">1</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">1</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Abr-2023</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b">Dic-2027</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',10)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',10)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:var(--row-alt)">
-          <td style="font-weight:600">
-            ELECCON IQUIQUE
-            
-          </td>
-          <td style="text-align:center;font-weight:700">1</td>
-          <td style="text-align:center">1</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">1</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Abr-2026</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b">Dic-2026</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',16)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',16)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:transparent">
-          <td style="font-weight:600">
-            ENAP HUALPEN
-            
-          </td>
-          <td style="text-align:center;font-weight:700">1</td>
-          <td style="text-align:center">1</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">1</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Sep-2025</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b">Dic-2027</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',13)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',13)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:var(--row-alt)">
-          <td style="font-weight:600">
-            HLF
-            
-          </td>
-          <td style="text-align:center;font-weight:700">1</td>
-          <td style="text-align:center">1</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">1</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">Ago-2024</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b">May-2027</td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',14)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',14)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr><tr style="background:transparent">
-          <td style="font-weight:600">
-            RESCATE BASE 8
-            
-          </td>
-          <td style="text-align:center;font-weight:700">1</td>
-          <td style="text-align:center">1</td>
-          <td style="text-align:center">—</td>
-          <td style="text-align:center;font-weight:600">1</td>
-          <td style="text-align:center;font-weight:700;color:#d97706">=</td>
-          <td style="text-align:center;font-size:11px;color:#64748b">—</td>
-          <td style="text-align:center;font-size:11px;font-weight:400;color:#64748b"><span style="color:#94a3b8">Permanente</span></td>
-          <td style="text-align:center;white-space:nowrap">
-            <button onclick="editContrato('4x2',15)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar fechas y requerimientos">✏️</button>
-            <button onclick="eliminarContrato('4x2',15)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
-          </td>
-        </tr>
-      </tbody>
-      <tfoot><tr>
-        <td><strong>TOTAL</strong></td>
-        <td style="text-align:center"><strong>69</strong></td>
-        <td style="text-align:center"><strong>65</strong></td>
-        <td style="text-align:center"><strong>1</strong></td>
-        <td style="text-align:center"><strong>66</strong></td>
-        <td style="text-align:center;font-weight:700;color:#16a34a">+</td>
-        <td></td><td></td><td></td>
-      </tr></tfoot>
-    </table></div>
+  <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
+    <button onclick="abrirFormPipeline(null)" style="padding:5px 14px;background:#1d4ed8;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600">+ Agregar oportunidad</button>
   </div>
-
-  <!-- Detalle en taller -->
   
-  <div class="sec">
-    <div style="font-size:12px;font-weight:600;color:#0f172a;margin-bottom:8px">Vehículos en taller esta semana <span style="font-weight:400;color:#94a3b8">(impactan disponibilidad)</span></div>
-    <div class="tbl-wrap"><table>
-      <thead><tr>
-        <th class="sortable" data-sort-dir="none">Móvil</th><th class="sortable" data-sort-dir="none">Marca / Modelo</th><th class="sortable" data-sort-dir="none">Patente</th><th class="sortable" data-sort-dir="none">Sem. consecutivas</th><th class="sortable" data-sort-dir="none">Falla actual</th>
-      </tr></thead>
-      <tbody>
-      <tr style="background:transparent">
-          <td style="text-align:center"><strong>239</strong></td>
-          <td>FORD F-350 TYPE I 6,7</td>
-          <td style="font-family:monospace;font-size:11px;text-align:center">LJWH-90</td>
-          <td style="text-align:center">
-            <span style="font-weight:700;color:#dc2626">8 sem.</span>
-          </td>
-          <td class="wrap">Falla de Motor en revisión</td>
-        </tr><tr style="background:var(--row-alt)">
-          <td style="text-align:center"><strong>245</strong></td>
-          <td>MERCEDES BENZ SPRINTER</td>
-          <td style="font-family:monospace;font-size:11px;text-align:center">RRTF-70</td>
-          <td style="text-align:center">
-            <span style="font-weight:700;color:#eab308">1 sem.</span>
-          </td>
-          <td class="wrap">En espera de asignación de Taller por parte de Aseguradora</td>
-        </tr>
-      </tbody>
-    </table></div>
+
+  <div id="pipeline-form-container"></div>
+
+  <div class="tbl-wrap"><table>
+    <thead><tr>
+      <th class="sortable sort-asc" data-sort-dir="asc">Cliente</th>
+      <th class="sortable" data-sort-dir="none">Unidades</th>
+      <th class="sortable" data-sort-dir="none">Prob. %</th>
+      <th class="sortable" data-sort-dir="none">Dem. pond.</th>
+      <th class="sortable" data-sort-dir="none">F. Requerida</th>
+      <th class="sortable" data-sort-dir="none">Duración (m)</th>
+      <th class="sortable" data-sort-dir="none">Estado</th>
+      <th class="sortable" data-sort-dir="none">Notas</th>
+      <th data-sort-dir="none"></th>
+    </tr></thead>
+    <tbody>
+    
+    <tr style="">
+      <td><strong>AES LOS CURUROS</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:20px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">20%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.2</td>
+      <td style="text-align:center">Jul-2026</td>
+      <td style="text-align:center">12 m</td>
+      <td><span class="badge b-grey">Prospecto</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(10)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(10)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>COSAYACH - CALA CALA</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:50px;max-width:100px;height:8px;border-radius:4px;background:#d97706"></div>
+          <strong style="color:#d97706">50%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.5</td>
+      <td style="text-align:center">Ago-2026</td>
+      <td style="text-align:center">24 m</td>
+      <td><span class="badge b-amber">Negociación</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(4)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(4)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>COSAYACH - NEGREIRO</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:10px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">10%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.1</td>
+      <td style="text-align:center">Sep-2026</td>
+      <td style="text-align:center">24 m</td>
+      <td><span class="badge b-grey">Prospecto</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(14)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(14)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>COSAYACH - TANA</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:10px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">10%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.1</td>
+      <td style="text-align:center">Sep-2026</td>
+      <td style="text-align:center">24 m</td>
+      <td><span class="badge b-grey">Prospecto</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(15)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(15)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>FUSAT RANCAGUA</strong></td>
+      <td style="text-align:center;font-weight:700">3</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:10px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">10%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.3</td>
+      <td style="text-align:center">Jul-2026</td>
+      <td style="text-align:center">36 m</td>
+      <td><span class="badge b-grey">Prospecto</span></td>
+      <td class="wrap">Licitación hospital público</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(1)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(1)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>GRUPO COSTANERA-LITORAL</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:20px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">20%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.2</td>
+      <td style="text-align:center">Jul-2026</td>
+      <td style="text-align:center">36 m</td>
+      <td><span class="badge b-grey">Negociación</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(2)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(2)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>HOSPITAL SAN JUAN DE DIOS</strong></td>
+      <td style="text-align:center;font-weight:700">7</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:25px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">25%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">1.8</td>
+      <td style="text-align:center">Ago-2026</td>
+      <td style="text-align:center">12 m</td>
+      <td><span class="badge b-grey">Prospecto</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(8)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(8)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>PAMPA CAMARONES</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:30px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">30%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.3</td>
+      <td style="text-align:center">Ago-2026</td>
+      <td style="text-align:center">24 m</td>
+      <td><span class="badge b-grey">Prospecto</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(11)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(11)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>POWER CHINA - VALLENAR</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:50px;max-width:100px;height:8px;border-radius:4px;background:#d97706"></div>
+          <strong style="color:#d97706">50%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.5</td>
+      <td style="text-align:center">Jul-2026</td>
+      <td style="text-align:center">8 m</td>
+      <td><span class="badge b-amber">Negociación</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(12)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(12)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>RUTA DEL CANAL</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:40px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">40%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.4</td>
+      <td style="text-align:center">Jul-2026</td>
+      <td style="text-align:center">12 m</td>
+      <td><span class="badge b-grey">Propuesta</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(16)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(16)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>RUTA MINERA</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:20px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">20%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.2</td>
+      <td style="text-align:center">Jul-2026</td>
+      <td style="text-align:center">36 m</td>
+      <td><span class="badge b-grey">Propuesta</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(9)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(9)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>SACYR COPIAPO</strong></td>
+      <td style="text-align:center;font-weight:700">2</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:10px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">10%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.2</td>
+      <td style="text-align:center">Ago-2026</td>
+      <td style="text-align:center">36 m</td>
+      <td><span class="badge b-grey">Prospecto</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(6)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(6)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>SACYR RUTA 68</strong></td>
+      <td style="text-align:center;font-weight:700">3</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:30px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">30%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.9</td>
+      <td style="text-align:center">Jul-2026</td>
+      <td style="text-align:center">36 m</td>
+      <td><span class="badge b-grey">Propuesta</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(5)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(5)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>SACYR RUTA DEL ALGARROBO</strong></td>
+      <td style="text-align:center;font-weight:700">2</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:10px;max-width:100px;height:8px;border-radius:4px;background:#94a3b8"></div>
+          <strong style="color:#94a3b8">10%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.2</td>
+      <td style="text-align:center">Jul-2026</td>
+      <td style="text-align:center">36 m</td>
+      <td><span class="badge b-grey">Prospecto</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(7)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(7)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>TANGHUA - CHILLAN VIEJO</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:100px;max-width:100px;height:8px;border-radius:4px;background:#16a34a"></div>
+          <strong style="color:#16a34a">100%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">1.0</td>
+      <td style="text-align:center">Jun-2026</td>
+      <td style="text-align:center">4 m</td>
+      <td><span class="badge b-blue">Adjudicado</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(13)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(13)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>MUNICIPALIDAD LAS CONDES</strong></td>
+      <td style="text-align:center;font-weight:700">4</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:50px;max-width:100px;height:8px;border-radius:4px;background:#d97706"></div>
+          <strong style="color:#d97706">50%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">2.0</td>
+      <td style="text-align:center">Ago-2026</td>
+      <td style="text-align:center">24 m</td>
+      <td><span class="badge b-amber">Propuesta</span></td>
+      <td class="wrap">—</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(3)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(3)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr><tr style="">
+      <td><strong>VERONA</strong></td>
+      <td style="text-align:center;font-weight:700">1</td>
+      <td style="text-align:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:80px;max-width:100px;height:8px;border-radius:4px;background:#16a34a"></div>
+          <strong style="color:#16a34a">80%</strong>
+        </div>
+      </td>
+      <td style="text-align:center;font-weight:600;color:#7c3aed">0.8</td>
+      <td style="text-align:center">Sep-2026</td>
+      <td style="text-align:center">24 m</td>
+      <td><span class="badge b-green">Negociación avanzada</span></td>
+      <td class="wrap">Empresa RM</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="abrirFormPipeline(0)" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(0)" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+      </td>
+    </tr></tbody>
+  </table></div>
+
+  <!-- Chart: unidades a comprar por mes -->
+  
+  <div class="card" style="margin-top:18px">
+    <div class="card-title">Unidades a adquirir por mes — según demanda ponderada del pipeline</div>
+    <div style="font-size:11px;color:#64748b;margin-bottom:10px">Azul = demanda bruta pipeline · Verde = se liberan de contratos · Naranja/Rojo = compra neta recomendada (demanda − liberadas). Pasa el cursor para ver detalle de cada mes.</div>
+    <div class="chart-wrap" style="height:220px"><canvas id="chartPipelineCompras" width="1854" height="220" style="display: block; box-sizing: border-box; height: 220px; width: 1854px;"></canvas></div>
+    <div id="pipeline-chart-data" data-labels="[&quot;jun. 26&quot;,&quot;jul. 26&quot;,&quot;ago. 26&quot;,&quot;sep. 26&quot;,&quot;oct. 26&quot;,&quot;nov. 26&quot;,&quot;dic. 26&quot;,&quot;ene. 27&quot;,&quot;feb. 27&quot;,&quot;mar. 27&quot;,&quot;abr. 27&quot;,&quot;may. 27&quot;,&quot;jun. 27&quot;,&quot;jul. 27&quot;,&quot;ago. 27&quot;,&quot;sep. 27&quot;,&quot;oct. 27&quot;,&quot;nov. 27&quot;,&quot;dic. 27&quot;,&quot;ene. 28&quot;,&quot;feb. 28&quot;,&quot;mar. 28&quot;,&quot;abr. 28&quot;,&quot;may. 28&quot;]" data-demand="[1,3,5,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]" data-freed="[0,0,11,0,0,0,0,5,0,0,0,0,1,0,0,0,0,0,0,22,0,0,0,0]" data-net="[1,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]" style="display:none"></div>
   </div>
   </div>
 </div>
@@ -623,7 +568,7 @@ tfoot td{padding:8px 10px;font-weight:700;border-right:1px solid var(--border)}
 ═══════════════════════════════════════════ */
 const FLEET_AMB = [{"prop":"UCM","movil":219,"marca":"FORD","modelo":"E-350 6,8 BENCINERO","patente":"BVZS-29","anio":2010,"chasis":"1FDWE3FSXADA92181","rs":"OK","cond":"OPERATIVO CON OBS.","estado":"BACK UP EVENTOS RM","obs":"Inutilizable por A/C con falla sin reparación , Reclamo sindical DT","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"USA"},{"prop":"UCM","movil":221,"marca":"FORD","modelo":"E-350 6,8 BENCINERO","patente":"BVZS-30","anio":2010,"chasis":"1FDWE3FS1ADA92182","rs":"OK","cond":"OPERATIVO CON OBS.","estado":"BACK UP EVENTOS RM","obs":"Inutilizable por A/C con falla sin reparación , Reclamo sindical DT","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"USA"},{"prop":"UCM","movil":225,"marca":"FORD","modelo":"F - 350 6,7","patente":"GSWH-43","anio":2014,"chasis":"1FDRF3GT8EEB82737","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"USA"},{"prop":"UCM","movil":229,"marca":"FORD","modelo":"F - 350 6,7","patente":"GXCD-48","anio":2014,"chasis":"1FDRF3GTXEEB82738","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"USA"},{"prop":"UCM","movil":231,"marca":"FORD","modelo":"F - 350 6,7","patente":"GXCD-51","anio":2014,"chasis":"1FDRF3GT1EEB82739","rs":"OK","cond":"OPERATIVO","estado":"RESCATE BASE 1","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"USA"},{"prop":"UCM","movil":233,"marca":"FORD","modelo":"F-350 TYPE I 6,7","patente":"LGCL-18","anio":2018,"chasis":"1FDRF3GT2JEC36477","rs":"OK","cond":"NO OPERATIVO","estado":"FUERA DE SERVICIO","obs":"Inutilizable por falla total de motor (el importado refaccionado falló y caja de cambio con problemas)","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"USA"},{"prop":"UCM","movil":235,"marca":"FORD","modelo":"F-350 TYPE I 6,7","patente":"LJWH-87","anio":2018,"chasis":"1FDRF3GT6JEC36478","rs":"OK","cond":"OPERATIVO","estado":"RESCATE BASE 1","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"USA"},{"prop":"UCM","movil":237,"marca":"FORD","modelo":"F-350 TYPE I 6,7","patente":"LJWH-89","anio":2018,"chasis":"1FDRF3GT6JEC36479","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"USA"},{"prop":"UCM","movil":239,"marca":"FORD","modelo":"F-350 TYPE I 6,7","patente":"LJWH-90","anio":2018,"chasis":"1FDRF3GT6JEC36482","rs":"OK","cond":"FALLA MECANICA ETI","estado":"EN TALLER","obs":"Falla de Motor en revisión","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"USA"},{"prop":"UCM","movil":241,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"RHRC-51","anio":2022,"chasis":"WF0XXXTTGMTM43747","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":"Banco de Chile","fIni":"2021-10","fFin":"2026-10","monto":50979167,"cuota":1134003,"remanente":5503806,"carrocero":"VESPEK"},{"prop":"UCM","movil":243,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"RHTK-96","anio":2022,"chasis":"WF0XXXTTGMTM43743","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":"Banco de Chile","fIni":"2021-10","fFin":"2026-10","monto":50979167,"cuota":1134003,"remanente":5503806,"carrocero":"VESPEK"},{"prop":"UCM","movil":245,"marca":"MERCEDES BENZ","modelo":"SPRINTER","patente":"RRTF-70","anio":2022,"chasis":"WIV907633NP293313","rs":"OK","cond":"SINIESTRADA","estado":"CORP. LAS CONDES","obs":"En espera de asignación de Taller por parte de Aseguradora","banco":"Banco de Chile","fIni":"2023-04","fFin":"2027-01","monto":61786568,"cuota":1711800,"remanente":13098142,"carrocero":"VESPEK"},{"prop":"UCM","movil":249,"marca":"MERCEDES BENZ","modelo":"SPRINTER","patente":"RSVL-33","anio":2022,"chasis":"WIV907633NP293314","rs":"OK","cond":"OPERATIVO","estado":"CLINICA INDISA","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"VESPEK"},{"prop":"UCM","movil":251,"marca":"MERCEDES BENZ","modelo":"SPRINTER","patente":"RSVL-38","anio":2022,"chasis":"8AC907643PE210146","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"VESPEK"},{"prop":"UCM","movil":253,"marca":"MERCEDES BENZ","modelo":"SPRINTER","patente":"SKRG-89","anio":2023,"chasis":"8AC907643PE214718","rs":"OK","cond":"OPERATIVO","estado":"CORP. LAS CONDES","obs":"","banco":"Banco Internacional","fIni":"2022-11","fFin":"2026-12","monto":75641187,"cuota":1960222,"remanente":13188755,"carrocero":"VESPEK"},{"prop":"UCM","movil":255,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SSHC-51","anio":2023,"chasis":"WF0XXXTTGNTJ42171","rs":"OK","cond":"OPERATIVO","estado":"CORP. LAS CONDES","obs":"","banco":"Banco Internacional","fIni":"2023-03","fFin":"2027-03","monto":65806287,"cuota":1732932,"remanente":16413127,"carrocero":"VESPEK"},{"prop":"UCM","movil":257,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SSGZ-39","anio":2023,"chasis":"WF0XXXTTGNTJ38746","rs":"OK","cond":"OPERATIVO","estado":"CORP. LAS CONDES","obs":"","banco":"Banco Internacional","fIni":"2023-03","fFin":"2027-03","monto":65806287,"cuota":1732932,"remanente":16413127,"carrocero":"VESPEK"},{"prop":"UCM","movil":279,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TFJT-44","anio":2024,"chasis":"WF0EXXTTRPTL49628","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","banco":"Los Cuatro","fIni":"2024-01","fFin":"2027-01","monto":62500000,"cuota":2075894,"remanente":15884072,"carrocero":"VESPEK"},{"prop":"UCM","movil":281,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TFJT-45","anio":2024,"chasis":"WF0EXXTTRPTL49625","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","banco":"Los Cuatro","fIni":"2024-01","fFin":"2027-01","monto":62500000,"cuota":2075894,"remanente":15884072,"carrocero":"VESPEK"},{"prop":"UCM","movil":283,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TFJT-46","anio":2024,"chasis":"WF0EXXTTRPTY77802","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","banco":"Los Cuatro","fIni":"2024-01","fFin":"2027-01","monto":62500000,"cuota":2075894,"remanente":15884072,"carrocero":"VESPEK"},{"prop":"UCM","movil":285,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TFJT-47","anio":2024,"chasis":"WF0EXXTTRPTL49619","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","banco":"Los Cuatro","fIni":"2024-01","fFin":"2027-01","monto":62500000,"cuota":2075894,"remanente":15884072,"carrocero":"VESPEK"},{"prop":"UCM","movil":287,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TGFC-87","anio":2024,"chasis":"WF0EXXTTRPTY76178","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","banco":"Banco BCI","fIni":"2024-01","fFin":"2026-06","monto":52016806,"cuota":2283548,"remanente":1793683,"carrocero":"VESPEK"},{"prop":"UCM","movil":309,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TSHL-29","anio":2024,"chasis":"WF0EXXTTRPTT32856","rs":"OK","cond":"OPERATIVO","estado":"CORP. LAS CONDES","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"VESPEK"},{"prop":"UCM","movil":311,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TSHL-46","anio":2024,"chasis":"WF0EXXTTRPTT32860","rs":"OK","cond":"OPERATIVO","estado":"EMECAR","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"VESPEK"},{"prop":"UCM","movil":313,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TSHL-56","anio":2024,"chasis":"WF0EXXTTRPTT32857","rs":"OK","cond":"OPERATIVO","estado":"RESCATE BASE 1","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"VESPEK"},{"prop":"UCM","movil":315,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TFTT-58","anio":2025,"chasis":"WF0DTGVGXSU015802","rs":"PENDIENTE","cond":"OPERATIVO","estado":"RESCATE BASE 2","obs":"","banco":"Banco BICE","fIni":"2024-11","fFin":"2026-12","monto":50375594,"cuota":2244352,"remanente":14105166,"carrocero":"VESPEK"},{"prop":"UCM","movil":317,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TFTT-59","anio":2025,"chasis":"WF0DTGVG7SU015806","rs":"PENDIENTE","cond":"OPERATIVO","estado":"DISPONIBLE","obs":"","banco":"Banco BICE","fIni":"2024-11","fFin":"2026-12","monto":50375594,"cuota":2244352,"remanente":14105166,"carrocero":"VESPEK"},{"prop":"UCM","movil":319,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TYLF-60","anio":2025,"chasis":"WF0EXXTT7STK37552","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL SAN JUAN DE DIOS","obs":"","banco":"Banco BICE","fIni":"2024-12","fFin":"2027-01","monto":46400000,"cuota":2244352,"remanente":14848000,"carrocero":"VESPEK"},{"prop":"UCM","movil":321,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TYLF-83","anio":2025,"chasis":"WF0EXXTT6STK41110","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL SAN JUAN DE DIOS","obs":"","banco":"Banco BICE","fIni":"2024-12","fFin":"2027-01","monto":46400000,"cuota":2244352,"remanente":14848000,"carrocero":"VESPEK"},{"prop":"UCM","movil":323,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TYSZ-69","anio":2025,"chasis":"WF0EXXTT1STC30647","rs":"OK","cond":"OPERATIVO","estado":"LICITACION HOSP. LUIS TISNE","obs":"","banco":"Banco de Chile","fIni":"2024-12","fFin":"2026-12","monto":46400000,"cuota":2805554,"remanente":13533333,"carrocero":"VESPEK"},{"prop":"UCM","movil":325,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TZHF-19","anio":2025,"chasis":"WF0EXXTT0STK43922","rs":"OK","cond":"OPERATIVO","estado":"AUTOPISTA NORORIENTE","obs":"","banco":"Banco BCI","fIni":"2025-01","fFin":"2027-02","monto":46400000,"cuota":2525915,"remanente":16704000,"carrocero":"VESPEK"},{"prop":"UCM","movil":327,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TZVJ-71","anio":2025,"chasis":"WF0EXXTT0STC30705","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL SAN JUAN DE DIOS","obs":"","banco":"Banco BCI","fIni":"2025-01","fFin":"2027-03","monto":46400000,"cuota":2559831,"remanente":16704000,"carrocero":"VESPEK"},{"prop":"UCM","movil":333,"marca":"FORD","modelo":"TRANSIT 2.0 AT","patente":"RKXL74","anio":2025,"chasis":"WF0DTGVG0SU017560","rs":"OK","cond":"OPERATIVO","estado":"LICITACION H DE LINARES","obs":"","banco":"Banco BCI","fIni":"2025-02","fFin":"2028-03","monto":50375594,"cuota":1942965,"remanente":26433056,"carrocero":"VESPEK"},{"prop":"UCM","movil":335,"marca":"FORD","modelo":"TRANSIT 2.0 AT","patente":"RKXL75","anio":2025,"chasis":"WF0DTGVG4SU0175562","rs":"OK","cond":"OPERATIVO","estado":"LICITACION HOSP. LUIS TISNE","obs":"","banco":"Banco BCI","fIni":"2025-02","fFin":"2028-03","monto":50375594,"cuota":1560620,"remanente":26433056,"carrocero":"VESPEK"},{"prop":"UCM","movil":337,"marca":"FORD","modelo":"TRANSIT 2.0 AT","patente":"TZBW10","anio":2025,"chasis":"WF0DTGVGBSU016415","rs":"OK","cond":"OPERATIVO","estado":"LICITACION TALAGANTE","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"VESPEK"},{"prop":"UCM","movil":339,"marca":"FORD","modelo":"TRANSIT 2.0 AT","patente":"TZBW11","anio":2025,"chasis":"WF0DTGVGBSU016423","rs":"OK","cond":"OPERATIVO","estado":"LICITACION HOSP. LUIS TISNE","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"VESPEK"},{"prop":"UCM","movil":341,"marca":"FORD","modelo":"TRANSIT 2.0 AT","patente":"TZBW13","anio":2025,"chasis":"WF0DTGVG3SU017262","rs":"OK","cond":"OPERATIVO","estado":"LICITACION HOSP. LUIS TISNE","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"VESPEK"},{"prop":"UCM","movil":343,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TVKC17","anio":2025,"chasis":"WF0EXXTT7STY01149","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL SAN JUAN DE DIOS","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"VESPEK"},{"prop":"UCM","movil":345,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TVKC18","anio":2025,"chasis":"WF0EXXTT8STY01144","rs":"OK","cond":"OPERATIVO","estado":"ENAP HUALPEN","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"VESPEK"},{"prop":"UCM","movil":347,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TVKC19","anio":2025,"chasis":"WF0EXXTT6STY03636","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL SAN JUAN DE DIOS","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"VESPEK"},{"prop":"UCM","movil":349,"marca":"FORD","modelo":"TRANSIT 2.0 AT","patente":"TZBW12","anio":2025,"chasis":"WF0DTGVG1SU017258","rs":"PENDIENTE","cond":"OPERATIVO","estado":"LICITACION HOSP. LUIS TISNE","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"VESPEK"},{"prop":"UCM","movil":351,"marca":"FORD","modelo":"TRANSIT 2.0 AT","patente":"TZBW14","anio":2025,"chasis":"WF0DTGVG9SU016424","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL SAN JUAN DE DIOS","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"VESPEK"},{"prop":"UCM","movil":353,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"VKKJ92","anio":2026,"chasis":"WF0EXXTT7STJ41162","rs":"PENDIENTE","cond":"OPERATIVO","estado":"DISPONIBLE","obs":"","banco":"Rio Branco","fIni":"2025-09","fFin":"2027-09","monto":56250000,"cuota":2647883,"remanente":38971208,"carrocero":"VESPEK"},{"prop":"UCM","movil":355,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"VKKJ96","anio":2026,"chasis":"WF0EXXTT7STJ41159","rs":"PENDIENTE","cond":"OPERATIVO","estado":"DISPONIBLE","obs":"","banco":"Rio Branco","fIni":"2025-09","fFin":"2027-09","monto":56250000,"cuota":2647883,"remanente":38971208,"carrocero":"VESPEK"},{"prop":"UCM","movil":357,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"VKZC-10","anio":2026,"chasis":"WF0EXXTT9STT27446","rs":"PENDIENTE","cond":"OPERATIVO","estado":"HOSPITAL DE RANCAGUA","obs":"","banco":"Banco BICE","fIni":"2025-09","fFin":"2028-09","monto":50100000,"cuota":1561375,"remanente":39267568,"carrocero":"PESCO"},{"prop":"UCM","movil":359,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"VLPF-65","anio":2026,"chasis":"WF0EXXTT9STT27454","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL DE RANCAGUA","obs":"","banco":"Banco BCI","fIni":"2025-09","fFin":"2028-04","monto":51018798,"cuota":2276894,"remanente":37852657,"carrocero":"PESCO"},{"prop":"UCM","movil":361,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"VDSD-36","anio":2026,"chasis":"WF0EXXTT0STM65263","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL DE RANCAGUA","obs":"","banco":"Rio Branco","fIni":"2025-09","fFin":"2027-09","monto":56250000,"cuota":2647883,"remanente":38971208,"carrocero":"LJ"},{"prop":"UCM","movil":363,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"VDSD-37","anio":2026,"chasis":"WF0EXXTT0STM65277","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL DE RANCAGUA","obs":"","banco":"Rio Branco","fIni":"2025-09","fFin":"2027-09","monto":56250000,"cuota":2647883,"remanente":38971208,"carrocero":"LJ"},{"prop":"EMECAR","movil":80,"marca":"MERCEDES BENZ","modelo":"SPRINTER","patente":"DBLS-58","anio":2011,"chasis":"8AC90366BE039400","rs":"OK","cond":"OPERATIVO CON OBS.","estado":"BACK UP EVENTOS RM","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"BERTONATI"},{"prop":"EMECAR","movil":82,"marca":"MERCEDES BENZ","modelo":"SPRINTER","patente":"FCCV-39","anio":2012,"chasis":"WD3YE7A99CS684012","rs":"OK","cond":"OPERATIVO CON OBS.","estado":"BACK UP EMECAR","obs":"$17M","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"BERTONATI"},{"prop":"EMECAR","movil":83,"marca":"MERCEDES BENZ","modelo":"SPRINTER","patente":"GSWJ-43","anio":2014,"chasis":"WBD906613ES845128","rs":"OK","cond":"OPERATIVO CON OBS.","estado":"BACK UP EVENTOS RM","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"BERTONATI"},{"prop":"EMECAR","movil":84,"marca":"MERCEDES BENZ","modelo":"SPRINTER","patente":"JZDX-19","anio":2017,"chasis":"8AC906633HE123855","rs":"OK","cond":"OPERATIVO CON OBS.","estado":"BACK UP EMECAR","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"BERTONATI"},{"prop":"EMECAR","movil":85,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"RGCW-93","anio":2022,"chasis":"WF0XXXTTGMTJ74615","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"VESPEK"},{"prop":"EMECAR","movil":86,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"RGCW-99","anio":2022,"chasis":"WF0XXXTTGMTJ74614","rs":"OK","cond":"OPERATIVO","estado":"EMECAR","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"VESPEK"},{"prop":"EMECAR","movil":87,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"RWTR-74","anio":2022,"chasis":"WF0XXXTTGNTL02510","rs":"OK","cond":"OPERATIVO","estado":"EMECAR","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"VESPEK"},{"prop":"EMECAR","movil":259,"marca":"MAXUS","modelo":"DELIVER 9 L3H3","patente":"SFPS-34","anio":2023,"chasis":"LSH14J7CXNA050811","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","banco":"Banco BCI","fIni":"2023-07","fFin":"2026-09","monto":56210084,"cuota":2190891,"remanente":4437638,"carrocero":"VESPEK"},{"prop":"EMECAR","movil":261,"marca":"MAXUS","modelo":"DELIVER 9 L3H3","patente":"SXSV-36","anio":2023,"chasis":"LSH14J7C7NA050796","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","banco":"Banco Santander","fIni":"2023-08","fFin":"2026-09","monto":54400000,"cuota":1959952,"remanente":5881081,"carrocero":"VESPEK"},{"prop":"EMECAR","movil":263,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SHXL-79","anio":2023,"chasis":"WF0XXXTTGPTB37770","rs":"OK","cond":"OPERATIVO","estado":"RESCATE BASE 1","obs":"","banco":"Banco BCI","fIni":"2023-07","fFin":"2027-09","monto":50655198,"cuota":1567490,"remanente":16209663,"carrocero":"VESPEK"},{"prop":"EMECAR","movil":265,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SHXL-94","anio":2023,"chasis":"WF0XXXTTGPTB37773","rs":"OK","cond":"OPERATIVO","estado":"HOSPITAL SAN JUAN DE DIOS","obs":"","banco":"Banco BCI","fIni":"2023-07","fFin":"2027-09","monto":50655198,"cuota":1567490,"remanente":16209663,"carrocero":"VESPEK"},{"prop":"EMECAR","movil":267,"marca":"MAXUS","modelo":"DELIVER 9 L3H3","patente":"TBYY-96","anio":2023,"chasis":"LSH14J7C0NA050803","rs":"N/A","cond":"OPERATIVO","estado":"COMUDEF","obs":"","banco":"Banco Santander","fIni":"2023-10","fFin":"2026-11","monto":50000000,"cuota":1791145,"remanente":8108108,"carrocero":"VESPEK"},{"prop":"EMECAR","movil":269,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SHXL-67","anio":2023,"chasis":"WF0XXXTTGPTB35369","rs":"OK","cond":"OPERATIVO","estado":"HLF","obs":"","banco":"Banco Internacional","fIni":"2023-12","fFin":"2026-12","monto":43187531,"cuota":1639248,"remanente":8397575,"carrocero":"VESPEK"},{"prop":"EMECAR","movil":271,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SHXL-68","anio":2023,"chasis":"WF0XXXTTGPTM09116","rs":"OK","cond":"OPERATIVO","estado":"RESCATE BASE 2","obs":"","banco":"Banco Internacional","fIni":"2023-12","fFin":"2026-12","monto":43187531,"cuota":1639248,"remanente":8397575,"carrocero":"VESPEK"},{"prop":"EMECAR","movil":273,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SHXL-69","anio":2023,"chasis":"WF0XXXTTGPTB38395","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":"Banco Internacional","fIni":"2023-12","fFin":"2026-12","monto":43187531,"cuota":1639248,"remanente":8397575,"carrocero":"VESPEK"},{"prop":"EMECAR","movil":275,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SHXL-93","anio":2023,"chasis":"WF0XXXTTGPTB38398","rs":"OK","cond":"OPERATIVO","estado":"BUPA ANTOFAGASTA","obs":"","banco":"Banco Internacional","fIni":"2023-12","fFin":"2026-12","monto":43187531,"cuota":1639248,"remanente":8397575,"carrocero":"VESPEK"},{"prop":"EMECAR","movil":277,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"SHXL-95","anio":2023,"chasis":"WF0XXXTTGPTB35366","rs":"OK","cond":"OPERATIVO","estado":"EMECAR","obs":"","banco":"Banco Internacional","fIni":"2023-12","fFin":"2026-12","monto":43187531,"cuota":1639248,"remanente":8397575,"carrocero":"VESPEK"},{"prop":"EMECAR","movil":289,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TJTL-96","anio":2024,"chasis":"WF0EXXTTRPTY77810","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":"Banco BCI","fIni":"2024-03","fFin":"2028-04","monto":52481311,"cuota":1598296,"remanente":24634085,"carrocero":"VESPEK"},{"prop":"EMECAR","movil":291,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TJTL-98","anio":2024,"chasis":"WF0EXXTTRPTT32868","rs":"OK","cond":"OPERATIVO","estado":"RESCATE BASE 2","obs":"","banco":"Banco BCI","fIni":"2024-03","fFin":"2028-04","monto":52481311,"cuota":1598296,"remanente":24634085,"carrocero":"VESPEK"},{"prop":"EMECAR","movil":293,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TKJH-97","anio":2024,"chasis":"WF0EXXTTRPTT32858","rs":"OK","cond":"OPERATIVO","estado":"TRASLADO BÁSICO","obs":"","banco":"Banco Internacional","fIni":"2024-04","fFin":"2028-04","monto":52481311,"cuota":1491976,"remanente":25482518,"carrocero":"VESPEK"},{"prop":"EMECAR","movil":295,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TKJH-99","anio":2024,"chasis":"WF0EXXTTRPTT32859","rs":"OK","cond":"OPERATIVO","estado":"LICITACION H DE LINARES","obs":"","banco":"Banco Internacional","fIni":"2024-04","fFin":"2028-04","monto":52481311,"cuota":1491976,"remanente":25482518,"carrocero":"VESPEK"},{"prop":"EMECAR","movil":297,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TKXZ-70","anio":2024,"chasis":"WF0EXXTTRPTT32862","rs":"OK","cond":"OPERATIVO","estado":"RESCATE BASE 8","obs":"","banco":"Banco Internacional","fIni":"2024-04","fFin":"2028-04","monto":52481311,"cuota":1491976,"remanente":24391837,"carrocero":"VESPEK"},{"prop":"EMECAR","movil":299,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TKXZ-71","anio":2024,"chasis":"WF0EXXTTRPTT32807","rs":"OK","cond":"OPERATIVO","estado":"LICITACION TALAGANTE","obs":"","banco":"Banco Internacional","fIni":"2024-04","fFin":"2028-04","monto":52481311,"cuota":1491976,"remanente":24391837,"carrocero":"VESPEK"},{"prop":"EMECAR","movil":301,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TKYL-33","anio":2024,"chasis":"WF0EXXTTRPTL32866","rs":"OK","cond":"OPERATIVO","estado":"RESCATE BASE 2","obs":"","banco":"Banco Internacional","fIni":"2024-04","fFin":"2028-04","monto":52481311,"cuota":1506312,"remanente":24391837,"carrocero":"VESPEK"},{"prop":"EMECAR","movil":303,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TKYL-34","anio":2024,"chasis":"WF0EXXTTRPTL69849","rs":"OK","cond":"OPERATIVO","estado":"ELECCON IQUIQUE","obs":"","banco":"Banco Internacional","fIni":"2024-04","fFin":"2028-04","monto":52481311,"cuota":1506312,"remanente":24391837,"carrocero":"VESPEK"},{"prop":"EMECAR","movil":305,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TKYL-35","anio":2024,"chasis":"WF0EXXTTRPTL32861","rs":"OK","cond":"OPERATIVO","estado":"COMUDEF","obs":"","banco":"Banco Internacional","fIni":"2024-04","fFin":"2028-04","monto":52026807,"cuota":1564211,"remanente":24391837,"carrocero":"VESPEK"},{"prop":"EMECAR","movil":307,"marca":"FORD","modelo":"TRANSIT 2.2","patente":"TKYP-59","anio":2024,"chasis":"WF0EXXTTRPTL32804","rs":"OK","cond":"OPERATIVO","estado":"RESCATE BASE 1","obs":"","banco":"Banco Internacional","fIni":"2024-04","fFin":"2028-04","monto":52026807,"cuota":1564211,"remanente":24391837,"carrocero":"VESPEK"},{"prop":"UCM","movil":371,"marca":"FORD","modelo":"TRANSIT VAN L3H3 2.0","patente":"VYFL-63","anio":2026,"chasis":"WF0EXXTT8TTL12163","rs":"PENDIENTE","cond":"NO OPERATIVO","estado":"DISPONIBLE","obs":"En espera de equipamiento y GPS","fEntrega":"2026-06","banco":"Banco Santander","fIni":"2026-05","fFin":"2028-07","monto":49706592,"cuota":2589074,"remanente":0,"carrocero":"DIKAR"},{"prop":"UCM","movil":373,"marca":"FORD","modelo":"TRANSIT VAN L3H3 2.0","patente":"VYFL-36","anio":2026,"chasis":"WF0EXXTT9TTL12155","rs":"PENDIENTE","cond":"NO OPERATIVO","estado":"DISPONIBLE","obs":"En espera de equipamiento y GPS","fEntrega":"2026-06","banco":"Banco Santander","fIni":"2026-05","fFin":"2028-07","monto":49706592,"cuota":2589074,"remanente":0,"carrocero":"DIKAR"},{"prop":"UCM","movil":379,"marca":"FORD","modelo":"TRANSIT VAN L3H3 2.0","patente":"VYJR-53","anio":2026,"chasis":"WF0EXXTT7TTL12154","rs":"PENDIENTE","cond":"NO OPERATIVO","estado":"DISPONIBLE","obs":"En espera de Branding, equipamiento y GPS","fEntrega":"2026-06","banco":"Banco Santander","fIni":"2026-05","fFin":"2028-07","monto":50097037,"cuota":2659213,"remanente":0,"carrocero":"DIKAR"},{"prop":"UCM","movil":381,"marca":"FORD","modelo":"TRANSIT VAN L3H3 2.0","patente":"VYJP-72","anio":2026,"chasis":"WF0EXXTT8TTL15032","rs":"PENDIENTE","cond":"EN PRODUCCION","estado":"EN PRODUCCION","obs":"Pendiente recepción","fEntrega":"2026-06","banco":"Banco Santander","fIni":"2026-05","fFin":"2028-07","monto":50097037,"cuota":2659213,"remanente":0,"carrocero":"DIKAR"}];
 
-const FLEET_4X4 = [{"prop":"UCM","movil":329,"marca":"TOYOTA","modelo":"HILUX 4x4 2.4 MT DX","patente":"TZSG42","anio":2025,"chasis":"8AJDB3CD7S1369963","rs":"OK","cond":"OPERATIVO","estado":"TECHINT TOCOPILLA","obs":"","banco":"Banco Internacional","fIni":"2025-01","fFin":"2029-02","monto":54093123,"cuota":1561430,"remanente":36430062,"carrocero":"VESPEK"},{"prop":"UCM","movil":331,"marca":"TOYOTA","modelo":"HILUX 4x4 2.4 MT DX","patente":"TZSG43","anio":2025,"chasis":"8AJDB3CD4S1369967","rs":"OK","cond":"OPERATIVO","estado":"TECHINT TOCOPILLA","obs":"","banco":"Banco Internacional","fIni":"2025-01","fFin":"2029-02","monto":54093123,"cuota":1561430,"remanente":36430062,"carrocero":"VESPEK"},{"prop":"UCM","movil":365,"marca":"FORD","modelo":"TRANSIT VAN L3H3 4X4 2.0","patente":"VXLP-37","anio":2026,"chasis":"WF0EXXTT4STT24275","rs":"PENDIENTE","cond":"OPERATIVO","estado":"BESS LIBRILLO TAL TAL","obs":"","fEntrega":null,"banco":"Banco Santander","fIni":"2026-04","fFin":"2028-06","monto":65263680,"cuota":3394463,"remanente":65263680,"carrocero":"PESCO"},{"prop":"UCM","movil":367,"marca":"FORD","modelo":"TRANSIT VAN L3H3 4X4 2.0","patente":"VXPT-90","anio":2026,"chasis":"WF0EXXTTXTTD81973","rs":"PENDIENTE","cond":"OPERATIVO","estado":"GRUPO COX MARIA ELENA","obs":"","fEntrega":"2026-05","banco":"Banco Santander","fIni":"2026-04","fFin":"2028-06","monto":65264246,"cuota":3396137,"remanente":0,"carrocero":"PESCO"},{"prop":"UCM","movil":377,"marca":"FORD","modelo":"TRANSIT VAN L3H3 4X4 2.0","patente":"VYHC-78","anio":2026,"chasis":"WF0EXXTT9TTD82001","rs":"PENDIENTE","cond":"NO OPERATIVO","estado":"DISPONIBLE","obs":"En espera de Branding, equipamiento y GPS","fEntrega":"2026-06","banco":"Banco Santander","fIni":"2026-05","fFin":"2028-07","monto":63566592,"cuota":3311002,"remanente":0,"carrocero":"DIKAR"},{"prop":"UCM","movil":369,"marca":"MAXUS","modelo":"T60 4X4 MT E6","patente":"VJPP-80","anio":2024,"chasis":"LSFAM11A2RA041610","rs":"PENDIENTE","cond":"OPERATIVO","estado":"DISPONIBLE","obs":"","fEntrega":"2026-06","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":"PESCO"},{"prop":"UCM","movil":375,"marca":"FORD","modelo":"TRANSIT VAN L3H3 4X4 2.0","patente":"VYGX-15","anio":2026,"chasis":"WF0EXXTT8TTD81955","rs":"PENDIENTE","cond":"OPERATIVO","estado":"MINERA AURYN LAMPA","obs":"","fEntrega":"2026-06","banco":"Banco Santander","fIni":"2026-05","fFin":"2028-07","monto":63566592,"cuota":3311002,"remanente":0,"carrocero":"DIKAR"},{"prop":"UCM","movil":383,"marca":"FORD","modelo":"TRANSIT VAN L3H3 4X4 2.0","patente":"","anio":2026,"chasis":"","rs":"PENDIENTE","cond":"EN PRODUCCION","estado":"EN PRODUCCION","obs":"Fecha de entrega 30/06/2026 - Deberia ir a Auryn para liberar Maxus","fEntrega":"2026-06","banco":"Banco Santander","fIni":"","fFin":"","monto":0,"cuota":0,"remanente":0,"carrocero":""},{"prop":"UCM","movil":385,"marca":"FORD","modelo":"TRANSIT VAN L3H3 4X4 2.0","patente":"","anio":2026,"chasis":"","rs":"PENDIENTE","cond":"EN PRODUCCION","estado":"EN PRODUCCION","obs":"Fecha de entrega 30/06/2026 - Deberia ir a Besalco Zaldivar","fEntrega":"2026-06","banco":"Banco Santander","fIni":"","fFin":"","monto":0,"cuota":0,"remanente":0,"carrocero":""}];
+const FLEET_4X4 = [{"prop":"UCM","movil":329,"marca":"TOYOTA","modelo":"HILUX 4x4 2.4 MT DX","patente":"TZSG42","anio":2025,"chasis":"8AJDB3CD7S1369963","rs":"OK","cond":"OPERATIVO","estado":"TECHINT TOCOPILLA","obs":"","banco":"Banco Internacional","fIni":"2025-01","fFin":"2029-02","monto":54093123,"cuota":1561430,"remanente":36430062,"carrocero":"VESPEK"},{"prop":"UCM","movil":331,"marca":"TOYOTA","modelo":"HILUX 4x4 2.4 MT DX","patente":"TZSG43","anio":2025,"chasis":"8AJDB3CD4S1369967","rs":"OK","cond":"OPERATIVO","estado":"TECHINT TOCOPILLA","obs":"","banco":"Banco Internacional","fIni":"2025-01","fFin":"2029-02","monto":54093123,"cuota":1561430,"remanente":36430062,"carrocero":"VESPEK"},{"prop":"UCM","movil":365,"marca":"FORD","modelo":"TRANSIT VAN L3H3 4X4 2.0","patente":"VXLP-37","anio":2026,"chasis":"WF0EXXTT4STT24275","rs":"PENDIENTE","cond":"OPERATIVO","estado":"BESS LIBRILLO TAL TAL","obs":"","fEntrega":null,"banco":"Banco Santander","fIni":"2026-04","fFin":"2028-06","monto":65263680,"cuota":3394463,"remanente":65263680,"carrocero":"PESCO"},{"prop":"UCM","movil":367,"marca":"FORD","modelo":"TRANSIT VAN L3H3 4X4 2.0","patente":"VXPT-90","anio":2026,"chasis":"WF0EXXTTXTTD81973","rs":"PENDIENTE","cond":"OPERATIVO","estado":"GRUPO COX MARIA ELENA","obs":"","fEntrega":"2026-05","banco":"Banco Santander","fIni":"2026-04","fFin":"2028-06","monto":65264246,"cuota":3396137,"remanente":0,"carrocero":"PESCO"},{"prop":"UCM","movil":377,"marca":"FORD","modelo":"TRANSIT VAN L3H3 4X4 2.0","carrocero":"DIKAR","patente":"VYHC-78","anio":2026,"chasis":"WF0EXXTT9TTD82001","rs":"PENDIENTE","cond":"NO OPERATIVO","estado":"DISPONIBLE","obs":"En espera de Branding, equipamiento y GPS - Deberia ir a Besalco Zaldivar","fEntrega":"2026-06","banco":"Banco Santander","fIni":"2026-05","fFin":"2028-07","monto":63566592,"cuota":3311002,"remanente":0},{"prop":"UCM","movil":369,"marca":"MAXUS","modelo":"T60 4X4 MT E6","carrocero":"PESCO","patente":"VJPP-80","anio":2024,"chasis":"LSFAM11A2RA041610","rs":"PENDIENTE","cond":"OPERATIVO","estado":"DISPONIBLE","obs":"Debe quedar libre como back up y punta de lanza","fEntrega":"2026-06","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":375,"marca":"FORD","modelo":"TRANSIT VAN L3H3 4X4 2.0","patente":"VYGX-15","anio":2026,"chasis":"WF0EXXTT8TTD81955","rs":"PENDIENTE","cond":"OPERATIVO","estado":"MINERA AURYN LAMPA","obs":"","fEntrega":"2026-06","banco":"Banco Santander","fIni":"2026-05","fFin":"2028-07","monto":63566592,"cuota":3311002,"remanente":0,"carrocero":"DIKAR"},{"prop":"UCM","movil":383,"marca":"FORD","modelo":"TRANSIT VAN L3H3 4X4 2.0","carrocero":"DIKAR","patente":"","anio":2026,"chasis":"","rs":"PENDIENTE","cond":"EN PRODUCCION","estado":"EN PRODUCCION","obs":"Fecha de entrega 24/06/2026 - Deberia ir a COX","fEntrega":"2026-06","banco":"Banco Santander","fIni":"","fFin":"","monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":385,"marca":"FORD","modelo":"TRANSIT VAN L3H3 4X4 2.0","carrocero":"DIKAR","patente":"","anio":2026,"chasis":"","rs":"PENDIENTE","cond":"EN PRODUCCION","estado":"EN PRODUCCION","obs":"Fecha de entrega 30/06/2026 - Deberia ir a Besalco Zaldivar","fEntrega":"2026-06","banco":"Banco Santander","fIni":"","fFin":"","monto":0,"cuota":0,"remanente":0},{"prop":"UCM","movil":387,"marca":"FORD","modelo":" TRANSIT VAN L3H3 4x4 2.0","carrocero":"DIKAR","patente":"","anio":2026,"chasis":"","rs":"PENDIENTE","cond":"EN PRODUCCION","estado":"EN PRODUCCION","obs":"Fecha de Entrega 01/07/2026 - Deberia ir a Cox","fEntrega":"2026-07","banco":"Banco BCI","fIni":"","fFin":"","monto":0,"cuota":0,"remanente":0}];
 
 const FLEET_VAN = [{"prop":"UCM","movil":3,"marca":"MAXUS","modelo":"DELIVER 9 L3H3","patente":"SXWT-11","anio":2023,"chasis":"LSKG5GC18NA823719","rs":"PENDIENTE","cond":"OPERATIVO","estado":"CORP. LAS CONDES","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":""},{"prop":"UCM","movil":5,"marca":"MAXUS","modelo":"DELIVER 9 L3H3","patente":"SXWT-12","anio":2023,"chasis":"LSKG5GC18NA823994","rs":"PENDIENTE","cond":"OPERATIVO","estado":"CORP. LAS CONDES","obs":"","banco":null,"fIni":null,"fFin":null,"monto":0,"cuota":0,"remanente":0,"carrocero":""}];
 
@@ -649,8 +594,8 @@ const SHOP_HIST = {
 };
 
 /* ── PIPELINE ── */
-const PIPELINE_AMB = [{"id":1781019323614,"cliente":"VERONA","qty":1,"prob":80,"fReq":"2026-09","duracion":24,"estado":"Negociación avanzada","notas":"Empresa RM"},{"id":1778860204201,"cliente":"FUSAT RANCAGUA","qty":3,"prob":10,"fReq":"2026-07","duracion":36,"estado":"Prospecto","notas":"Licitación hospital público"},{"id":1779221586045,"cliente":"GRUPO COSTANERA-LITORAL","qty":1,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Negociación","notas":""},{"id":1778860117802,"cliente":"MUNICIPALIDAD LAS CONDES","qty":4,"prob":50,"fReq":"2026-08","duracion":24,"estado":"Propuesta","notas":""},{"id":1781800893517,"cliente":"COSAYACH - CALA CALA","qty":1,"prob":50,"fReq":"2026-08","duracion":24,"estado":"Negociación","notas":""},{"id":1779221740465,"cliente":"SACYR RUTA 68","qty":3,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Propuesta","notas":""},{"id":1779221698227,"cliente":"SACYR COPIAPO","qty":2,"prob":10,"fReq":"2026-08","duracion":36,"estado":"Prospecto","notas":""},{"id":1779221756425,"cliente":"SACYR RUTA DEL ALGARROBO","qty":2,"prob":10,"fReq":"2026-07","duracion":36,"estado":"Prospecto","notas":""},{"id":1778853574689,"cliente":"HOSPITAL SAN JUAN DE DIOS","qty":7,"prob":25,"fReq":"2026-08","duracion":12,"estado":"Prospecto","notas":""},{"id":1779221825771,"cliente":"RUTA MINERA","qty":1,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Propuesta","notas":""},{"id":1779221892251,"cliente":"AES LOS CURUROS","qty":1,"prob":20,"fReq":"2026-07","duracion":12,"estado":"Prospecto","notas":""},{"id":1779221926783,"cliente":"PAMPA CAMARONES","qty":1,"prob":30,"fReq":"2026-08","duracion":24,"estado":"Prospecto","notas":""},{"id":1779810489850,"cliente":"HOSPITAL LUIS TISNE","qty":1,"prob":50,"fReq":"2026-06","duracion":3,"estado":"Prospecto","notas":""},{"id":1781800950271,"cliente":"POWER CHINA - VALLENAR","qty":1,"prob":50,"fReq":"2026-07","duracion":8,"estado":"Prospecto","notas":""},{"id":1781637298680,"cliente":"TANGHUA - CHILLAN VIEJO","qty":1,"prob":100,"fReq":"2026-06","duracion":4,"estado":"Adjudicado","notas":""},{"id":1781800921193,"cliente":"COSAYACH - NEGREIRO","qty":1,"prob":10,"fReq":"2026-09","duracion":24,"estado":"Prospecto","notas":""},{"id":1781800942749,"cliente":"COSAYACH - TANA","qty":1,"prob":10,"fReq":"2026-09","duracion":24,"estado":"Prospecto","notas":""},{"id":1781800987598,"cliente":"RUTA DEL CANAL","qty":1,"prob":40,"fReq":"2026-07","duracion":12,"estado":"Propuesta","notas":""}];
-const PIPELINE_4X4 = [{"id":1781019337154,"cliente":"ACCIONA","qty":1,"prob":90,"fReq":"2026-08","duracion":24,"estado":"Negociación avanzada","notas":""},{"id":1780579109042,"cliente":"ANDEX MINERALS","qty":1,"prob":20,"fReq":"2026-08","duracion":12,"estado":"Negociación","notas":"Solo Arriendo Fierro"},{"id":1779222087238,"cliente":"COLLAHUASI","qty":1,"prob":5,"fReq":"2026-08","duracion":12,"estado":"Prospecto","notas":""},{"id":1780579223439,"cliente":"GRUPO COX - ANTOFAGASTA","qty":1,"prob":95,"fReq":"2026-06","duracion":12,"estado":"Negociación avanzada","notas":""},{"id":1780579241919,"cliente":"GRUPO COX - EL SALVADOR","qty":1,"prob":95,"fReq":"2026-08","duracion":12,"estado":"Negociación avanzada","notas":""},{"id":1780579272114,"cliente":"GRUPO COX - VICTORIA","qty":1,"prob":20,"fReq":"2026-08","duracion":12,"estado":"Propuesta","notas":""},{"id":1780323078531,"cliente":"METLEN","qty":1,"prob":10,"fReq":"2026-06","duracion":12,"estado":"Propuesta","notas":""},{"id":1781800582594,"cliente":"BESALCO - ZALDIVAR","qty":2,"prob":100,"fReq":"2026-07","duracion":12,"estado":"Adjudicado","notas":"Inicio 1 de Julio"},{"id":1781800565596,"cliente":"BESALCO - ZALDIVAR","qty":2,"prob":50,"fReq":"2026-08","duracion":12,"estado":"Negociación avanzada","notas":"Inicio 1 de Agosto"},{"id":1781019808999,"cliente":"GRUPO COX - (SIN NOMBRE PROYECTO AUN)","qty":1,"prob":15,"fReq":"2026-08","duracion":12,"estado":"Propuesta","notas":""},{"id":1781800629246,"cliente":"GRENERGY - MARIA ELENA","qty":1,"prob":20,"fReq":"2026-07","duracion":12,"estado":"Propuesta","notas":""},{"id":1781019923977,"cliente":"GLOBALTEC","qty":1,"prob":10,"fReq":"2026-09","duracion":12,"estado":"Prospecto","notas":""},{"id":1781800649824,"cliente":"GRENERGY - PARRAL","qty":1,"prob":20,"fReq":"2026-09","duracion":12,"estado":"Prospecto","notas":""},{"id":1781800686455,"cliente":"GRENERGY - MONTE AGUILA","qty":1,"prob":20,"fReq":"2026-09","duracion":12,"estado":"Prospecto","notas":""},{"id":1781800710168,"cliente":"GRENERGY - PELEQUEN","qty":1,"prob":20,"fReq":"2026-09","duracion":12,"estado":"Prospecto","notas":""}];
+const PIPELINE_AMB = [{"id":1781019323614,"cliente":"VERONA","qty":1,"prob":80,"fReq":"2026-09","duracion":24,"estado":"Negociación avanzada","notas":"Empresa RM"},{"id":1778860204201,"cliente":"FUSAT RANCAGUA","qty":3,"prob":10,"fReq":"2026-07","duracion":36,"estado":"Prospecto","notas":"Licitación hospital público"},{"id":1779221586045,"cliente":"GRUPO COSTANERA-LITORAL","qty":1,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Negociación","notas":""},{"id":1778860117802,"cliente":"MUNICIPALIDAD LAS CONDES","qty":4,"prob":50,"fReq":"2026-08","duracion":24,"estado":"Propuesta","notas":""},{"id":1781800893517,"cliente":"COSAYACH - CALA CALA","qty":1,"prob":50,"fReq":"2026-08","duracion":24,"estado":"Negociación","notas":""},{"id":1781812083088,"cliente":"SACYR RUTA 68","qty":3,"prob":30,"fReq":"2026-07","duracion":36,"estado":"Propuesta","notas":""},{"id":1779221698227,"cliente":"SACYR COPIAPO","qty":2,"prob":10,"fReq":"2026-08","duracion":36,"estado":"Prospecto","notas":""},{"id":1779221756425,"cliente":"SACYR RUTA DEL ALGARROBO","qty":2,"prob":10,"fReq":"2026-07","duracion":36,"estado":"Prospecto","notas":""},{"id":1778853574689,"cliente":"HOSPITAL SAN JUAN DE DIOS","qty":7,"prob":25,"fReq":"2026-08","duracion":12,"estado":"Prospecto","notas":""},{"id":1779221825771,"cliente":"RUTA MINERA","qty":1,"prob":20,"fReq":"2026-07","duracion":36,"estado":"Propuesta","notas":""},{"id":1779221892251,"cliente":"AES LOS CURUROS","qty":1,"prob":20,"fReq":"2026-07","duracion":12,"estado":"Prospecto","notas":""},{"id":1779221926783,"cliente":"PAMPA CAMARONES","qty":1,"prob":30,"fReq":"2026-08","duracion":24,"estado":"Prospecto","notas":""},{"id":1781812112818,"cliente":"POWER CHINA - VALLENAR","qty":1,"prob":50,"fReq":"2026-07","duracion":8,"estado":"Negociación","notas":""},{"id":1781637298680,"cliente":"TANGHUA - CHILLAN VIEJO","qty":1,"prob":100,"fReq":"2026-06","duracion":4,"estado":"Adjudicado","notas":""},{"id":1781800921193,"cliente":"COSAYACH - NEGREIRO","qty":1,"prob":10,"fReq":"2026-09","duracion":24,"estado":"Prospecto","notas":""},{"id":1781800942749,"cliente":"COSAYACH - TANA","qty":1,"prob":10,"fReq":"2026-09","duracion":24,"estado":"Prospecto","notas":""},{"id":1781800987598,"cliente":"RUTA DEL CANAL","qty":1,"prob":40,"fReq":"2026-07","duracion":12,"estado":"Propuesta","notas":""}];
+const PIPELINE_4X4 = [{"id":1781812028533,"cliente":"ACCIONA - CERRO DOMINADOR","qty":1,"prob":90,"fReq":"2026-08","duracion":24,"estado":"Negociación avanzada","notas":""},{"id":1780579109042,"cliente":"ANDEX MINERALS","qty":1,"prob":20,"fReq":"2026-08","duracion":12,"estado":"Negociación","notas":"Solo Arriendo Fierro"},{"id":1779222087238,"cliente":"COLLAHUASI","qty":1,"prob":5,"fReq":"2026-08","duracion":12,"estado":"Prospecto","notas":""},{"id":1780579223439,"cliente":"GRUPO COX - ANTOFAGASTA","qty":1,"prob":95,"fReq":"2026-06","duracion":12,"estado":"Negociación avanzada","notas":""},{"id":1781811948402,"cliente":"GRUPO COX - EL SALVADOR","qty":1,"prob":95,"fReq":"2026-07","duracion":12,"estado":"Negociación avanzada","notas":""},{"id":1780579272114,"cliente":"GRUPO COX - VICTORIA","qty":1,"prob":20,"fReq":"2026-08","duracion":12,"estado":"Propuesta","notas":""},{"id":1780323078531,"cliente":"METLEN","qty":1,"prob":10,"fReq":"2026-06","duracion":12,"estado":"Propuesta","notas":""},{"id":1781800582594,"cliente":"BESALCO - ZALDIVAR","qty":2,"prob":100,"fReq":"2026-07","duracion":12,"estado":"Adjudicado","notas":"Inicio 1 de Julio"},{"id":1781800565596,"cliente":"BESALCO - ZALDIVAR","qty":2,"prob":50,"fReq":"2026-08","duracion":12,"estado":"Negociación avanzada","notas":"Inicio 1 de Agosto"},{"id":1781019808999,"cliente":"GRUPO COX - (SIN NOMBRE PROYECTO AUN)","qty":1,"prob":15,"fReq":"2026-08","duracion":12,"estado":"Propuesta","notas":""},{"id":1781800629246,"cliente":"GRENERGY - MARIA ELENA","qty":1,"prob":20,"fReq":"2026-07","duracion":12,"estado":"Propuesta","notas":""},{"id":1781019923977,"cliente":"GLOBALTEC","qty":1,"prob":10,"fReq":"2026-09","duracion":12,"estado":"Prospecto","notas":""},{"id":1781800649824,"cliente":"GRENERGY - PARRAL","qty":1,"prob":20,"fReq":"2026-09","duracion":12,"estado":"Prospecto","notas":""},{"id":1781800686455,"cliente":"GRENERGY - MONTE AGUILA","qty":1,"prob":20,"fReq":"2026-09","duracion":12,"estado":"Prospecto","notas":""},{"id":1781800710168,"cliente":"GRENERGY - PELEQUEN","qty":1,"prob":20,"fReq":"2026-09","duracion":12,"estado":"Prospecto","notas":""}];
 const PIPELINE_VAN = [];
 
 /* ══════════════════════════════════════
@@ -1113,6 +1058,7 @@ function filterFlota(){
     if(srch&&!`${v.movil} ${v.patente} ${v.chasis} ${v.estado} ${v.marca} ${v.modelo}`.toLowerCase().includes(srch))return false;
     return true;
   });
+  filtered.sort((a,b)=>(Number(a.movil)||0)-(Number(b.movil)||0));
   const tb=document.getElementById("flota-tbody");
   if(tb)tb.innerHTML=renderFlotaRows(filtered);
   const c=document.getElementById("flota-count");
@@ -2025,6 +1971,32 @@ function renderProyeccion(){
   </div>
   ${alertaCompra}
 
+  <!-- Tarjetas de decisión: próximos 3 meses (zoom corto plazo) -->
+  <div class="card sec">
+    <div class="card-title">Próximos 3 meses · balance neto (contratos + pipeline)</div>
+    <p style="color:#64748b;font-size:11px;margin:2px 0 12px">Detalle de los meses inmediatos, donde el gráfico de 24 meses pierde resolución. El balance ya descuenta la demanda de pipeline.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      ${months.slice(0,3).map(m=>{
+        const b=m.balanceTotal;
+        const col=b<0?'#dc2626':b<3?'#d97706':'#16a34a';
+        const bg=b<0?'#fef2f2':b<3?'#fffbeb':'#f0fdf4';
+        const bord=b<0?'#fecaca':b<3?'#fde68a':'#bbf7d0';
+        const etiqueta=b<0?'déficit':b<3?'margen ajustado':'holgura';
+        const signo=b>0?'+':'';
+        return `<div style="background:${bg};border:1px solid ${bord};border-radius:12px;padding:14px 16px">
+          <div style="font-size:12px;color:#64748b;text-transform:capitalize;font-weight:600">${m.lbl}</div>
+          <div style="font-size:34px;font-weight:800;color:${col};line-height:1.1;margin:4px 0">${signo}${b}</div>
+          <div style="font-size:11px;color:${col};font-weight:600;margin-bottom:8px">${etiqueta}</div>
+          <div style="font-size:10px;color:#94a3b8;border-top:1px solid ${bord};padding-top:7px;line-height:1.5">
+            Flota efectiva: <strong style="color:#475569">${m.flotaEfectiva}</strong><br>
+            Asignada a contratos: <strong style="color:#475569">${m.demandaContratos}</strong><br>
+            ${m.contratosTerminan>0?`Terminan: <strong style="color:#475569">${m.contratosTerminan}</strong> · `:''}Pide pipeline: <strong style="color:#475569">${m.pipeDemanda}</strong>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>
+
   <!-- Chart -->
   <div class="card sec">
     <div class="card-title">Flota disponible vs demanda por mes</div>
@@ -2120,7 +2092,7 @@ function renderProyeccion(){
 }
 
 function renderPipeline(){
-  const pipe=getPipeline();
+  const pipe=getPipeline().slice().sort((a,b)=>(a.cliente||"").localeCompare(b.cliente||"","es",{sensitivity:"base"}));
   const flName=currentFlota==="4x2"?"AMB 4×2":currentFlota==="4x4"?"AMB 4×4":currentFlota==="van"?"VAN":"AUTOS";
   const wDemandExact=pipe.reduce((s,p)=>s+(p.qty*(p.prob/100)),0);
   const wDemand=Math.round(wDemandExact); // Redondeado — no se compran fracciones de ambulancia
@@ -2188,8 +2160,8 @@ function renderPipeline(){
       <td><span class="badge ${p.estado==="Adjudicado"?"b-blue":p.prob>=70?"b-green":p.prob>=50?"b-amber":"b-grey"}">${p.estado}</span></td>
       <td class="wrap">${p.notas||"—"}</td>
       <td style="text-align:center;white-space:nowrap">
-        <button onclick="abrirFormPipeline(${i})" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
-        <button onclick="eliminarPipeline(${i})" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
+        <button onclick="abrirFormPipeline(${p.id})" style="background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px" title="Editar">✏️</button>
+        <button onclick="eliminarPipeline(${p.id})" style="background:none;border:none;cursor:pointer;color:#dc2626;padding:2px 4px" title="Eliminar">🗑️</button>
       </td>
     </tr>`;}).join("")}
     </tbody>
@@ -2616,9 +2588,10 @@ function renderRadar(){
 
 
 
-function abrirFormPipeline(idx){
+function abrirFormPipeline(idOrNull){
   const pipe=getPipeline();
-  const p=idx!==null?pipe[idx]:null;
+  const p=idOrNull!==null?pipe.find(x=>x.id===idOrNull):null;
+  const idx=p?pipe.indexOf(p):-1;
   const isNew=p===null;
   const container=document.getElementById("pipeline-form-container");
   if(!container)return;
@@ -2675,9 +2648,10 @@ function guardarPipeline(idx){
   destroyCharts();render();
 }
 
-function eliminarPipeline(idx){
+function eliminarPipeline(id){
   const pipe=getPipeline();
-  if(!pipe[idx])return;
+  const idx=pipe.findIndex(x=>x.id===id);
+  if(idx<0||!pipe[idx])return;
   if(!confirm("¿Eliminar oportunidad: "+pipe[idx].cliente+"?"))return;
   pipe.splice(idx,1);
   destroyCharts();render();
@@ -3799,7 +3773,7 @@ function syncReqsFromFleet(){
 render();
 </script>
 
-<div id="gtip" style="position: fixed; background: rgb(15, 23, 42); color: rgb(255, 255, 255); padding: 7px 12px; border-radius: 7px; font-size: 11px; pointer-events: none; z-index: 9999; max-width: 260px; line-height: 1.5; box-shadow: rgba(0, 0, 0, 0.3) 0px 4px 16px; display: none; left: 376px; top: 583px;">Total − FS − Reserva estructural % − Op. con Obs. − Prod. sin fecha. Formato: base(+entregas ese mes). Ej: 62(+2) = 62 disponibles + 2 que ingresan.</div>
+<div id="gtip" style="position: fixed; background: rgb(15, 23, 42); color: rgb(255, 255, 255); padding: 7px 12px; border-radius: 7px; font-size: 11px; pointer-events: none; z-index: 9999; max-width: 260px; line-height: 1.5; box-shadow: rgba(0, 0, 0, 0.3) 0px 4px 16px; display: none; left: 1640px; top: 596px;">Sobrante/Faltante − Demanda pipeline. Negativo = hay que adquirir flota para cubrir contratos actuales y pipeline esperado.</div>
 
 <!-- ── CHANGELOG MODAL ── -->
 <div id="cl-overlay" onclick="if(event.target===this)cerrarChangelog()" class="">
@@ -3811,9 +3785,35 @@ render();
     <div id="cl-body">
     <div class="cl-version">
       <div class="cl-ver-hdr">
-        <span class="cl-ver-num">v2.42.2</span>
+        <span class="cl-ver-num">v2.42.4</span>
         <span class="cl-ver-date">2026-06-18</span>
         <span class="cl-ver-badge latest">✓ Versión actual</span>
+      </div>
+      
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Ajustes Menores</span>
+        </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 16px">
+    <div class="cl-version">
+      <div class="cl-ver-hdr">
+        <span class="cl-ver-num">v2.42.3</span>
+        <span class="cl-ver-date">2026-06-18</span>
+        
+      </div>
+      
+        <div class="cl-entry">
+          <span class="cl-dot "></span>
+          <span>Ajuste compra Ambulancia</span>
+        </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 16px">
+    <div class="cl-version">
+      <div class="cl-ver-hdr">
+        <span class="cl-ver-num">v2.42.2</span>
+        <span class="cl-ver-date">2026-06-18</span>
+        
       </div>
       
         <div class="cl-entry">
@@ -5273,7 +5273,7 @@ render();
    y actualizar APP_VERSION.
 ──────────────────────────────────────────────────────────────── */
 let APP_VERSION = document.querySelector('meta[name="app-version"]')?.content || "2.0.5";
-const CHANGELOG = [{"version":"2.42.2","date":"2026-06-18","latest":true,"entries":[{"type":"feat","text":"Ajuste de Pipeline"}]},{"version":"2.42.1","date":"2026-06-16","entries":[{"type":"fix","text":"Análisis de Fallas en AUTOS: ya no muestra el gráfico de curva por edad de las ambulancias (era confuso, parecía dato de autos). En su lugar, un mensaje aclara que los autos no tienen historial propio y que para los cálculos se usa la curva 4x2 como referencia conservadora provisional. La curva de ambulancias sigue usándose solo internamente para reserva e índices, no se muestra como si fuera de autos."}]},{"version":"2.42.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Análisis de Fallas: indicador de actualización. Muestra hasta qué semana está actualizado el análisis y lo compara con el último reporte cargado en la flota. Verde Al día cuando coinciden; ámbar de aviso cuando hay reportes más recientes sin incorporar al análisis. Así se ve de un vistazo si el análisis de fallas está al día con la última carga semanal."}]},{"version":"2.41.0","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Análisis de Fallas: (1) Incorporados los 5 reportes semanales posteriores al ZIP (18/05 a 15/06) que se habían cargado individualmente. El análisis ahora cubre 103 semanas (antes 98), hasta el 15/06/2026. Se recalcularon curva, índice por móvil, clientes, siniestralidad y Radar. (2) La referencia internacional EMS de vida útil ahora solo aparece en flotas de ambulancia (4x2 y 4x4); en VAN y AUTOS no se muestra porque ese estándar es específico de ambulancias."}]},{"version":"2.40.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Análisis de Fallas ahora se diferencia por tipo de vehículo, respetando el selector de flota global. La curva de falla por edad de la 4x2 (única con datos sólidos: 332 semanas) se usa como referencia para 4x4 y VAN (vehículos de naturaleza y uso similar) y provisionalmente para AUTOS (hasta que acumulen historial propio). Cada flota muestra sus propios móviles, clientes y siniestralidad. Flotas nuevas sin historial (VAN) muestran pantalla informativa en vez de datos vacíos. Avisos claros indican cuándo se usa la curva 4x2 como referencia."}]},{"version":"2.39.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"La reserva estructural de taller ahora SIEMPRE arranca en el valor sugerido por el historial al abrir la app, sin importar ajustes previos. Los botones +/− permiten ajustar dentro de la sesión, pero al reabrir el HTML vuelve siempre al sugerido (que es el ancla permanente). El sugerido se mantiene como única fuente de verdad al iniciar."}]},{"version":"2.38.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"La reserva estructural de taller ahora arranca por defecto en el valor sugerido por el historial (ponderado por edad de cada flota), en vez del 6% genérico. Ej: 4x2 parte en 7%, 4x4 en 2%, VAN 5%, AUTOS 2%. Si se ajusta manualmente con +/−, ese valor manda y persiste al guardar. Así no hay que aplicar la sugerencia a mano cada vez."}]},{"version":"2.37.1","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Hoja Flota: el badge EMECAR de la columna Prop. se escapaba del borde (columna 60px, badge necesita ~70px). Se ensanchó Prop. a 75px y Condición a 140px (para OPERATIVO CON OBS.), y se agregó overflow oculto a las celdas de badge de propietario. Auditoría de todas las tablas: solo Flota usa anchos fijos (las demás se ajustan al contenido); ya no quedan celdas de badge sin protección de desborde."}]},{"version":"2.37.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Benchmark internacional de vida útil en Análisis de Fallas. Bajo la curva de edad se agregó una referencia con el estándar EMS (EE.UU.): 0-7 años óptimo (servicio frontal), 8-9 fin de vida útil, 10+ no viable (sube costo y riesgo). El estándar recomienda reemplazo a 5-7 años / ~250.000 millas. La curva propia confirma el patrón: la falla se dispara a los 4-5 años, igual que flotas internacionales. En el ranking de móviles, cada vehículo muestra su fase de vida útil (óptimo/fin útil/crítico) según su edad vs el estándar."}]},{"version":"2.36.3","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Bug importante corregido: las unidades NUEVAS en alistamiento (NO OPERATIVO con obs tipo pendiente recepción, en espera de branding/GPS, kit minero, aún no entregada por VESPEK) se estaban contando como semanas en taller. No es taller — es el proceso previo a operar, equivalente a EN PRODUCCION. Afectaba a toda la flota, sobre todo a las unidades nuevas (Hilux 329/331, Transit 4x4 375/377/369, y varias 4x2: 319/321/323/327/333/335). Se verificó que ningún NO OPERATIVO era una falla mecánica disfrazada. HIST_ANUAL pasó de 69 a 40 móviles con falla/siniestro real. Se recalcularon curva de edad, índice por móvil, índice por cliente, siniestralidad y el Radar. Las fallas reales (233, 239, 237, 223) quedaron intactas."}]},{"version":"2.36.2","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Radar: las combinaciones de riesgo móvil-cliente se recalcularon con los índices limpios (solo falla mecánica). Antes usaban valores viejos que aún incluían siniestros, quedando desfasados de las demás vistas. Ahora son coherentes: la dupla móvil 315 → Rescate Base 2 sube a riesgo 14.4 (6.7x falla mecánica × 2.15x desgaste del cliente), reflejando su magnitud real sin contaminación de choques."}]},{"version":"2.36.1","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Radar: el botón seleccionado ya no usa fondo morado oscuro sólido (se veía pesado). Ahora queda con fondo lila claro, borde morado marcado y texto morado en negrita — seleccionado pero liviano, coherente con la estética del resto."}]},{"version":"2.36.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Separación de siniestros (choques) y fallas mecánicas en todo el análisis. Los siniestros son un evento externo, no salud del vehículo, así que se excluyen del denominador de las tasas de falla (estado aparte, ni operando ni en taller). Impacto: el móvil 341 pasó de índice 10.5x (mal clasificado) a 1.6x real, porque sus semanas malas eran un choque, no defecto. Nuevas vistas en Análisis de Fallas: Siniestralidad por cliente (quién choca más: Puerto Montt 9.2%) y columna de siniestros en el ranking de móviles. El desgaste por cliente y el deterioro del Radar ahora son solo falla mecánica pura."}]},{"version":"2.35.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Radar: drill-down en Tormentas. Cada tormenta ahora se puede expandir para ver el detalle de los móviles que entran a zona de falla, con un veredicto por vehículo (🔴 evaluar reemplazo / ⚠ llega tocado / ✓ sano para su edad) y una explicación basada en su índice vs edad y tendencia. Ej: en ene-2027, de 8 móviles que cumplen 5 años, 3 llegan tocados (243, 241, 85) y 5 sanos. El resumen muestra el conteo antes de expandir."}]},{"version":"2.34.2","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Radar: se quitó el bloque Oportunidades de caja. Esa información (leasings que vencen por mes) ya se ve directo en la hoja de Leasing, así que repetirla ensuciaba el Radar sin agregar inteligencia. El Radar queda fiel a su principio: solo muestra lo que NO es evidente mirando las hojas de datos (tormentas, deterioro acelerado, malas duplas)."}]},{"version":"2.34.1","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Radar: corregido el marco del vencimiento de leasing. Como todos son financieros, vencer NO es riesgo sino oportunidad (la unidad pasa a propiedad UCM y se libera la cuota). Se sacaron los leasings del bloque Tormentas (ahora solo contratos + envejecimiento) y se creó el bloque Oportunidades de caja: muestra por mes cuántas unidades pasan a ser propias y cuánta cuota mensual se libera. Ej: dic-2026 = 10 unidades propias y $18M/mes liberados."}]},{"version":"2.34.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Nueva pestaña Radar (extremo derecho, con brillo sutil) — detección anticipada que cruza datos para revelar lo que no es evidente mirando las hojas: (1) Tormentas en el horizonte: meses futuros donde se acumulan vencimientos de contratos + leasings + envejecimiento de flota (ej. ene-2027 con 3 frentes); (2) Deterioro acelerado: móviles cuya frecuencia de falla se dispara comparando últimos 3 meses vs previo (ej. móvil 239: 15%→85%); (3) Combinaciones de riesgo móvil-cliente: vehículos frágiles asignados a clientes que maltratan. Cada señal muestra su fundamento y nivel de confianza, separada de las hojas de data dura."}]},{"version":"2.33.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Análisis de Fallas: nueva sección Ranking de móviles por anormalidad. A diferencia del ranking por semanas de la pestaña Taller, ordena por índice vs edad (cuántas veces más falla cada móvil de lo esperado para su antigüedad), con tendencia (empeora/estable/mejora) y señal de acción. Destaca problemas emergentes: ej. móvil 355 (nuevo) falla 16x lo esperado, más urgente que el 233 (viejo) que falla lo normal para su edad."}]},{"version":"2.32.3","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Hoja Flota: la columna R° Sanitaria se ensanchó (70→95px) para que el badge PENDIENTE no se desborde sobre Condición. Celda con overflow oculto como seguridad."}]},{"version":"2.32.2","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Análisis de Fallas: el criterio B (ajustado por edad) viene seleccionado por defecto. El tooltip de cada cliente ahora explica en lenguaje claro qué significa el dato (ej: \"falló 10.1% del tiempo en uso, cuando para la edad de sus vehículos se esperaba 2.6%. Es decir, 3.95x lo normal\")."}]},{"version":"2.32.1","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Reserva sugerida: el tooltip explicativo ya no tapa el botón Aplicar. Ahora el tooltip solo cubre el texto, y el botón queda libre. Al hacer clic en Aplicar el tooltip se oculta."}]},{"version":"2.32.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Proyección: la reserva estructural de taller ahora muestra una sugerencia basada en la tasa de falla histórica real, ponderada por la edad actual de cada flota (📉 Sugerido por historial). Un botón aplica el valor sugerido. Ej: 4x2 sugiere 8% (flota madura), 4x4 sugiere 2% (flota nueva), AUTOS 3%. A medida que la flota envejece, la sugerencia sube sola. El criterio final sigue siendo manual."}]},{"version":"2.31.3","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Curva de falla por edad ahora es mixta: años individuales 0-4 (donde hay 8-48 vehículos distintos, datos sólidos) y tramos agrupados 5-9 y 10+ (donde solo hay 4-6 vehículos). Antes la curva por edad exacta mostraba dientes de sierra engañosos porque cada edad la dominaban 2-3 móviles puntuales, no un patrón de edad real. El índice por cliente se recalculó contra la nueva curva."}]},{"version":"2.31.2","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Pestaña Concentración movida al lado de Asignaciones (orden: Asignaciones → Concentración → Taller → Análisis de Fallas)."}]},{"version":"2.31.1","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Análisis de Fallas: corregido el gráfico de curva por edad que crecía sin control (ahora va en un contenedor de altura fija). Pestaña movida al lado de Taller (su tema natural) e icono cambiado a 📉 para que se entienda mejor."}]},{"version":"2.31.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Nueva pestaña Análisis de Fallas: (1) curva de tasa de falla por edad del vehículo, calculada sobre base en-uso (excluye semanas en reserva) desde 98 reportes históricos; (2) índice de exposición a taller por cliente, con toggle A (tasa cruda) / B (ajustado por la edad esperada de falla). El criterio B revela que Hospital de Castro genera 4.65x más taller del esperado para la edad de sus unidades. Aviso de baja confianza para clientes con menos de 15 semanas de exposición."}]},{"version":"2.30.1","date":"2026-06-16","latest":false,"entries":[{"type":"data","text":"Historial anual reconstruido desde el archivo completo de 98 reportes semanales (abr-2024 a may-2026), recuperando 21 semanas y 147 registros de taller que faltaban. Fusionado con las semanas recientes (18/05-15/06). Total: 103 semanas, 69 móviles. Vocabulario validado: fallas antiguas en estado (motor/caja/cigüeñal) cuentan como taller; BACK UP RM = EVENTOS RM; bases 52/53/BUPA = EMECAR; base 7 = RESCATE UCM; espera licitación La Florida = disponible."}]},{"version":"2.30.0","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Hoja Flota: la columna Condición se ensanchó (95→130px) para que badges largos como OPERATIVO CON OBS. o FALLA MECANICA ETI no se sobrepasen a la columna Estado. La celda además tiene overflow oculto como seguridad."}]},{"version":"2.29.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Panel: el gráfico de evolución de cuota de leasing ahora muestra TODOS los meses en el eje X (antes solo enero y julio), con etiquetas verticales y sin auto-omitir. Se aumentó la altura del gráfico para acomodar las etiquetas."}]},{"version":"2.28.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Hoja Flota: anchos de columna fijos e idénticos para todas las flotas (4x2, 4x4, VAN, AUTOS) mediante table-layout:fixed y colgroup. Antes el navegador ajustaba los anchos según el contenido de cada flota, dándoles tamaños distintos. Las celdas con texto largo (modelo, estado, chasis, banco, observaciones) se truncan con … y muestran el texto completo en tooltip al pasar el cursor."}]},{"version":"2.27.0","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Observaciones: el reporte semanal ahora es la fuente de verdad de la columna obs. Si el xlsx trae la obs vacía para un vehículo, se limpia la observación anterior (antes quedaban pegados comentarios de semanas pasadas). Se limpiaron 9 observaciones obsoletas. Los vehículos que NO están en el reporte (ej: 383/385 aún sin llegar) y los FUERA DE SERVICIO conservan su observación."}]},{"version":"2.26.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Hoja Flota: la columna Observaciones ahora se muestra en una sola línea truncada con … y el texto completo aparece en un tooltip al pasar el cursor. Así todas las filas mantienen la misma altura. El carrocero CONVERSIONES LJ se abrevia a LJ para que la columna sea más angosta."}]},{"version":"2.25.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Nuevo campo Carrocero (encarrozador) por vehículo, visible en la tabla de la hoja Flota entre Modelo y Patente, y editable en el formulario. Poblado desde el xlsx del 15/06 (VESPEK, USA, DIKAR, PESCO, BERTONATI, CONVERSIONES LJ). La carga del reporte semanal ahora detecta automáticamente la columna Carrocero y ajusta los índices de columna según corresponda."}]},{"version":"2.24.2","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Ajuste de adjudicaciones en Pipeline"}]},{"version":"2.24.1","date":"2026-06-15","entries":[{"type":"data","text":"Actualización de leasing (Detalle 15-Jun): nuevos leasings para los Transit 375/377 (4x4, cuota 3.311.002, Santander) y 379/381 (4x2, cuota 2.659.213, Santander), todos hasta 2028-07, con N° de operación individual (no prorrateados). Rangers 37/39 se mantienen en cuota prorrateada 980.004."}]},{"version":"2.24.0","date":"2026-06-15","latest":false,"entries":[{"type":"feat","text":"Nueva regla de recepción: un vehículo NO OPERATIVO cuya observación indica \"pendiente recepción\" se clasifica como EN PRODUCCION (aún no recibido). Si la obs indica \"en espera de branding/equipamiento\" queda DISPONIBLE (ya recibido, en preparación). Se aplica en la carga del reporte semanal y se corrigió el móvil 381 actual."}]},{"version":"2.23.6","date":"2026-06-15","latest":false,"entries":[{"type":"data","text":"Patentes agregadas a 379 (VYJR-53) y 381 (VYJP-72), que el xlsx ya traía. Modelo uniformado a TRANSIT VAN L3H3 2.0. Confirmado: 383 y 385 (4x4) siguen EN PRODUCCION — son unidades adicionales que aún no llegan y por eso no están en el reporte."}]},{"version":"2.23.5","date":"2026-06-15","latest":false,"entries":[{"type":"data","text":"Carga reporte semanal 15/06: 301 vuelve a operación (RESCATE BASE 2), 317/369 pasan a DISPONIBLE, 375 sale de producción a operación (MINERA AURYN LAMPA), 371/373/377/379 quedan NO OPERATIVO/DISPONIBLE (esperando branding/equipamiento), 381 NO OPERATIVO pendiente recepción. 233 se mantiene FUERA DE SERVICIO. La hoja AEA del xlsx trae una columna nueva (Carrocero) que desplaza las columnas — índices ajustados."}]},{"version":"2.23.4","date":"2026-06-15","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline 4x4"}]},{"version":"2.23.3","date":"2026-06-15","entries":[{"type":"feat","text":"Ajuste Pipeline 4x4"}]},{"version":"2.23.2","date":"2026-06-15","entries":[{"type":"feat","text":"Ajuste Pipeline"}]},{"version":"2.23.1","date":"2026-06-15","entries":[{"type":"feat","text":"Ajuste Pipeline"}]},{"version":"2.23.0","date":"2026-06-09","entries":[{"type":"feat","text":"Asignaciones: se eliminó el segmento Back up de la barra de distribución. Esas 6 unidades (que son OPERATIVO CON OBS.) ahora cuentan en Op. con obs, igual que en el Panel. Las dos vistas quedan totalmente coherentes."}]},{"version":"2.22.0","date":"2026-06-09","latest":false,"entries":[{"type":"fix","text":"Asignaciones: la barra de distribución de flota ahora es coherente con el Panel. El segmento Operativos se renombró a Asignados (63, solo OPERATIVO operando con cliente, sin disponibles/obs/backup) y se agregó segmento Op. con obs separado. Antes mezclaba operativos con observaciones y contaba disponibles como operativos. Ahora los segmentos son mutuamente excluyentes y suman el total exacto."}]},{"version":"2.21.0","date":"2026-06-09","latest":false,"entries":[{"type":"fix","text":"Asignaciones (Visión B): una unidad en taller (falla mecánica/siniestrada), fuera de servicio o en producción ya NO cuenta como asignada a su cliente, aunque su estado tenga el nombre del cliente. Solo cuentan las unidades efectivamente operando. Ej: el móvil 245 (siniestrado, Las Condes) deja de sumar a los asignados. Ahora el recuadro verde Asignados del Panel (63) coincide con los asignados a cliente de la tabla."}]},{"version":"2.20.0","date":"2026-06-09","latest":false,"entries":[{"type":"feat","text":"Panel: el recuadro Operativos se separó en dos: Asignados (verde, operando con cliente) y Op. con observaciones (ámbar, uso limitado), ya que estos últimos se usan poco. Aplica a todas las flotas. Los recuadros siguen sumando exactamente el total."}]},{"version":"2.19.1","date":"2026-06-09","latest":false,"entries":[{"type":"fix","text":"Panel: corregido doble conteo. Los vehículos OPERATIVO con estado DISPONIBLE (353/355) se contaban en Operativos Y en Disponibles, haciendo que los recuadros sumaran más que el total. Ahora Operativos excluye los disponibles, y el pie de estado incluye la categoría DISPONIBLE (celeste). Los recuadros suman exactamente el total de la flota."}]},{"version":"2.19.0","date":"2026-06-09","latest":false,"entries":[{"type":"feat","text":"Las unidades NO OPERATIVO recién recibidas de producción (sin asignar, fuera de taller/FS) ahora se cuentan como Disponibles en el Panel, el recuadro celeste y la fila DISPONIBLE de Asignaciones. Nuevo helper esDisponible() unifica el criterio. Ej: 371/373 ahora suman a disponibles."}]},{"version":"2.18.0","date":"2026-06-09","latest":false,"entries":[{"type":"feat","text":"Reserva estructural de taller ahora es independiente por tipo de flota (4x2, 4x4, VAN, AUTOS), ya que cada una tiene su propia tasa de falla. El control +/− ajusta solo la flota activa y el valor persiste al guardar el HTML."}]},{"version":"2.17.0","date":"2026-06-09","latest":false,"entries":[{"type":"fix","text":"Proyección: corregida la inconsistencia de la reserva estructural de taller. El texto (= N und.) y las unidades que se restan a la flota efectiva ahora usan la misma base (total − fuera de servicio), así el número mostrado siempre coincide con lo que se descuenta. Antes el texto usaba una base distinta (excluía producción) y mostraba 0 mientras restaba 1."}]},{"version":"2.16.2","date":"2026-06-09","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline"}]},{"version":"2.16.1","date":"2026-06-08","entries":[{"type":"data","text":"Actualización de leasing (fuente: Detalle Vehiculos 08-Jun, cols AG-AM). Cuotas de operaciones compartidas prorrateadas entre sus vehículos: 293/295/297/299 (÷4 = 1.491.976), 315/317 y 319/321 (÷2 = 2.244.352), Sail 1-8 (÷8 = 472.434). Montos y fechas actualizados. Nuevos leasings: 371/373 (2.589.074), Hilux 41 (1.450.178). El monto financiado es por vehículo; solo la cuota se prorratea."}]},{"version":"2.16.0","date":"2026-06-08","latest":false,"entries":[{"type":"fix","text":"Asignaciones: la fila DISPONIBLE muestra +N (unidades disponibles) en vez de Completar, solo para ese uso. El recuadro celeste ahora cuenta directamente los vehículos con estado DISPONIBLE (corrige descuadre)."},{"type":"feat","text":"Panel: nuevo recuadro Disponibles (celeste) entre En Taller Activo y En Producción, con la cantidad de unidades sin asignación."}]},{"version":"2.15.3","date":"2026-06-08","latest":false,"entries":[{"type":"feat","text":"Actualización de ambulancias EN PRODUCCIÓN"}]},{"version":"2.15.2","date":"2026-06-08","entries":[{"type":"data","text":"Corrección de numeración Transit: el móvil 381 (AMB) era en realidad el 375 (4x4) según chasis del xlsx — reubicado a la flota 4x4. Patentes agregadas a 371 (VYFL-63), 373 (VYFL-36), 375 (VYGX-15), 377 (VYHC-78). Fusionado placeholder duplicado de producción del 375."}]},{"version":"2.15.1","date":"2026-06-08","latest":false,"entries":[{"type":"feat","text":"Cambio en Asignaciones"}]},{"version":"2.15.0","date":"2026-06-08","entries":[{"type":"fix","text":"Taller: ahora SOLO incluye vehículos con FALLA MECANICA (ETI/ETE) o SINIESTRADA. NO OPERATIVO ya no cuenta como taller (puede ser una unidad recién recibida pendiente de branding/equipamiento). Nueva función isTaller() separada de isNonOp()."},{"type":"feat","text":"Panel y mini-pies: nueva categoría NO OPERATIVO (color ámbar oscuro) distinta de EN TALLER, para no contar las unidades pendientes de recepción como operativas ni como taller."}]},{"version":"2.14.2","date":"2026-06-08","latest":false,"entries":[{"type":"data","text":"Carga reporte semanal 08/06: 267/289/307 salen del taller a clientes, 301 entra a falla (enfriador de aceite), 321/341/353/355 cambian asignación (353/355 quedan DISPONIBLE), 371/373/375/377 pasan de EN PRODUCCION a NO OPERATIVO (pendientes de recepción/branding). 233 se mantiene FUERA DE SERVICIO."}]},{"version":"2.14.1","date":"2026-06-04","latest":false,"entries":[{"type":"feat","text":"Ajuste Pipeline"}]},{"version":"2.14.0","date":"2026-06-03","entries":[{"type":"feat","text":"Panel \"Ver todas las flotas\": el gráfico Estado de flota ahora muestra 4 mini-doughnuts (uno por tipo de vehículo) con una leyenda de colores compartida, para comparar el estado de las flotas de un vistazo. En vista de flota individual se mantiene el pie único."}]},{"version":"2.13.0","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Muro de vencimientos de leasing ahora es mensual (antes trimestral): eje temporal continuo desde el mes del reporte hasta el último vencimiento, con barras delgadas. Etiquetas en ene/jul, mes completo en el tooltip. Muestra mejor la concentración real de vencimientos."}]},{"version":"2.12.0","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Muro de vencimientos de leasing rediseñado: barras más compactas (150px de alto) con relleno degradado sólido, esquinas redondeadas, ejes limpios y tooltip oscuro. Contenedor alineado al gráfico de evolución."},{"type":"feat","text":"Bloque de plan de renovación (hoja Flota) rediseñado como card al estilo de los KPIs, con pills sobrias y edad coloreada por severidad."}]},{"version":"2.11.1","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline"}]},{"version":"2.11.0","date":"2026-06-03","entries":[{"type":"feat","text":"Concentración: las bases de rescate (RESCATE BASE 1/2/8) se agrupan bajo RESCATE UCM solo en esta vista. En Asignaciones siguen separadas por base."}]},{"version":"2.10.0","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Mejora estética del gráfico de evolución de cuota de leasing: rellenos con degradado por banco, áreas ordenadas por monto, línea TOTAL más refinada con punto destacado en el mes actual, ejes y grid más limpios, contenedor con fondo degradado."}]},{"version":"2.9.0","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Antigüedad de flota (hoja Flota): alerta informativa de unidades 5-6 años (envejeciendo) y 7+ años (para renovación), usando el año dinámico del último reporte."},{"type":"feat","text":"Muro de vencimientos de leasing (hoja Leasing): gráfico de barras con la cuota mensual que se libera por trimestre. Al vencer, la unidad pasa a propiedad UCM."},{"type":"feat","text":"Nueva pestaña Concentración: distribución de flota por cliente (barras) y concentración temporal de vencimientos por trimestre, con alertas de dependencia ≥20%."},{"type":"feat","text":"Proyección: banda de sensibilidad del pipeline — área sombreada entre escenario pesimista (solo adjudicado) y optimista (todo el pipeline al 100%)."}]},{"version":"2.8.0","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Asignaciones: los arriendos temporales asignados a un cliente se suman a sus unidades asignadas, pero solo si están activos en el mes actual. Badge 🚐 indica cuántas son arrendadas."},{"type":"fix","text":"getAsigReal se mantiene puro (sin arriendos) para no afectar el cálculo de la proyección a 24 meses."}]},{"version":"2.7.1","date":"2026-06-02","latest":false,"entries":[{"type":"fix","text":"Arriendos: cada arriendo es ahora 1 unidad con su propio N° móvil. Se eliminó el campo cantidad — para arrendar varias, se crea un registro por vehículo."}]},{"version":"2.7.0","date":"2026-06-02","latest":false,"entries":[{"type":"fix","text":"Arriendos: fechas normalizadas (2026-6 → 2026-06) — la línea azul de flota efectiva ahora sube correctamente durante el período del arriendo."},{"type":"feat","text":"Arriendos: campo para asignar la unidad a un proyecto/cliente (dropdown con contratos existentes). Se muestra en tabla y tooltip de la curva."}]},{"version":"2.6.0","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Arriendos temporales: nueva sección en Proyección para registrar vehículos que un tercero nos entrega por un período acotado. Suman a la flota efectiva durante los meses activos."},{"type":"feat","text":"Cada arriendo: N° móvil, proveedor, fecha desde/hasta, cantidad y notas. Array propio por flota (ARRIENDOS_AMB/4X4/VAN/AUTOS)."},{"type":"feat","text":"El tooltip de la curva de proyección muestra las unidades arrendadas activas en cada mes."}]},{"version":"2.5.1","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline luego de reunion comercial 02/06"}]},{"version":"2.5.0","date":"2026-06-01","entries":[{"type":"feat","text":"Gráfico de leasing (evolución de cuota mensual) arranca dinámicamente en el mes del último reporte, igual que la proyección. Se mueve solo con el tiempo."}]},{"version":"2.4.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Proyección dinámica: gráfico y tabla arrancan en el mes del último reporte y avanzan 24 meses. Se mueve solo a medida que se cargan reportes."},{"type":"feat","text":"Reserva taller: mes actual usa unidades reales en taller; reserva estructural % aplica desde el mes siguiente en adelante."},{"type":"feat","text":"Pipeline: alerta visual en oportunidades con fecha de inicio vencida — para eliminar o actualizar."}]},{"version":"2.3.3","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Ajustes Asignaciones"}]},{"version":"2.3.2","date":"2026-06-01","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.3.1","date":"2026-06-01","entries":[{"type":"feat","text":"Ajuste de Asignaciones"}]},{"version":"2.3.0","date":"2026-06-01","entries":[{"type":"fix","text":"Carga xlsx: AUTOS ahora usa hoja 'Status Autos 2026' con match por patente — funciona aunque cambien los números de móvil."},{"type":"fix","text":"Carga xlsx: Rangers renumerados 501/503→37/39, Hilux 409→41, Sail 401-408→1-8 con patentes reales."},{"type":"feat","text":"Carga xlsx: updatedAutos incluido en el resumen de la carga."}]},{"version":"2.2.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Proyección: alerta de compra recomendada — indica 1ª o 2ª quincena del mes en que debe iniciarse la adquisición (45 días antes del déficit proyectado)."},{"type":"feat","text":"Alerta se colorea según urgencia: azul (tiempo suficiente), ámbar (menos de 30 días), rojo (plazo vencido)."}]},{"version":"2.1.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Versioning semántico: MAYOR.MENOR.PARCHE — código cambia MENOR, datos cambian PARCHE."},{"type":"fix","text":"Proyección: reserva estructural de taller calculada dinámicamente por mes según flota entregada."},{"type":"fix","text":"Flota tab: KPIs ahora usan isNonOp() correctamente — muestra taller y FS por separado."},{"type":"feat","text":"Taller: historial anual y ranking SHOP_HIST filtrados por flota activa. Todos los vehículos visibles aunque tengan 0 semanas."},{"type":"feat","text":"Panel: botón Ver todas las flotas consolida KPIs de todas las flotas."}]},{"version":"2.0.13","date":"2026-06-01","latest":false,"entries":[{"type":"fix","text":"Proyección: reserva estructural de taller calculada dinámicamente por mes — crece a medida que entran vehículos de producción según su fEntrega."},{"type":"fix","text":"Reserva estructural usa flota entregada en cada mes (total - FS - en producción ese mes), no el total fijo actual."}]},{"version":"2.0.12","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline"}]},{"version":"2.0.11","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de Asignación de Autos Comudef"},{"type":"feat","text":"Ingreso a Producción Hylux URT"}]},{"version":"2.0.10","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.9","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.8","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.7","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.6","date":"2026-05-22","entries":[{"type":"feat","text":"Mejoras en la Hoja Taller"},{"type":"feat","text":"Arreglo en el número de version"}]},{"version":"2.0.5","date":"2026-05-22","entries":[{"type":"feat","text":"Ajuste Pipeline"}]},{"version":"2.0.4","date":"2026-05-19","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.3","date":"2026-05-19","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.2","date":"2026-05-19","entries":[{"type":"feat","text":"Se arreglaron los Pipeline de Ambulancias 4x2 y 4x4"}]},{"version":"2.0.1","date":"2026-05-19","entries":[{"type":"feat","text":"Versionado automático al guardar: la versión se incrementa sola (patch), sin intervención manual."},{"type":"fix","text":"downloadUpdatedHTML: APP_VERSION y CHANGELOG ahora se serializan correctamente usando funciones arrow en replace() para evitar interpretación errónea de $ en JSON."},{"type":"feat","text":"Nombre del archivo incluye fecha y versión: UCM_Fleet_Intelligence_YYYYMMDD_vX-Y-Z.html."}]},{"version":"2.0.0","date":"2026-05-19","entries":[{"type":"feat","text":"Panel: botón 'Ver todas las flotas' consolida KPIs de AMB 4×2, 4×4, VAN y AUTOS en una sola vista."},{"type":"feat","text":"Diagnóstico: rediseñado como modal instantáneo (sin file picker). Muestra estado de librerías, condiciones por flota, estados sin REQS, semana cargada y versión."}]},{"version":"1.9.0","date":"2026-05-19","entries":[{"type":"feat","text":"Requerimientos temporales recurrentes por contrato: campo tempReqs con mesIni/mesFin/qty/motivo. Se aplica todos los años en ese rango de meses."},{"type":"feat","text":"getReqOp(r, ym): función helper que calcula requerimiento base + boosts temporales para un mes dado."},{"type":"feat","text":"Proyección: demandaContratos varía mes a mes según tempReqs activos — la línea azul ya no es plana."},{"type":"feat","text":"Asignaciones: columna Req. Operación muestra badge morado +N cuando hay boost temporal activo."},{"type":"fix","text":"Proyección: data-freed y data-net del gráfico Pipeline usan getReqOp y getAsigReal con variable local flt (no fl del scope externo)."}]},{"version":"1.8.1","date":"2026-05-19","entries":[{"type":"fix","text":"Asignaciones: REQS_AMB reconstruido con nombres exactos que vienen del xlsx (TRASLADO BÁSICO, CORP. LAS CONDES, etc.)."},{"type":"fix","text":"syncReqsFromFleet: purga entradas fantasma (asig=0 sin fFin futura) — resuelve duplicados por cambio de nombre en xlsx."},{"type":"fix","text":"REQS_4X4: TECHINT renombrado a TECHINT TOCOPILLA, BESS LIBRILLO agregado."},{"type":"fix","text":"editContrato: acepta clientes nuevos (string), agrega fIni, elimina campo asig (ahora es solo lectura desde FLEET)."}]},{"version":"1.8.0","date":"2026-05-18","entries":[{"type":"feat","text":"Asignaciones: tabla unificada — asig desde FLEET.estado (automático), metadata desde REQS (manual). Clientes nuevos detectados con badge NUEVO."},{"type":"feat","text":"buildTodasFilas() y getAsigReal(): helpers compartidos entre Asignaciones y Proyección."},{"type":"fix","text":"Proyección: demandaContratos y unidadesLibres usan getAsigReal en lugar de r.asig (que era siempre 0)."},{"type":"fix","text":"Carga de reporte: EN PRODUCCION y FUERA DE SERVICIO protegidos contra sobreescritura."},{"type":"fix","text":"Carga de reporte: normalizarCond() mapea variantes del xlsx (OPERATIVO C/OBS, NO OP, etc.)."},{"type":"feat","text":"Changelog incorporado: badge de versión en topbar abre historial de cambios."}]},{"version":"1.7.0","date":"2026-05-18","entries":[{"type":"feat","text":"Panel: botón 'Ver todas las flotas' en Leasing (ya existía)."},{"type":"feat","text":"4×4: contrato RESCATE RM (rol 4×2) para móvil 365."},{"type":"fix","text":"Capital remanente calculado dinámicamente con amortización lineal según fecha actual."}]},{"version":"1.6.0","date":"2026-05-15","entries":[{"type":"fix","text":"Proyección: pipeDemanda considera duración de cada oportunidad — línea naranja sube y baja correctamente."},{"type":"fix","text":"Ambulancias en pipeline y reserva taller redondeadas al entero más cercano."}]},{"version":"1.5.0","date":"2026-05-15","entries":[{"type":"data","text":"Datos leasing actualizados desde Detalle_Vehiculos_UCM_Emecar_11-May-26.xlsx."},{"type":"feat","text":"Cuotas PMT 1%/mes para móviles 241, 243, 245, 253, 255, 257. Los Cuatro y Rio Branco con datos completos."}]}];
+const CHANGELOG = [{"version":"2.44.0","date":"2026-06-18","latest":true,"entries":[{"type":"feat","text":"Proyección: tarjetas de decisión para los próximos 3 meses, sobre el gráfico. Cada tarjeta muestra el balance neto del mes (contratos + pipeline) con número grande y color (verde holgura, ámbar margen ajustado, rojo déficit), más el detalle de flota efectiva, asignada, contratos que terminan y demanda de pipeline. Resuelve el punto ciego del gráfico de 24 meses, que pierde resolución en el corto plazo: el gráfico mantiene la perspectiva larga (eje en cero) y las tarjetas dan el zoom de los meses inminentes donde se toman las definiciones."}]},{"version":"2.43.0","date":"2026-06-18","latest":false,"entries":[{"type":"feat","text":"Orden por defecto: Pipeline (todas las flotas) abre ordenado alfabéticamente por cliente (A-Z); Flota abre ordenada por número de móvil ascendente. Las tablas siguen siendo reordenables con clic en las cabeceras. Para que el orden no rompa editar/eliminar en Pipeline, esas acciones ahora referencian por id en vez de por posición."}]},{"version":"2.42.4","date":"2026-06-18","latest":false,"entries":[{"type":"feat","text":"Ajustes Menores"}]},{"version":"2.42.3","date":"2026-06-18","entries":[{"type":"feat","text":"Ajuste compra Ambulancia"}]},{"version":"2.42.2","date":"2026-06-18","entries":[{"type":"feat","text":"Ajuste de Pipeline"}]},{"version":"2.42.1","date":"2026-06-16","entries":[{"type":"fix","text":"Análisis de Fallas en AUTOS: ya no muestra el gráfico de curva por edad de las ambulancias (era confuso, parecía dato de autos). En su lugar, un mensaje aclara que los autos no tienen historial propio y que para los cálculos se usa la curva 4x2 como referencia conservadora provisional. La curva de ambulancias sigue usándose solo internamente para reserva e índices, no se muestra como si fuera de autos."}]},{"version":"2.42.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Análisis de Fallas: indicador de actualización. Muestra hasta qué semana está actualizado el análisis y lo compara con el último reporte cargado en la flota. Verde Al día cuando coinciden; ámbar de aviso cuando hay reportes más recientes sin incorporar al análisis. Así se ve de un vistazo si el análisis de fallas está al día con la última carga semanal."}]},{"version":"2.41.0","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Análisis de Fallas: (1) Incorporados los 5 reportes semanales posteriores al ZIP (18/05 a 15/06) que se habían cargado individualmente. El análisis ahora cubre 103 semanas (antes 98), hasta el 15/06/2026. Se recalcularon curva, índice por móvil, clientes, siniestralidad y Radar. (2) La referencia internacional EMS de vida útil ahora solo aparece en flotas de ambulancia (4x2 y 4x4); en VAN y AUTOS no se muestra porque ese estándar es específico de ambulancias."}]},{"version":"2.40.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Análisis de Fallas ahora se diferencia por tipo de vehículo, respetando el selector de flota global. La curva de falla por edad de la 4x2 (única con datos sólidos: 332 semanas) se usa como referencia para 4x4 y VAN (vehículos de naturaleza y uso similar) y provisionalmente para AUTOS (hasta que acumulen historial propio). Cada flota muestra sus propios móviles, clientes y siniestralidad. Flotas nuevas sin historial (VAN) muestran pantalla informativa en vez de datos vacíos. Avisos claros indican cuándo se usa la curva 4x2 como referencia."}]},{"version":"2.39.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"La reserva estructural de taller ahora SIEMPRE arranca en el valor sugerido por el historial al abrir la app, sin importar ajustes previos. Los botones +/− permiten ajustar dentro de la sesión, pero al reabrir el HTML vuelve siempre al sugerido (que es el ancla permanente). El sugerido se mantiene como única fuente de verdad al iniciar."}]},{"version":"2.38.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"La reserva estructural de taller ahora arranca por defecto en el valor sugerido por el historial (ponderado por edad de cada flota), en vez del 6% genérico. Ej: 4x2 parte en 7%, 4x4 en 2%, VAN 5%, AUTOS 2%. Si se ajusta manualmente con +/−, ese valor manda y persiste al guardar. Así no hay que aplicar la sugerencia a mano cada vez."}]},{"version":"2.37.1","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Hoja Flota: el badge EMECAR de la columna Prop. se escapaba del borde (columna 60px, badge necesita ~70px). Se ensanchó Prop. a 75px y Condición a 140px (para OPERATIVO CON OBS.), y se agregó overflow oculto a las celdas de badge de propietario. Auditoría de todas las tablas: solo Flota usa anchos fijos (las demás se ajustan al contenido); ya no quedan celdas de badge sin protección de desborde."}]},{"version":"2.37.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Benchmark internacional de vida útil en Análisis de Fallas. Bajo la curva de edad se agregó una referencia con el estándar EMS (EE.UU.): 0-7 años óptimo (servicio frontal), 8-9 fin de vida útil, 10+ no viable (sube costo y riesgo). El estándar recomienda reemplazo a 5-7 años / ~250.000 millas. La curva propia confirma el patrón: la falla se dispara a los 4-5 años, igual que flotas internacionales. En el ranking de móviles, cada vehículo muestra su fase de vida útil (óptimo/fin útil/crítico) según su edad vs el estándar."}]},{"version":"2.36.3","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Bug importante corregido: las unidades NUEVAS en alistamiento (NO OPERATIVO con obs tipo pendiente recepción, en espera de branding/GPS, kit minero, aún no entregada por VESPEK) se estaban contando como semanas en taller. No es taller — es el proceso previo a operar, equivalente a EN PRODUCCION. Afectaba a toda la flota, sobre todo a las unidades nuevas (Hilux 329/331, Transit 4x4 375/377/369, y varias 4x2: 319/321/323/327/333/335). Se verificó que ningún NO OPERATIVO era una falla mecánica disfrazada. HIST_ANUAL pasó de 69 a 40 móviles con falla/siniestro real. Se recalcularon curva de edad, índice por móvil, índice por cliente, siniestralidad y el Radar. Las fallas reales (233, 239, 237, 223) quedaron intactas."}]},{"version":"2.36.2","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Radar: las combinaciones de riesgo móvil-cliente se recalcularon con los índices limpios (solo falla mecánica). Antes usaban valores viejos que aún incluían siniestros, quedando desfasados de las demás vistas. Ahora son coherentes: la dupla móvil 315 → Rescate Base 2 sube a riesgo 14.4 (6.7x falla mecánica × 2.15x desgaste del cliente), reflejando su magnitud real sin contaminación de choques."}]},{"version":"2.36.1","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Radar: el botón seleccionado ya no usa fondo morado oscuro sólido (se veía pesado). Ahora queda con fondo lila claro, borde morado marcado y texto morado en negrita — seleccionado pero liviano, coherente con la estética del resto."}]},{"version":"2.36.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Separación de siniestros (choques) y fallas mecánicas en todo el análisis. Los siniestros son un evento externo, no salud del vehículo, así que se excluyen del denominador de las tasas de falla (estado aparte, ni operando ni en taller). Impacto: el móvil 341 pasó de índice 10.5x (mal clasificado) a 1.6x real, porque sus semanas malas eran un choque, no defecto. Nuevas vistas en Análisis de Fallas: Siniestralidad por cliente (quién choca más: Puerto Montt 9.2%) y columna de siniestros en el ranking de móviles. El desgaste por cliente y el deterioro del Radar ahora son solo falla mecánica pura."}]},{"version":"2.35.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Radar: drill-down en Tormentas. Cada tormenta ahora se puede expandir para ver el detalle de los móviles que entran a zona de falla, con un veredicto por vehículo (🔴 evaluar reemplazo / ⚠ llega tocado / ✓ sano para su edad) y una explicación basada en su índice vs edad y tendencia. Ej: en ene-2027, de 8 móviles que cumplen 5 años, 3 llegan tocados (243, 241, 85) y 5 sanos. El resumen muestra el conteo antes de expandir."}]},{"version":"2.34.2","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Radar: se quitó el bloque Oportunidades de caja. Esa información (leasings que vencen por mes) ya se ve directo en la hoja de Leasing, así que repetirla ensuciaba el Radar sin agregar inteligencia. El Radar queda fiel a su principio: solo muestra lo que NO es evidente mirando las hojas de datos (tormentas, deterioro acelerado, malas duplas)."}]},{"version":"2.34.1","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Radar: corregido el marco del vencimiento de leasing. Como todos son financieros, vencer NO es riesgo sino oportunidad (la unidad pasa a propiedad UCM y se libera la cuota). Se sacaron los leasings del bloque Tormentas (ahora solo contratos + envejecimiento) y se creó el bloque Oportunidades de caja: muestra por mes cuántas unidades pasan a ser propias y cuánta cuota mensual se libera. Ej: dic-2026 = 10 unidades propias y $18M/mes liberados."}]},{"version":"2.34.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Nueva pestaña Radar (extremo derecho, con brillo sutil) — detección anticipada que cruza datos para revelar lo que no es evidente mirando las hojas: (1) Tormentas en el horizonte: meses futuros donde se acumulan vencimientos de contratos + leasings + envejecimiento de flota (ej. ene-2027 con 3 frentes); (2) Deterioro acelerado: móviles cuya frecuencia de falla se dispara comparando últimos 3 meses vs previo (ej. móvil 239: 15%→85%); (3) Combinaciones de riesgo móvil-cliente: vehículos frágiles asignados a clientes que maltratan. Cada señal muestra su fundamento y nivel de confianza, separada de las hojas de data dura."}]},{"version":"2.33.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Análisis de Fallas: nueva sección Ranking de móviles por anormalidad. A diferencia del ranking por semanas de la pestaña Taller, ordena por índice vs edad (cuántas veces más falla cada móvil de lo esperado para su antigüedad), con tendencia (empeora/estable/mejora) y señal de acción. Destaca problemas emergentes: ej. móvil 355 (nuevo) falla 16x lo esperado, más urgente que el 233 (viejo) que falla lo normal para su edad."}]},{"version":"2.32.3","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Hoja Flota: la columna R° Sanitaria se ensanchó (70→95px) para que el badge PENDIENTE no se desborde sobre Condición. Celda con overflow oculto como seguridad."}]},{"version":"2.32.2","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Análisis de Fallas: el criterio B (ajustado por edad) viene seleccionado por defecto. El tooltip de cada cliente ahora explica en lenguaje claro qué significa el dato (ej: \"falló 10.1% del tiempo en uso, cuando para la edad de sus vehículos se esperaba 2.6%. Es decir, 3.95x lo normal\")."}]},{"version":"2.32.1","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Reserva sugerida: el tooltip explicativo ya no tapa el botón Aplicar. Ahora el tooltip solo cubre el texto, y el botón queda libre. Al hacer clic en Aplicar el tooltip se oculta."}]},{"version":"2.32.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Proyección: la reserva estructural de taller ahora muestra una sugerencia basada en la tasa de falla histórica real, ponderada por la edad actual de cada flota (📉 Sugerido por historial). Un botón aplica el valor sugerido. Ej: 4x2 sugiere 8% (flota madura), 4x4 sugiere 2% (flota nueva), AUTOS 3%. A medida que la flota envejece, la sugerencia sube sola. El criterio final sigue siendo manual."}]},{"version":"2.31.3","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Curva de falla por edad ahora es mixta: años individuales 0-4 (donde hay 8-48 vehículos distintos, datos sólidos) y tramos agrupados 5-9 y 10+ (donde solo hay 4-6 vehículos). Antes la curva por edad exacta mostraba dientes de sierra engañosos porque cada edad la dominaban 2-3 móviles puntuales, no un patrón de edad real. El índice por cliente se recalculó contra la nueva curva."}]},{"version":"2.31.2","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Pestaña Concentración movida al lado de Asignaciones (orden: Asignaciones → Concentración → Taller → Análisis de Fallas)."}]},{"version":"2.31.1","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Análisis de Fallas: corregido el gráfico de curva por edad que crecía sin control (ahora va en un contenedor de altura fija). Pestaña movida al lado de Taller (su tema natural) e icono cambiado a 📉 para que se entienda mejor."}]},{"version":"2.31.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Nueva pestaña Análisis de Fallas: (1) curva de tasa de falla por edad del vehículo, calculada sobre base en-uso (excluye semanas en reserva) desde 98 reportes históricos; (2) índice de exposición a taller por cliente, con toggle A (tasa cruda) / B (ajustado por la edad esperada de falla). El criterio B revela que Hospital de Castro genera 4.65x más taller del esperado para la edad de sus unidades. Aviso de baja confianza para clientes con menos de 15 semanas de exposición."}]},{"version":"2.30.1","date":"2026-06-16","latest":false,"entries":[{"type":"data","text":"Historial anual reconstruido desde el archivo completo de 98 reportes semanales (abr-2024 a may-2026), recuperando 21 semanas y 147 registros de taller que faltaban. Fusionado con las semanas recientes (18/05-15/06). Total: 103 semanas, 69 móviles. Vocabulario validado: fallas antiguas en estado (motor/caja/cigüeñal) cuentan como taller; BACK UP RM = EVENTOS RM; bases 52/53/BUPA = EMECAR; base 7 = RESCATE UCM; espera licitación La Florida = disponible."}]},{"version":"2.30.0","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Hoja Flota: la columna Condición se ensanchó (95→130px) para que badges largos como OPERATIVO CON OBS. o FALLA MECANICA ETI no se sobrepasen a la columna Estado. La celda además tiene overflow oculto como seguridad."}]},{"version":"2.29.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Panel: el gráfico de evolución de cuota de leasing ahora muestra TODOS los meses en el eje X (antes solo enero y julio), con etiquetas verticales y sin auto-omitir. Se aumentó la altura del gráfico para acomodar las etiquetas."}]},{"version":"2.28.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Hoja Flota: anchos de columna fijos e idénticos para todas las flotas (4x2, 4x4, VAN, AUTOS) mediante table-layout:fixed y colgroup. Antes el navegador ajustaba los anchos según el contenido de cada flota, dándoles tamaños distintos. Las celdas con texto largo (modelo, estado, chasis, banco, observaciones) se truncan con … y muestran el texto completo en tooltip al pasar el cursor."}]},{"version":"2.27.0","date":"2026-06-16","latest":false,"entries":[{"type":"fix","text":"Observaciones: el reporte semanal ahora es la fuente de verdad de la columna obs. Si el xlsx trae la obs vacía para un vehículo, se limpia la observación anterior (antes quedaban pegados comentarios de semanas pasadas). Se limpiaron 9 observaciones obsoletas. Los vehículos que NO están en el reporte (ej: 383/385 aún sin llegar) y los FUERA DE SERVICIO conservan su observación."}]},{"version":"2.26.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Hoja Flota: la columna Observaciones ahora se muestra en una sola línea truncada con … y el texto completo aparece en un tooltip al pasar el cursor. Así todas las filas mantienen la misma altura. El carrocero CONVERSIONES LJ se abrevia a LJ para que la columna sea más angosta."}]},{"version":"2.25.0","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Nuevo campo Carrocero (encarrozador) por vehículo, visible en la tabla de la hoja Flota entre Modelo y Patente, y editable en el formulario. Poblado desde el xlsx del 15/06 (VESPEK, USA, DIKAR, PESCO, BERTONATI, CONVERSIONES LJ). La carga del reporte semanal ahora detecta automáticamente la columna Carrocero y ajusta los índices de columna según corresponda."}]},{"version":"2.24.2","date":"2026-06-16","latest":false,"entries":[{"type":"feat","text":"Ajuste de adjudicaciones en Pipeline"}]},{"version":"2.24.1","date":"2026-06-15","entries":[{"type":"data","text":"Actualización de leasing (Detalle 15-Jun): nuevos leasings para los Transit 375/377 (4x4, cuota 3.311.002, Santander) y 379/381 (4x2, cuota 2.659.213, Santander), todos hasta 2028-07, con N° de operación individual (no prorrateados). Rangers 37/39 se mantienen en cuota prorrateada 980.004."}]},{"version":"2.24.0","date":"2026-06-15","latest":false,"entries":[{"type":"feat","text":"Nueva regla de recepción: un vehículo NO OPERATIVO cuya observación indica \"pendiente recepción\" se clasifica como EN PRODUCCION (aún no recibido). Si la obs indica \"en espera de branding/equipamiento\" queda DISPONIBLE (ya recibido, en preparación). Se aplica en la carga del reporte semanal y se corrigió el móvil 381 actual."}]},{"version":"2.23.6","date":"2026-06-15","latest":false,"entries":[{"type":"data","text":"Patentes agregadas a 379 (VYJR-53) y 381 (VYJP-72), que el xlsx ya traía. Modelo uniformado a TRANSIT VAN L3H3 2.0. Confirmado: 383 y 385 (4x4) siguen EN PRODUCCION — son unidades adicionales que aún no llegan y por eso no están en el reporte."}]},{"version":"2.23.5","date":"2026-06-15","latest":false,"entries":[{"type":"data","text":"Carga reporte semanal 15/06: 301 vuelve a operación (RESCATE BASE 2), 317/369 pasan a DISPONIBLE, 375 sale de producción a operación (MINERA AURYN LAMPA), 371/373/377/379 quedan NO OPERATIVO/DISPONIBLE (esperando branding/equipamiento), 381 NO OPERATIVO pendiente recepción. 233 se mantiene FUERA DE SERVICIO. La hoja AEA del xlsx trae una columna nueva (Carrocero) que desplaza las columnas — índices ajustados."}]},{"version":"2.23.4","date":"2026-06-15","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline 4x4"}]},{"version":"2.23.3","date":"2026-06-15","entries":[{"type":"feat","text":"Ajuste Pipeline 4x4"}]},{"version":"2.23.2","date":"2026-06-15","entries":[{"type":"feat","text":"Ajuste Pipeline"}]},{"version":"2.23.1","date":"2026-06-15","entries":[{"type":"feat","text":"Ajuste Pipeline"}]},{"version":"2.23.0","date":"2026-06-09","entries":[{"type":"feat","text":"Asignaciones: se eliminó el segmento Back up de la barra de distribución. Esas 6 unidades (que son OPERATIVO CON OBS.) ahora cuentan en Op. con obs, igual que en el Panel. Las dos vistas quedan totalmente coherentes."}]},{"version":"2.22.0","date":"2026-06-09","latest":false,"entries":[{"type":"fix","text":"Asignaciones: la barra de distribución de flota ahora es coherente con el Panel. El segmento Operativos se renombró a Asignados (63, solo OPERATIVO operando con cliente, sin disponibles/obs/backup) y se agregó segmento Op. con obs separado. Antes mezclaba operativos con observaciones y contaba disponibles como operativos. Ahora los segmentos son mutuamente excluyentes y suman el total exacto."}]},{"version":"2.21.0","date":"2026-06-09","latest":false,"entries":[{"type":"fix","text":"Asignaciones (Visión B): una unidad en taller (falla mecánica/siniestrada), fuera de servicio o en producción ya NO cuenta como asignada a su cliente, aunque su estado tenga el nombre del cliente. Solo cuentan las unidades efectivamente operando. Ej: el móvil 245 (siniestrado, Las Condes) deja de sumar a los asignados. Ahora el recuadro verde Asignados del Panel (63) coincide con los asignados a cliente de la tabla."}]},{"version":"2.20.0","date":"2026-06-09","latest":false,"entries":[{"type":"feat","text":"Panel: el recuadro Operativos se separó en dos: Asignados (verde, operando con cliente) y Op. con observaciones (ámbar, uso limitado), ya que estos últimos se usan poco. Aplica a todas las flotas. Los recuadros siguen sumando exactamente el total."}]},{"version":"2.19.1","date":"2026-06-09","latest":false,"entries":[{"type":"fix","text":"Panel: corregido doble conteo. Los vehículos OPERATIVO con estado DISPONIBLE (353/355) se contaban en Operativos Y en Disponibles, haciendo que los recuadros sumaran más que el total. Ahora Operativos excluye los disponibles, y el pie de estado incluye la categoría DISPONIBLE (celeste). Los recuadros suman exactamente el total de la flota."}]},{"version":"2.19.0","date":"2026-06-09","latest":false,"entries":[{"type":"feat","text":"Las unidades NO OPERATIVO recién recibidas de producción (sin asignar, fuera de taller/FS) ahora se cuentan como Disponibles en el Panel, el recuadro celeste y la fila DISPONIBLE de Asignaciones. Nuevo helper esDisponible() unifica el criterio. Ej: 371/373 ahora suman a disponibles."}]},{"version":"2.18.0","date":"2026-06-09","latest":false,"entries":[{"type":"feat","text":"Reserva estructural de taller ahora es independiente por tipo de flota (4x2, 4x4, VAN, AUTOS), ya que cada una tiene su propia tasa de falla. El control +/− ajusta solo la flota activa y el valor persiste al guardar el HTML."}]},{"version":"2.17.0","date":"2026-06-09","latest":false,"entries":[{"type":"fix","text":"Proyección: corregida la inconsistencia de la reserva estructural de taller. El texto (= N und.) y las unidades que se restan a la flota efectiva ahora usan la misma base (total − fuera de servicio), así el número mostrado siempre coincide con lo que se descuenta. Antes el texto usaba una base distinta (excluía producción) y mostraba 0 mientras restaba 1."}]},{"version":"2.16.2","date":"2026-06-09","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline"}]},{"version":"2.16.1","date":"2026-06-08","entries":[{"type":"data","text":"Actualización de leasing (fuente: Detalle Vehiculos 08-Jun, cols AG-AM). Cuotas de operaciones compartidas prorrateadas entre sus vehículos: 293/295/297/299 (÷4 = 1.491.976), 315/317 y 319/321 (÷2 = 2.244.352), Sail 1-8 (÷8 = 472.434). Montos y fechas actualizados. Nuevos leasings: 371/373 (2.589.074), Hilux 41 (1.450.178). El monto financiado es por vehículo; solo la cuota se prorratea."}]},{"version":"2.16.0","date":"2026-06-08","latest":false,"entries":[{"type":"fix","text":"Asignaciones: la fila DISPONIBLE muestra +N (unidades disponibles) en vez de Completar, solo para ese uso. El recuadro celeste ahora cuenta directamente los vehículos con estado DISPONIBLE (corrige descuadre)."},{"type":"feat","text":"Panel: nuevo recuadro Disponibles (celeste) entre En Taller Activo y En Producción, con la cantidad de unidades sin asignación."}]},{"version":"2.15.3","date":"2026-06-08","latest":false,"entries":[{"type":"feat","text":"Actualización de ambulancias EN PRODUCCIÓN"}]},{"version":"2.15.2","date":"2026-06-08","entries":[{"type":"data","text":"Corrección de numeración Transit: el móvil 381 (AMB) era en realidad el 375 (4x4) según chasis del xlsx — reubicado a la flota 4x4. Patentes agregadas a 371 (VYFL-63), 373 (VYFL-36), 375 (VYGX-15), 377 (VYHC-78). Fusionado placeholder duplicado de producción del 375."}]},{"version":"2.15.1","date":"2026-06-08","latest":false,"entries":[{"type":"feat","text":"Cambio en Asignaciones"}]},{"version":"2.15.0","date":"2026-06-08","entries":[{"type":"fix","text":"Taller: ahora SOLO incluye vehículos con FALLA MECANICA (ETI/ETE) o SINIESTRADA. NO OPERATIVO ya no cuenta como taller (puede ser una unidad recién recibida pendiente de branding/equipamiento). Nueva función isTaller() separada de isNonOp()."},{"type":"feat","text":"Panel y mini-pies: nueva categoría NO OPERATIVO (color ámbar oscuro) distinta de EN TALLER, para no contar las unidades pendientes de recepción como operativas ni como taller."}]},{"version":"2.14.2","date":"2026-06-08","latest":false,"entries":[{"type":"data","text":"Carga reporte semanal 08/06: 267/289/307 salen del taller a clientes, 301 entra a falla (enfriador de aceite), 321/341/353/355 cambian asignación (353/355 quedan DISPONIBLE), 371/373/375/377 pasan de EN PRODUCCION a NO OPERATIVO (pendientes de recepción/branding). 233 se mantiene FUERA DE SERVICIO."}]},{"version":"2.14.1","date":"2026-06-04","latest":false,"entries":[{"type":"feat","text":"Ajuste Pipeline"}]},{"version":"2.14.0","date":"2026-06-03","entries":[{"type":"feat","text":"Panel \"Ver todas las flotas\": el gráfico Estado de flota ahora muestra 4 mini-doughnuts (uno por tipo de vehículo) con una leyenda de colores compartida, para comparar el estado de las flotas de un vistazo. En vista de flota individual se mantiene el pie único."}]},{"version":"2.13.0","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Muro de vencimientos de leasing ahora es mensual (antes trimestral): eje temporal continuo desde el mes del reporte hasta el último vencimiento, con barras delgadas. Etiquetas en ene/jul, mes completo en el tooltip. Muestra mejor la concentración real de vencimientos."}]},{"version":"2.12.0","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Muro de vencimientos de leasing rediseñado: barras más compactas (150px de alto) con relleno degradado sólido, esquinas redondeadas, ejes limpios y tooltip oscuro. Contenedor alineado al gráfico de evolución."},{"type":"feat","text":"Bloque de plan de renovación (hoja Flota) rediseñado como card al estilo de los KPIs, con pills sobrias y edad coloreada por severidad."}]},{"version":"2.11.1","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline"}]},{"version":"2.11.0","date":"2026-06-03","entries":[{"type":"feat","text":"Concentración: las bases de rescate (RESCATE BASE 1/2/8) se agrupan bajo RESCATE UCM solo en esta vista. En Asignaciones siguen separadas por base."}]},{"version":"2.10.0","date":"2026-06-03","latest":false,"entries":[{"type":"feat","text":"Mejora estética del gráfico de evolución de cuota de leasing: rellenos con degradado por banco, áreas ordenadas por monto, línea TOTAL más refinada con punto destacado en el mes actual, ejes y grid más limpios, contenedor con fondo degradado."}]},{"version":"2.9.0","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Antigüedad de flota (hoja Flota): alerta informativa de unidades 5-6 años (envejeciendo) y 7+ años (para renovación), usando el año dinámico del último reporte."},{"type":"feat","text":"Muro de vencimientos de leasing (hoja Leasing): gráfico de barras con la cuota mensual que se libera por trimestre. Al vencer, la unidad pasa a propiedad UCM."},{"type":"feat","text":"Nueva pestaña Concentración: distribución de flota por cliente (barras) y concentración temporal de vencimientos por trimestre, con alertas de dependencia ≥20%."},{"type":"feat","text":"Proyección: banda de sensibilidad del pipeline — área sombreada entre escenario pesimista (solo adjudicado) y optimista (todo el pipeline al 100%)."}]},{"version":"2.8.0","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Asignaciones: los arriendos temporales asignados a un cliente se suman a sus unidades asignadas, pero solo si están activos en el mes actual. Badge 🚐 indica cuántas son arrendadas."},{"type":"fix","text":"getAsigReal se mantiene puro (sin arriendos) para no afectar el cálculo de la proyección a 24 meses."}]},{"version":"2.7.1","date":"2026-06-02","latest":false,"entries":[{"type":"fix","text":"Arriendos: cada arriendo es ahora 1 unidad con su propio N° móvil. Se eliminó el campo cantidad — para arrendar varias, se crea un registro por vehículo."}]},{"version":"2.7.0","date":"2026-06-02","latest":false,"entries":[{"type":"fix","text":"Arriendos: fechas normalizadas (2026-6 → 2026-06) — la línea azul de flota efectiva ahora sube correctamente durante el período del arriendo."},{"type":"feat","text":"Arriendos: campo para asignar la unidad a un proyecto/cliente (dropdown con contratos existentes). Se muestra en tabla y tooltip de la curva."}]},{"version":"2.6.0","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Arriendos temporales: nueva sección en Proyección para registrar vehículos que un tercero nos entrega por un período acotado. Suman a la flota efectiva durante los meses activos."},{"type":"feat","text":"Cada arriendo: N° móvil, proveedor, fecha desde/hasta, cantidad y notas. Array propio por flota (ARRIENDOS_AMB/4X4/VAN/AUTOS)."},{"type":"feat","text":"El tooltip de la curva de proyección muestra las unidades arrendadas activas en cada mes."}]},{"version":"2.5.1","date":"2026-06-02","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline luego de reunion comercial 02/06"}]},{"version":"2.5.0","date":"2026-06-01","entries":[{"type":"feat","text":"Gráfico de leasing (evolución de cuota mensual) arranca dinámicamente en el mes del último reporte, igual que la proyección. Se mueve solo con el tiempo."}]},{"version":"2.4.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Proyección dinámica: gráfico y tabla arrancan en el mes del último reporte y avanzan 24 meses. Se mueve solo a medida que se cargan reportes."},{"type":"feat","text":"Reserva taller: mes actual usa unidades reales en taller; reserva estructural % aplica desde el mes siguiente en adelante."},{"type":"feat","text":"Pipeline: alerta visual en oportunidades con fecha de inicio vencida — para eliminar o actualizar."}]},{"version":"2.3.3","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Ajustes Asignaciones"}]},{"version":"2.3.2","date":"2026-06-01","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.3.1","date":"2026-06-01","entries":[{"type":"feat","text":"Ajuste de Asignaciones"}]},{"version":"2.3.0","date":"2026-06-01","entries":[{"type":"fix","text":"Carga xlsx: AUTOS ahora usa hoja 'Status Autos 2026' con match por patente — funciona aunque cambien los números de móvil."},{"type":"fix","text":"Carga xlsx: Rangers renumerados 501/503→37/39, Hilux 409→41, Sail 401-408→1-8 con patentes reales."},{"type":"feat","text":"Carga xlsx: updatedAutos incluido en el resumen de la carga."}]},{"version":"2.2.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Proyección: alerta de compra recomendada — indica 1ª o 2ª quincena del mes en que debe iniciarse la adquisición (45 días antes del déficit proyectado)."},{"type":"feat","text":"Alerta se colorea según urgencia: azul (tiempo suficiente), ámbar (menos de 30 días), rojo (plazo vencido)."}]},{"version":"2.1.0","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Versioning semántico: MAYOR.MENOR.PARCHE — código cambia MENOR, datos cambian PARCHE."},{"type":"fix","text":"Proyección: reserva estructural de taller calculada dinámicamente por mes según flota entregada."},{"type":"fix","text":"Flota tab: KPIs ahora usan isNonOp() correctamente — muestra taller y FS por separado."},{"type":"feat","text":"Taller: historial anual y ranking SHOP_HIST filtrados por flota activa. Todos los vehículos visibles aunque tengan 0 semanas."},{"type":"feat","text":"Panel: botón Ver todas las flotas consolida KPIs de todas las flotas."}]},{"version":"2.0.13","date":"2026-06-01","latest":false,"entries":[{"type":"fix","text":"Proyección: reserva estructural de taller calculada dinámicamente por mes — crece a medida que entran vehículos de producción según su fEntrega."},{"type":"fix","text":"Reserva estructural usa flota entregada en cada mes (total - FS - en producción ese mes), no el total fijo actual."}]},{"version":"2.0.12","date":"2026-06-01","latest":false,"entries":[{"type":"feat","text":"Ajuste de Pipeline"}]},{"version":"2.0.11","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de Asignación de Autos Comudef"},{"type":"feat","text":"Ingreso a Producción Hylux URT"}]},{"version":"2.0.10","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.9","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.8","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.7","date":"2026-05-26","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.6","date":"2026-05-22","entries":[{"type":"feat","text":"Mejoras en la Hoja Taller"},{"type":"feat","text":"Arreglo en el número de version"}]},{"version":"2.0.5","date":"2026-05-22","entries":[{"type":"feat","text":"Ajuste Pipeline"}]},{"version":"2.0.4","date":"2026-05-19","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.3","date":"2026-05-19","entries":[{"type":"feat","text":"Actualización de datos y ajustes menores."}]},{"version":"2.0.2","date":"2026-05-19","entries":[{"type":"feat","text":"Se arreglaron los Pipeline de Ambulancias 4x2 y 4x4"}]},{"version":"2.0.1","date":"2026-05-19","entries":[{"type":"feat","text":"Versionado automático al guardar: la versión se incrementa sola (patch), sin intervención manual."},{"type":"fix","text":"downloadUpdatedHTML: APP_VERSION y CHANGELOG ahora se serializan correctamente usando funciones arrow en replace() para evitar interpretación errónea de $ en JSON."},{"type":"feat","text":"Nombre del archivo incluye fecha y versión: UCM_Fleet_Intelligence_YYYYMMDD_vX-Y-Z.html."}]},{"version":"2.0.0","date":"2026-05-19","entries":[{"type":"feat","text":"Panel: botón 'Ver todas las flotas' consolida KPIs de AMB 4×2, 4×4, VAN y AUTOS en una sola vista."},{"type":"feat","text":"Diagnóstico: rediseñado como modal instantáneo (sin file picker). Muestra estado de librerías, condiciones por flota, estados sin REQS, semana cargada y versión."}]},{"version":"1.9.0","date":"2026-05-19","entries":[{"type":"feat","text":"Requerimientos temporales recurrentes por contrato: campo tempReqs con mesIni/mesFin/qty/motivo. Se aplica todos los años en ese rango de meses."},{"type":"feat","text":"getReqOp(r, ym): función helper que calcula requerimiento base + boosts temporales para un mes dado."},{"type":"feat","text":"Proyección: demandaContratos varía mes a mes según tempReqs activos — la línea azul ya no es plana."},{"type":"feat","text":"Asignaciones: columna Req. Operación muestra badge morado +N cuando hay boost temporal activo."},{"type":"fix","text":"Proyección: data-freed y data-net del gráfico Pipeline usan getReqOp y getAsigReal con variable local flt (no fl del scope externo)."}]},{"version":"1.8.1","date":"2026-05-19","entries":[{"type":"fix","text":"Asignaciones: REQS_AMB reconstruido con nombres exactos que vienen del xlsx (TRASLADO BÁSICO, CORP. LAS CONDES, etc.)."},{"type":"fix","text":"syncReqsFromFleet: purga entradas fantasma (asig=0 sin fFin futura) — resuelve duplicados por cambio de nombre en xlsx."},{"type":"fix","text":"REQS_4X4: TECHINT renombrado a TECHINT TOCOPILLA, BESS LIBRILLO agregado."},{"type":"fix","text":"editContrato: acepta clientes nuevos (string), agrega fIni, elimina campo asig (ahora es solo lectura desde FLEET)."}]},{"version":"1.8.0","date":"2026-05-18","entries":[{"type":"feat","text":"Asignaciones: tabla unificada — asig desde FLEET.estado (automático), metadata desde REQS (manual). Clientes nuevos detectados con badge NUEVO."},{"type":"feat","text":"buildTodasFilas() y getAsigReal(): helpers compartidos entre Asignaciones y Proyección."},{"type":"fix","text":"Proyección: demandaContratos y unidadesLibres usan getAsigReal en lugar de r.asig (que era siempre 0)."},{"type":"fix","text":"Carga de reporte: EN PRODUCCION y FUERA DE SERVICIO protegidos contra sobreescritura."},{"type":"fix","text":"Carga de reporte: normalizarCond() mapea variantes del xlsx (OPERATIVO C/OBS, NO OP, etc.)."},{"type":"feat","text":"Changelog incorporado: badge de versión en topbar abre historial de cambios."}]},{"version":"1.7.0","date":"2026-05-18","entries":[{"type":"feat","text":"Panel: botón 'Ver todas las flotas' en Leasing (ya existía)."},{"type":"feat","text":"4×4: contrato RESCATE RM (rol 4×2) para móvil 365."},{"type":"fix","text":"Capital remanente calculado dinámicamente con amortización lineal según fecha actual."}]},{"version":"1.6.0","date":"2026-05-15","entries":[{"type":"fix","text":"Proyección: pipeDemanda considera duración de cada oportunidad — línea naranja sube y baja correctamente."},{"type":"fix","text":"Ambulancias en pipeline y reserva taller redondeadas al entero más cercano."}]},{"version":"1.5.0","date":"2026-05-15","entries":[{"type":"data","text":"Datos leasing actualizados desde Detalle_Vehiculos_UCM_Emecar_11-May-26.xlsx."},{"type":"feat","text":"Cuotas PMT 1%/mes para móviles 241, 243, 245, 253, 255, 257. Los Cuatro y Rio Branco con datos completos."}]}];
 function initChangelog(){
   const badge=document.getElementById("ver-badge");
   if(badge) badge.textContent="v"+APP_VERSION;
