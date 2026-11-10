@@ -1,6 +1,6 @@
 <html lang="es"><head>
 <meta charset="UTF-8">
-<meta name="app-version" content="3.3.0">
+<meta name="app-version" content="3.3.1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fleet Intelligence · UCM</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -742,7 +742,7 @@ function renderPanel(){
     <div class="sec-hdr">
       <h3>Resumen Operacional — ${flName}</h3>
       <div style="display:flex;align-items:center;gap:10px">
-        <span class="sub">Semana: 02/11/2026</span>
+        <span class="sub">${(document.getElementById("last-update")||{}).textContent||""}</span>
         <button onclick="togglePanelView()" style="padding:4px 12px;border-radius:20px;border:1px solid var(--blue);background:${panelViewAll?"var(--blue)":"#fff"};color:${panelViewAll?"#fff":"var(--blue)"};font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap">
           ${panelViewAll?"✓ Todas las flotas":"Ver todas las flotas"}
         </button>
@@ -5619,7 +5619,7 @@ body.fi-en-usuarios #fleet-selector{visibility:hidden}
    Los datos ya no viven en este archivo: se leen de Supabase después del ingreso,
    y cada usuario recibe solo lo que sus permisos le permiten (lo aplica la base de datos).
 ──────────────────────────────────────────────────────────────────────── */
-const FI3_VERSION = "3.3.0";
+const FI3_VERSION = "3.3.1";
 const FI3_INACTIVIDAD_MS = 8 * 60 * 60 * 1000;   // cierra la sesión tras 8 horas sin uso
 const FI3 = {
   url: "https://madmfzrhezhsbizzkbmd.supabase.co",
@@ -5681,7 +5681,9 @@ async function fiCargarDatos(){
     document.getElementById("last-update").textContent = "Semana: " + d + "/" + m + "/" + y;
   }
   CHANGELOG.length = 0;
-  CHANGELOG.push({version:"3.3.0", date:"2026-11-03", latest:true, entries:[
+  CHANGELOG.push({version:"3.3.1", date:"2026-11-09", latest:true, entries:[
+    {type:"fix", text:"El rótulo «Semana» junto al título del Panel quedaba en la fecha de la última publicación (02/11) aunque los datos fueran de una semana posterior. Ahora toma la semana vigente de la base de datos, igual que el rótulo de la barra superior."}]});
+  CHANGELOG.push({version:"3.3.0", date:"2026-11-03", latest:false, entries:[
     {type:"feature", text:"La sesión se cierra sola después de 8 horas sin uso: si nadie toca la app (ni en otra pestaña) durante ese tiempo, o si el computador se suspende y vuelve después, pide la contraseña de nuevo con un aviso que explica por qué. Antes la sesión quedaba abierta hasta presionar Cerrar sesión."},
     {type:"feature", text:"Montos ocultos para quien no tiene el permiso «Ve montos de leasing y deuda». En vez de ver ceros, esas cifras no aparecen: en Panel se ocultan el indicador de cuota, las columnas de cuota y deuda por banco y el gráfico de evolución de cuota; en Flota, las columnas Monto Financ. y Remanente K; en Leasing, los indicadores de montos, el muro de vencimientos y las columnas de montos, y en su lugar se muestra cuántos contratos vencen en seis meses o menos y cuántas entidades hay. La base de datos ya no le entregaba esos montos; ahora tampoco quedan rastros en pantalla."}]});
   CHANGELOG.push({version:"3.2.0", date:"2026-11-03", latest:false, entries:[
